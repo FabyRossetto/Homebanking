@@ -49,7 +49,7 @@ public class TarjetaServicio {
 
     @Transactional
     public Tarjeta CrearTarjetaDebito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
-        validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoDebito,tarjeta.getFechaVencimiento(),tarjeta.getAlta());
+        validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoDebito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
         tarjeta.setId(IdTarjeta);
         tarjeta.setUsuario(usuario);
         tarjeta.setPin(pin);
@@ -77,7 +77,7 @@ public class TarjetaServicio {
     
     public void ActualizarSaldoTarjetaDebito(Long IdTarjeta){
         Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
-        Integer SaldoUsuario=trayendoTarjeta.getUsuario().getCuenta().getSaldo();
+        Double SaldoUsuario=trayendoTarjeta.getUsuario().getCuenta().getSaldo();
         do{
             trayendoTarjeta.setSaldoDebito(SaldoUsuario);
             tarjetaRepo.save(trayendoTarjeta);

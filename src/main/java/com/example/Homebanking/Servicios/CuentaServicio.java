@@ -16,11 +16,11 @@ public class CuentaServicio {
 
     @Autowired
     private CuentaRepositorio cuentaRepositorio;
-    @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
-
-    @Autowired
-    private TransferenciaRepositorio transferenciaRepositorio;
+//    @Autowired
+//    private UsuarioRepositorio usuarioRepositorio;
+//
+//    @Autowired
+//    private TransferenciaRepositorio transferenciaRepositorio;
 
     //el error se debe a que no tengo creado los repo de usuario y transfernecia 
     //GUARDAR UNA CUENTA: CREACIÓN (necesito transferencia para crearlo?)
@@ -72,3 +72,4 @@ public class CuentaServicio {
             
     }
     }
+}
