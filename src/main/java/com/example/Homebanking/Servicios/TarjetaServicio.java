@@ -60,6 +60,7 @@ public class TarjetaServicio {
         return tarjetaguardada;
     }
 
+    @Transactional
     public Tarjeta modificarTarjetaDebito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
         validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoDebito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
         Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
@@ -75,6 +76,7 @@ public class TarjetaServicio {
         return tarjetaRepo.save(trayendoTarjeta);
     }
     
+    @Transactional
     public void ActualizarSaldoTarjetaDebito(Long IdTarjeta){
         Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
         Double SaldoUsuario=trayendoTarjeta.getUsuario().getCuenta().getSaldo();
@@ -90,7 +92,7 @@ public class TarjetaServicio {
             tarjetaRepo.delete(trayendoTarjeta);
         }
     }
-
+   @Transactional
     public void DarDeBajaTarjeta(Long IdTarjeta) {
         Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
         if (trayendoTarjeta != null) {
