@@ -28,45 +28,45 @@ public class TarjetaControlador {
     TarjetaServicio tarjetaServ;
     
      @PostMapping("/crearTarjetaCredito")
-     public String CrearTarjetaCredito (ModelMap modelo,@RequestParam Long IdTarjeta, @RequestParam Usuario usuario, @RequestParam Integer pin) throws Exception {
+     public String CrearTarjetaCredito (ModelMap modelo,@RequestParam Long IdTarjeta, @RequestParam String IdUsuario, @RequestParam Integer pin) throws Exception {
         
-        tarjetaServ.CrearTarjetaCredito(IdTarjeta, usuario, pin);
+        tarjetaServ.CrearTarjetaCredito(IdTarjeta, IdUsuario, pin);
         modelo.put("exito", "su tarjeta se ha creado con exito");
         return "su tarjeta se ha creado con exito";
     }
      
-      @PostMapping("/crearTarjetaDebito")
-     public String CrearTarjetaDebito (ModelMap modelo,@RequestParam Long IdTarjeta, @RequestParam Usuario usuario, @RequestParam Integer pin) throws Exception {
-        
-        tarjetaServ.CrearTarjetaDebito(IdTarjeta, usuario, pin);
-        modelo.put("exito", "su tarjeta se ha creado con exito");
-        return "su tarjeta se ha creado con exito";
-    }
-     
-     @PutMapping("/ModificarTarjetaDebito")
-     public String ModificarTarjetaDebito (ModelMap modelo,@RequestParam Long IdTarjeta, @RequestParam Usuario usuario, @RequestParam Integer pin) throws Exception {
-        
-        tarjetaServ.modificarTarjetaDebito(IdTarjeta, usuario, pin);
-        modelo.put("exito", "ha modificado su tarjeta de debito correctamente");
-        return "ha modificado su tarjeta de debito correctamente";
-    }
-     
-     @PutMapping("/actualizarSaldo")
-     public String ActualizarSaldoTarjetaDebito (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
-        
-        tarjetaServ.ActualizarSaldoTarjetaDebito(IdTarjeta);
-        modelo.put("exito", "el saldo se ha actualizado");
-        return "el saldo se ha actualizado";
-    }
-     
-     @DeleteMapping("/EliminarTarjeta")
-     public String EliminarTarjeta (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
-        
-        tarjetaServ.EliminarTarjeta(IdTarjeta);
-        modelo.put("exito", "se ha eliminado la tarjeta");
-        return "se ha eliminado la tarjeta";
-     }
-     
+//      @PostMapping("/crearTarjetaDebito")
+//     public String CrearTarjetaDebito (ModelMap modelo,@RequestParam Long IdTarjeta, @RequestParam Usuario usuario, @RequestParam Integer pin) throws Exception {
+//        
+//        tarjetaServ.CrearTarjetaDebito(IdTarjeta, usuario, pin);
+//        modelo.put("exito", "su tarjeta se ha creado con exito");
+//        return "su tarjeta se ha creado con exito";
+//    }
+//     
+//     @PutMapping("/ModificarTarjetaDebito")
+//     public String ModificarTarjetaDebito (ModelMap modelo,@RequestParam Long IdTarjeta, @RequestParam Usuario usuario, @RequestParam Integer pin) throws Exception {
+//        
+//        tarjetaServ.modificarTarjetaDebito(IdTarjeta, usuario, pin);
+//        modelo.put("exito", "ha modificado su tarjeta de debito correctamente");
+//        return "ha modificado su tarjeta de debito correctamente";
+//    }
+//     
+//     @PutMapping("/actualizarSaldo")
+//     public String ActualizarSaldoTarjetaDebito (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
+//        
+//        tarjetaServ.ActualizarSaldoTarjetaDebito(IdTarjeta);
+//        modelo.put("exito", "el saldo se ha actualizado");
+//        return "el saldo se ha actualizado";
+//    }
+//     
+//     @DeleteMapping("/EliminarTarjeta")
+//     public String EliminarTarjeta (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
+//        
+//        tarjetaServ.EliminarTarjeta(IdTarjeta);
+//        modelo.put("exito", "se ha eliminado la tarjeta");
+//        return "se ha eliminado la tarjeta";
+//     }
+//     
      @PutMapping("/darDeBaja")
      public String DarDeBaja (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
         

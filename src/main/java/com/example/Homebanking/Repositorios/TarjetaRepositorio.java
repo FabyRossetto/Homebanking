@@ -18,6 +18,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TarjetaRepositorio extends JpaRepository<Tarjeta,Long> {
     
-    @Query("SELECT t FROM Tarjeta t WHERE t.IdTarjeta = :IdTarjeta ")
-    public Tarjeta buscarPorId(@Param("IdTarjeta") Long IdTarjeta);
+    @Query("SELECT t FROM Tarjeta t WHERE t.Id = :IdTarjeta ")
+    public Tarjeta buscarPorId(@Param("IdTarjeta") Long Id);
 }
