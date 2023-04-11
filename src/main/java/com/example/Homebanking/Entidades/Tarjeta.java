@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -22,21 +23,27 @@ import lombok.Data;
  */
 @Data
 @Entity
+@Component
 public class Tarjeta {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long Id;
     
-    Integer Saldo;
+    Double SaldoCredito=500000.00;//saldo maximo a gastar
+    
+    Double SaldoDebito;
     
     @Column(nullable= false)
     Integer pin;
     
     @Temporal(TemporalType.DATE)
     Date fechaVencimiento;
+    //2023/07/25(año,mes,dia).
     
     @OneToOne
     Usuario usuario;
+    
+    Boolean Alta=Boolean.TRUE;
     
 }

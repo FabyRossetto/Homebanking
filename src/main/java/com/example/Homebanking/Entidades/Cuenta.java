@@ -5,12 +5,16 @@
  */
 package com.example.Homebanking.Entidades;
 
+import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.Data;
 
 /**
@@ -21,13 +25,16 @@ import lombok.Data;
 @Entity
 public class Cuenta {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String Id;
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    Long Id;
     
-    Integer Saldo;
+    
+    Boolean Alta=Boolean.TRUE; 
+    
+    Double Saldo;
    
     @OneToMany
-    Transferencia transferencia;
+    List<Transferencia> transferencia;//tuve que cambiar esto porque no me dejaba mapearla con el oneToMany al ser transferencia un solo objeto.
     
     @OneToOne
     Usuario usuario;

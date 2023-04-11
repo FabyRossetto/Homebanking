@@ -29,11 +29,10 @@ public class Transferencia {
     Long Id;
 
     @OneToOne
-    @Column(nullable = false)
     Cuenta CuentaEmisora;
+    // nested exception is org.hibernate.AnnotationException:@Column(s) not allowed on a @OneToOne property: com.example.Homebanking.Entidades.Transferencia.CuentaEmisora
 
     @OneToOne
-    @Column(nullable = false)
     Cuenta CuentaReceptora;
     
     @Temporal(TemporalType.TIMESTAMP)
