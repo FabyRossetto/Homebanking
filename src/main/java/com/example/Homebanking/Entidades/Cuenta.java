@@ -29,9 +29,16 @@ public class Cuenta {
     
     
      Boolean Alta= Boolean.TRUE; 
+     
+     
     
+     //saldoActual=saldo+nuevoIngreso
     Double Saldo;
+    Double saldoActual;
    
+    Double ingreso;
+    Double retiro;
+    
     @OneToMany
     Transferencia transferencia;
     
