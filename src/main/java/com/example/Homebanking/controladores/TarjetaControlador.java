@@ -28,9 +28,9 @@ public class TarjetaControlador {
     TarjetaServicio tarjetaServ;
     
      @PostMapping("/crearTarjetaCredito")
-     public String CrearTarjetaCredito (ModelMap modelo,@RequestParam Long IdTarjeta, @RequestParam String IdUsuario, @RequestParam Integer pin) throws Exception {
+     public String CrearTarjetaCredito (ModelMap modelo, @RequestParam String IdUsuario,@RequestParam Long IdTarjeta, @RequestParam Integer pin) throws Exception {
         
-        tarjetaServ.CrearTarjetaCredito(IdTarjeta, IdUsuario, pin);
+        tarjetaServ.CrearTarjetaCredito(IdUsuario,IdTarjeta,  pin);
         modelo.put("exito", "su tarjeta se ha creado con exito");
         return "su tarjeta se ha creado con exito";
     }

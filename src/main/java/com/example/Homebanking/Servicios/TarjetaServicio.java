@@ -9,6 +9,7 @@ import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Tarjeta;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
+import com.example.Homebanking.Repositorios.UsuarioRepo;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
@@ -34,18 +35,24 @@ public class TarjetaServicio {
 
     @Autowired
     TarjetaRepositorio tarjetaRepo;
+    
+    @Autowired
+    UsuarioRepo ure;
 
     @Transactional
-    public Tarjeta CrearTarjetaCredito(Long IdTarjeta, String IdUsuario, Integer pin) throws Exception {
-        validaciones(IdTarjeta,IdUsuario,pin,tarjeta.getSaldoCredito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
+    public Tarjeta CrearTarjetaCredito(String IdUsuario,Long IdTarjeta,Integer pin) throws Exception {
+//        validaciones(IdTarjeta,IdUsuario,pin,tarjeta.getSaldoCredito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
+          Usuario usuario = ure.getById(IdUsuario);
+        if(usuario.getTarjeta()==null){
+        tarjeta.setUsuario(usuario);
         tarjeta.setId(IdTarjeta);
-        tarjeta.getUsuario().setIdUsuario(IdUsuario);
         tarjeta.setPin(pin);
         tarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
         
-        Tarjeta tarjetaguardada = tarjetaRepo.save(tarjeta);
-        return tarjetaguardada;
+        }
+        return tarjetaRepo.save(tarjeta);
     }
+    
 
 //    @Transactional
 //    public Tarjeta CrearTarjetaDebito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
