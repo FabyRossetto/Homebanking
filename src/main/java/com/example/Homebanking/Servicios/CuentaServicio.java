@@ -16,26 +16,26 @@ public class CuentaServicio {
 
     @Autowired
     private CuentaRepositorio cuentaRepositorio;
-    @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
-
-    @Autowired
-    private TransferenciaRepositorio transferenciaRepositorio;
+//    @Autowired
+//    private UsuarioRepositorio usuarioRepositorio;
+//
+//    @Autowired
+//    private TransferenciaRepositorio transferenciaRepositorio;
 
     //el error se debe a que no tengo creado los repo de usuario y transfernecia 
     //GUARDAR UNA CUENTA: CREACIÓN (necesito transferencia para crearlo?)
-    @Transactional
-    public Cuenta guardar(Long Id,Usuario usuario, Transferencia transferencia) throws Excepcion {
-
-        //SETEO DE ATRIBUTOS
-        Cuenta cuenta = new Cuenta();
-        cuenta.setUsuario(usuario);
-        cuenta.setTransferencia(transferencia);
-
-        //PERSISTENCIA DEL OBJETO
-        return cuentaRepositorio.save(cuenta);
-
-    }
+//    @Transactional
+//    public Cuenta guardar(Long Id,Usuario usuario, Transferencia transferencia) throws Excepcion {
+//
+//        //SETEO DE ATRIBUTOS
+//        Cuenta cuenta = new Cuenta();
+//        cuenta.setUsuario(usuario);
+//        cuenta.setTransferencia(transferencia);
+//
+//        //PERSISTENCIA DEL OBJETO
+//        return cuentaRepositorio.save(cuenta);
+//
+//    }
 
     //ELIMINAR CUENTA
     @Transactional
@@ -72,3 +72,4 @@ public class CuentaServicio {
             
     }
     }
+}

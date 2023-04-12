@@ -9,6 +9,7 @@ import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Tarjeta;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
+import com.example.Homebanking.Repositorios.UsuarioRepo;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
@@ -34,63 +35,71 @@ public class TarjetaServicio {
 
     @Autowired
     TarjetaRepositorio tarjetaRepo;
+    
+    @Autowired
+    UsuarioRepo ure;
 
     @Transactional
-    public Tarjeta CrearTarjetaCredito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
-        validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoCredito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
-        tarjeta.setId(IdTarjeta);
+    public Tarjeta CrearTarjetaCredito(String IdUsuario,Long IdTarjeta,Integer pin) throws Exception {
+//        validaciones(IdTarjeta,IdUsuario,pin,tarjeta.getSaldoCredito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
+          Usuario usuario = ure.getById(IdUsuario);
+        if(usuario.getTarjeta()==null){
         tarjeta.setUsuario(usuario);
+        tarjeta.setId(IdTarjeta);
         tarjeta.setPin(pin);
         tarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
         
-        Tarjeta tarjetaguardada = tarjetaRepo.save(tarjeta);
-        return tarjetaguardada;
-    }
-
-    @Transactional
-    public Tarjeta CrearTarjetaDebito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
-        validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoDebito,tarjeta.getFechaVencimiento(),tarjeta.getAlta());
-        tarjeta.setId(IdTarjeta);
-        tarjeta.setUsuario(usuario);
-        tarjeta.setPin(pin);
-        tarjeta.setSaldoDebito(usuario.getCuenta().getSaldo());
-        tarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
-        
-        Tarjeta tarjetaguardada = tarjetaRepo.save(tarjeta);
-        return tarjetaguardada;
-    }
-
-    public Tarjeta modificarTarjetaDebito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
-        validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoDebito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
-        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
-        
-        if (trayendoTarjeta != null) {
-            trayendoTarjeta.setUsuario(usuario);
-            trayendoTarjeta.setPin(pin);
-            trayendoTarjeta.setSaldoDebito(usuario.getCuenta().getSaldo());
-            trayendoTarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
-            
-
         }
-        return tarjetaRepo.save(trayendoTarjeta);
+        return tarjetaRepo.save(tarjeta);
     }
     
-    public void ActualizarSaldoTarjetaDebito(Long IdTarjeta){
-        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
-        Integer SaldoUsuario=trayendoTarjeta.getUsuario().getCuenta().getSaldo();
-        do{
-            trayendoTarjeta.setSaldoDebito(SaldoUsuario);
-            tarjetaRepo.save(trayendoTarjeta);
-        }while(trayendoTarjeta.getSaldoDebito()!=SaldoUsuario);
-    }
 
-    public void EliminarTarjeta(Long IdTarjeta) {
-        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
-        if (trayendoTarjeta != null) {
-            tarjetaRepo.delete(trayendoTarjeta);
-        }
-    }
-
+//    @Transactional
+//    public Tarjeta CrearTarjetaDebito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
+//        validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoDebito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
+//        tarjeta.setId(IdTarjeta);
+//        tarjeta.setUsuario(usuario);
+//        tarjeta.setPin(pin);
+//        tarjeta.setSaldoDebito(usuario.getCuenta().getSaldo());
+//        tarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
+//        
+//        Tarjeta tarjetaguardada = tarjetaRepo.save(tarjeta);
+//        return tarjetaguardada;
+//    }
+//
+//    @Transactional
+//    public Tarjeta modificarTarjetaDebito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
+//        validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoDebito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
+//        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+//        
+//        if (trayendoTarjeta != null) {
+//            trayendoTarjeta.setUsuario(usuario);
+//            trayendoTarjeta.setPin(pin);
+//            trayendoTarjeta.setSaldoDebito(usuario.getCuenta().getSaldo());
+//            trayendoTarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
+//            
+//
+//        }
+//        return tarjetaRepo.save(trayendoTarjeta);
+//    }
+//    
+//    @Transactional
+//    public void ActualizarSaldoTarjetaDebito(Long IdTarjeta){
+//        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+//        Double SaldoUsuario=trayendoTarjeta.getUsuario().getCuenta().getSaldo();
+//        do{
+//            trayendoTarjeta.setSaldoDebito(SaldoUsuario);
+//            tarjetaRepo.save(trayendoTarjeta);
+//        }while(trayendoTarjeta.getSaldoDebito()!=SaldoUsuario);
+//    }
+//
+//    public void EliminarTarjeta(Long IdTarjeta) {
+//        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+//        if (trayendoTarjeta != null) {
+//            tarjetaRepo.delete(trayendoTarjeta);
+//        }
+//    }
+   @Transactional
     public void DarDeBajaTarjeta(Long IdTarjeta) {
         Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
         if (trayendoTarjeta != null) {
@@ -98,7 +107,7 @@ public class TarjetaServicio {
         }
 
     }
-    public void validaciones(Long Id,Usuario usuario,Integer pin,Double Saldo,Date fechaDeVencimiento,Boolean Alta) throws Exception {
+    public void validaciones(Long Id,String IdUsuario,Integer pin,Double Saldo,Date fechaDeVencimiento,Boolean Alta) throws Exception {
 
         if (Id == null || Id.toString().trim().isEmpty()) {
             throw new Exception(" El Id no puede ser nulo");
@@ -112,10 +121,10 @@ public class TarjetaServicio {
         }
         
         Date fechaActual=new Date();//ver si se crea con la fecha actual
-        if (fechaDeVencimiento.before(fechaActual)) {
+        if (fechaDeVencimiento.before(fechaActual)) {//ESTO ESTA FALLANDO,DA NULL
             throw new Exception(" La tarjeta esta vencida");
         }
-        if (usuario == null) {
+        if (IdUsuario == null) {
             throw new Exception(" El usuario no puede ser nulo");
         }
         if (Alta == null || Alta==false) {
