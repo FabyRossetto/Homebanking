@@ -31,6 +31,7 @@ public class CuentaServicio {
         Cuenta cuenta = new Cuenta();
         cuenta.setUsuario(usuario);
         cuenta.setSaldo(Double.NaN);
+        cuenta.setId(Id);
         //cuenta.setTransferencia(transferencia);
 
         //PERSISTENCIA DEL OBJETO
@@ -63,34 +64,67 @@ public class CuentaServicio {
 
     }
 
-    //MODIFICAR SALDO: Método para INGRESAR: sumar saldo + ingreso
+    //MODIFICAR SALDO: Método para INGRESAR: sumar saldo + deposito
     @Transactional
-    public void ingresarDinero(Double saldoActual,Double saldo,Double ingreso, Long Id) throws Excepcion {
+    public void ingresarDinero(Double saldoActual, Double saldo, Double deposito, Long Id, Date fecha) throws Excepcion {
 //        Deposito deposito = new deposito();
 //        deposito.setFecha(New Date());
         Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id); //busco la cuenta, y si existe una con ese id la materializamos
         if (respuesta.isPresent()) {
             Cuenta cuenta = respuesta.get();
-            cuenta.setSaldoActual(cuenta.getSaldo()+ingreso);
-            
+            cuenta.setSaldoActual(cuenta.getSaldo() + deposito);
+            cuenta.setFecha(fecha);
+
             cuentaRepositorio.save(cuenta);
-            
 
         }
     }
-    //MODIFICAR SALDO: Método para RETIRAR dinero : saldoActual-retiro
+
+    //MODIFICAR SALDO: Método para RETIRAR dinero : saldoActual-extraccion (retiro/compra)
     @Transactional
-    public void retirarDinero(Double saldoActual,Double saldo,Double retiro, Long Id) throws Excepcion {
+    public void retirarDinero(Double saldoActual, Double saldo, Double extraccion, Long Id, Date fecha) throws Excepcion {
 //        Extraccion extraccion=new extraccion();
 //        extraccion.setFecha(New Date());
         Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
         if (respuesta.isPresent()) {
             Cuenta cuenta = respuesta.get();
-            cuenta.setSaldoActual(cuenta.getSaldo()-retiro);
-            
+            cuenta.setSaldoActual(cuenta.getSaldo() - extraccion);
+            cuenta.setFecha(fecha);
+
             cuentaRepositorio.save(cuenta);
- 
+
         }
+    }
+
+    public void validar(Long Id, Double Saldo, Double saldoActual, Boolean Alta, Double deposito, Double extraccion,
+            Usuario usuario) throws Exception {
+
+        if (Id == null || Id.toString().trim().isEmpty()) {
+            throw new Exception(" El Id no puede ser nulo");
+        }
+        if (Saldo < 0) {
+
+            throw new Exception(" Su cuenta esta vacia");
+        }
+        if (saldoActual < 0) {
+
+            throw new Exception(" Su cuenta esta vacia");
+        }
+
+        if (deposito < 0.00) {
+
+            throw new Exception(" Debe ingresar un monto superior a cero");
+        }
+
+        if (extraccion < 0.00) {
+
+            throw new Exception(" Debe extraer un monto superior a cero");
+        }
+
+        if (usuario == null) {
+            throw new Exception(" El usuario no puede ser nulo");
+        }
+
     }
 }
 

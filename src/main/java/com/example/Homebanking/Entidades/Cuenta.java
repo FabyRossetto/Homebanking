@@ -23,26 +23,27 @@ import lombok.Data;
 @Data
 @Entity
 public class Cuenta {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
-    
-    
-     Boolean Alta= Boolean.TRUE; 
-     
-     
-    
-     //saldoActual=saldo+nuevoIngreso
+
+    Boolean Alta = Boolean.TRUE;
+
+    //saldoActual=saldo+deposito
     Double Saldo;
     Double saldoActual;
-   
-    Double ingreso;
-    Double retiro;
+
+    Double deposito = 0.00;
+    Double extraccion = 0.00;
     
+    @Temporal(TemporalType.TIMESTAMP)   
+    Date fecha;
+
     @OneToMany
     Transferencia transferencia;
-    
+
     @OneToOne
     Usuario usuario;
-    
+
 }
