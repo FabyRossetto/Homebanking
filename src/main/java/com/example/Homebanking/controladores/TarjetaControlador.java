@@ -6,7 +6,8 @@
 package com.example.Homebanking.controladores;
 
 import com.example.Homebanking.Entidades.Usuario;
-import com.example.Homebanking.Servicios.TarjetaServicio;
+import com.example.Homebanking.Servicios.TarjetaCreditoServicio;
+import com.example.Homebanking.Servicios.TarjetaDebitoServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,14 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class TarjetaControlador {
     
     @Autowired
-    TarjetaServicio tarjetaServ;
+    TarjetaCreditoServicio tarjetaCredito;
+    
+    @Autowired
+    TarjetaDebitoServicio tarjetaDebito;
     
      @PostMapping("/crearTarjetaCredito")
-     public String CrearTarjetaCredito (ModelMap modelo, @RequestParam String IdUsuario,@RequestParam Long IdTarjeta, @RequestParam Integer pin) throws Exception {
-        
-        tarjetaServ.CrearTarjetaCredito(IdUsuario,IdTarjeta,  pin);
-        modelo.put("exito", "su tarjeta se ha creado con exito");
-        return "su tarjeta se ha creado con exito";
+     public String CrearTarjetas (ModelMap modelo, @RequestParam String IdUsuario,@RequestParam Long IdTarjeta, @RequestParam Integer pin) throws Exception {
+        tarjetaCredito.CrearTarjeta(IdUsuario, IdTarjeta, pin);
+        tarjetaDebito.CrearTarjeta(IdUsuario, IdTarjeta, pin);
+        modelo.put("exito", "sus tarjetas de debito y credito se han creado con exito");
+        return "sus tarjetas se han creado con exito";
     }
      
 //      @PostMapping("/crearTarjetaDebito")
@@ -67,13 +71,13 @@ public class TarjetaControlador {
 //        return "se ha eliminado la tarjeta";
 //     }
 //     
-     @PutMapping("/darDeBaja")
-     public String DarDeBaja (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
-        
-        tarjetaServ.DarDeBajaTarjeta(IdTarjeta);
-        modelo.put("exito", "su tarjeta se ha dado de baja");
-        return "su tarjeta se ha dado de baja";
-    }
+//     @PutMapping("/darDeBaja")
+//     public String DarDeBaja (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
+//        
+//        tarjetaServ.DarDeBajaTarjeta(IdTarjeta);
+//        modelo.put("exito", "su tarjeta se ha dado de baja");
+//        return "su tarjeta se ha dado de baja";
+//    }
      
     
 }

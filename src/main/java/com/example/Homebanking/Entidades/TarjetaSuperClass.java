@@ -24,15 +24,13 @@ import org.springframework.stereotype.Component;
 @Data
 @Entity
 @Component
-public class Tarjeta {
+public class TarjetaSuperClass {
     
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long Id;
     
-    Double SaldoCredito=500000.00;//saldo maximo a gastar
-    
-    Double SaldoDebito;
+    Double Saldo;
     
     @Column(nullable= false)
     Integer pin;

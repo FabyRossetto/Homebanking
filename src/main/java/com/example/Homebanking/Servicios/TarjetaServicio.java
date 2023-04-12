@@ -6,7 +6,7 @@
 package com.example.Homebanking.Servicios;
 
 import com.example.Homebanking.Entidades.Cuenta;
-import com.example.Homebanking.Entidades.Tarjeta;
+import com.example.Homebanking.Entidades.TarjetaSuperClass;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepo;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 public class TarjetaServicio {
 
     @Autowired
-    Tarjeta tarjeta;
+    TarjetaSuperClass tarjeta;
 
     @Autowired
     TarjetaRepositorio tarjetaRepo;
@@ -40,8 +40,8 @@ public class TarjetaServicio {
     UsuarioRepo ure;
 
     @Transactional
-    public Tarjeta CrearTarjetaCredito(String IdUsuario,Long IdTarjeta,Integer pin) throws Exception {
-//        validaciones(IdTarjeta,IdUsuario,pin,tarjeta.getSaldoCredito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
+    public TarjetaSuperClass CrearTarjeta(String IdUsuario,Long IdTarjeta,Integer pin) throws Exception {//repensar el parametro idTarjeta,creo q no es necesario
+
           Usuario usuario = ure.getById(IdUsuario);
         if(usuario.getTarjeta()==null){
         tarjeta.setUsuario(usuario);
@@ -99,38 +99,41 @@ public class TarjetaServicio {
 //            tarjetaRepo.delete(trayendoTarjeta);
 //        }
 //    }
-   @Transactional
-    public void DarDeBajaTarjeta(Long IdTarjeta) {
-        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
-        if (trayendoTarjeta != null) {
-            trayendoTarjeta.setAlta(false);
+//   @Transactional
+//    public void DarDeBajaTarjeta(Long IdTarjeta) {
+//        TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+//        if (trayendoTarjeta != null) {
+//            trayendoTarjeta.setAlta(false);
+//        }
+//
+//    }
+     public void validacion1(String IdUsuario,Long Id,Integer pin) throws Exception {
+if (IdUsuario == null) {
+            throw new Exception(" El usuario no puede ser nulo");
         }
-
-    }
-    public void validaciones(Long Id,String IdUsuario,Integer pin,Double Saldo,Date fechaDeVencimiento,Boolean Alta) throws Exception {
-
         if (Id == null || Id.toString().trim().isEmpty()) {
             throw new Exception(" El Id no puede ser nulo");
         }
-        if (Saldo<0) {
-
-            throw new Exception(" Su cuenta esta vacia");
-        }
-        if (pin == null || pin.toString().trim().isEmpty() || pin.toString().length() > 4) {
+        
+        
+         if (pin == null || pin.toString().trim().isEmpty() || pin.toString().length() > 4) {
             throw new Exception(" El pin es nulo o no lo esta ingresando bien");
         }
         
+
+    }
+    public void validacion2(Double Saldo,Date fechaDeVencimiento,Boolean Alta)throws Exception{
+        if (Saldo<0||Saldo==null) {
+          throw new Exception(" Su cuenta esta vacia");
+        }
+       
         Date fechaActual=new Date();//ver si se crea con la fecha actual
         if (fechaDeVencimiento.before(fechaActual)) {//ESTO ESTA FALLANDO,DA NULL
             throw new Exception(" La tarjeta esta vencida");
         }
-        if (IdUsuario == null) {
-            throw new Exception(" El usuario no puede ser nulo");
-        }
         if (Alta == null || Alta==false) {
             throw new Exception(" La tarjeta esta dada de baja");
         }
-
     }
 
 }
