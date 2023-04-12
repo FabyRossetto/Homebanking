@@ -28,7 +28,9 @@ public class Tarjeta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
     
-    Integer Saldo;
+    Double SaldoCredito=500000.00;//saldo maximo a gastar
+    
+    Double SaldoDebito;
     
     @Column(nullable= false)
     Integer pin;
@@ -38,5 +40,7 @@ public class Tarjeta {
     
     @OneToOne
     Usuario usuario;
+    
+    Boolean Alta=Boolean.TRUE;
     
 }
