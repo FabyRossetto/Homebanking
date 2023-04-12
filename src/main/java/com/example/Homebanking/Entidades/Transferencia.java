@@ -39,6 +39,6 @@ public class Transferencia {
     Date Fecha;
 
     @Column(nullable = false)
-    Integer monto;
+    Double monto;
 
 }

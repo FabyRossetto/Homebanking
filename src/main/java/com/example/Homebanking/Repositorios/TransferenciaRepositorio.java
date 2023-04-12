@@ -15,4 +15,10 @@ public interface TransferenciaRepositorio extends JpaRepository<Transferencia,Lo
     
     @Query("SELECT f FROM Transferencia f WHERE f.Fecha =:Fecha")
     public Transferencia buscarFecha(@Param("Fecha" Date Fecha));*/
+    
+    
+    /*cuando busco transferencia por fecha o monto no me va a devolver una única transferencia
+    sino que puede ser más de una, por lo que debería devolver una lista de transferencias en el caso de
+    buscar por fecha y por monto
+    */
 }
