@@ -5,6 +5,7 @@
  */
 package com.example.Homebanking.Entidades;
 
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,20 +29,20 @@ public class TarjetaSuperClass {
     
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long Id;
+   protected Long Id;
     
-    Double Saldo;
+   protected Double Saldo;
     
     @Column(nullable= false)
-    Integer pin;
+   protected Integer pin;
     
     @Temporal(TemporalType.DATE)
-    Date fechaVencimiento;
+    protected LocalDate fechaVencimiento;
     //2023/07/25(año,mes,dia).
     
     @OneToOne
-    Usuario usuario;
+    protected Usuario usuario;
     
-    Boolean Alta=Boolean.TRUE;
+    protected Boolean Alta=Boolean.TRUE;
     
 }

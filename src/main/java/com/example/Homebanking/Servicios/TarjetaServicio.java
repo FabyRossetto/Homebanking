@@ -11,6 +11,9 @@ import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepo;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -47,7 +50,7 @@ public class TarjetaServicio {
         tarjeta.setUsuario(usuario);
         tarjeta.setId(IdTarjeta);
         tarjeta.setPin(pin);
-        tarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
+        tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
         
         }
         return tarjetaRepo.save(tarjeta);
@@ -122,15 +125,14 @@ if (IdUsuario == null) {
         
 
     }
-    public void validacion2(Double Saldo,Date fechaDeVencimiento,Boolean Alta)throws Exception{
+    public void validacion2(Double Saldo,LocalDate fechaDeVencimiento,Boolean Alta)throws Exception{
         if (Saldo<0||Saldo==null) {
           throw new Exception(" Su cuenta esta vacia");
         }
-       
-        Date fechaActual=new Date();//ver si se crea con la fecha actual
-        if (fechaDeVencimiento.before(fechaActual)) {//ESTO ESTA FALLANDO,DA NULL
-            throw new Exception(" La tarjeta esta vencida");
-        }
+        LocalDate fechaActual= LocalDate.now();//ver si se crea con la fecha actual
+         if (fechaActual.isAfter(fechaDeVencimiento)) {
+            System.out.println("La fecha de vencimiento ha pasado");
+         }
         if (Alta == null || Alta==false) {
             throw new Exception(" La tarjeta esta dada de baja");
         }

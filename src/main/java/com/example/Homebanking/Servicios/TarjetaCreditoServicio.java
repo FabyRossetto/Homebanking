@@ -9,6 +9,7 @@ import com.example.Homebanking.Entidades.TarjetaSuperClass;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepo;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class TarjetaCreditoServicio extends TarjetaServicio{
         tarjeta.setId(IdTarjeta);
         tarjeta.setPin(pin);
         tarjeta.setSaldo(500000.00);//saldo limite
-        tarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
+        tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
          
         }
 //        validacion2(tarjeta.getSaldo(), tarjeta.getFechaVencimiento(), tarjeta.getAlta());//ver si esta validacion la necesito aca o en un metodo para gastar
