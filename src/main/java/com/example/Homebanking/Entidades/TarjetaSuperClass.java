@@ -36,7 +36,7 @@ public class TarjetaSuperClass {
     @Column(nullable= false)
    protected Integer pin;
     
-    @Temporal(TemporalType.DATE)
+    
     protected LocalDate fechaVencimiento;
     //2023/07/25(año,mes,dia).
     
@@ -45,4 +45,5 @@ public class TarjetaSuperClass {
     
     protected Boolean Alta=Boolean.TRUE;
     
+    protected String tipo;
 }

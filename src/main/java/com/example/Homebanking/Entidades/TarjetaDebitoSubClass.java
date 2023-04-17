@@ -15,5 +15,5 @@ import lombok.Data;
 
 
 public class TarjetaDebitoSubClass extends TarjetaSuperClass{
-    
+
 }

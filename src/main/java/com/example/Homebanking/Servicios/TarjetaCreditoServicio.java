@@ -39,12 +39,32 @@ public class TarjetaCreditoServicio extends TarjetaServicio{
         tarjeta.setId(IdTarjeta);
         tarjeta.setPin(pin);
         tarjeta.setSaldo(500000.00);//saldo limite
-        tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
+        tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));
+        tarjeta.setTipo("Credito");
          
         }
-//        validacion2(tarjeta.getSaldo(), tarjeta.getFechaVencimiento(), tarjeta.getAlta());//ver si esta validacion la necesito aca o en un metodo para gastar
+        validacion2(tarjeta.getSaldo(), tarjeta.getFechaVencimiento(), tarjeta.getAlta());//ver si esta validacion la necesito aca o en un metodo para gastar
         return tarjetaRepo.save(tarjeta);
 }
+    @Transactional
+    public TarjetaSuperClass modificarTarjeta(Long IdTarjeta, String IdUsuario, Integer pin) throws Exception {
+       validacion1( IdUsuario,IdTarjeta, pin);
+        TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+        Usuario usuario = ure.getById(IdUsuario);
+        
+        if (trayendoTarjeta != null) {
+            trayendoTarjeta.setUsuario(usuario);
+            trayendoTarjeta.setPin(pin);
+            trayendoTarjeta.setSaldo(usuario.getCuenta().getSaldo());
+            trayendoTarjeta.setFechaVencimiento(LocalDate.of(2035, 12, 31));
+            trayendoTarjeta.setTipo("Credito");
+            
+        }
+        validacion2(trayendoTarjeta.getSaldo(), trayendoTarjeta.getFechaVencimiento(), trayendoTarjeta.getAlta());
+        return tarjetaRepo.save(trayendoTarjeta); 
+    }
+    
+    //pensar un metodo para ir restandole las compras al saldo maximo
 
 
    

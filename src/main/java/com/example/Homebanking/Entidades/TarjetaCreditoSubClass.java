@@ -14,5 +14,6 @@ import javax.persistence.Entity;
  */
 
 public class TarjetaCreditoSubClass extends TarjetaSuperClass{
-    
+
+  
 }
