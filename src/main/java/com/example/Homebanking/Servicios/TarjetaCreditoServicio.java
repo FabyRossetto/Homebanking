@@ -64,9 +64,31 @@ public class TarjetaCreditoServicio extends TarjetaServicio{
         return tarjetaRepo.save(trayendoTarjeta); 
     }
     
-    //pensar un metodo para ir restandole las compras al saldo maximo
+    
+    @Transactional
+    public void modificarSaldoMaximo( Double MontoCompra, Long IdTarjeta) throws Exception {
+        TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+        
+        if (trayendoTarjeta!=null) {
+            
+            if(MontoCompra>trayendoTarjeta.getSaldo()){
+                throw new Exception(" Fondos insuficientes");
+            }
+            
+            validacion2(trayendoTarjeta.getSaldo(), trayendoTarjeta.getFechaVencimiento(), trayendoTarjeta.getAlta());
+            
+            trayendoTarjeta.setSaldo(trayendoTarjeta.getSaldo()- MontoCompra);
+            
+           tarjetaRepo.save(trayendoTarjeta);
+
+}
+        }
+        
+    }
+    
+    
 
 
    
-}
+
 

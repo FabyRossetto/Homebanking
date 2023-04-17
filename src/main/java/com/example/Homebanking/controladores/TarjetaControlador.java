@@ -63,14 +63,16 @@ public class TarjetaControlador {
     }
 
     @PutMapping("/actualizarSaldo")
-    public String ActualizarSaldo(ModelMap modelo, @RequestParam Long IdTarjeta) throws Exception {
+    public String ActualizarSaldo(ModelMap modelo, @RequestParam Long IdTarjeta,@RequestParam Double MontoCompra) throws Exception {
         TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
         if (trayendoTarjeta.getTipo().equalsIgnoreCase("Debito")) {
             tarjetaDebito.ActualizarSaldoTarjetaDebito(IdTarjeta);
         }
-        //falta la parte de si es credito que llame al otro metodo para restarle al saldo maximo las compras que el usuario hace con la tarjeta de Credito
-        modelo.put("exito", "el saldo se ha actualizado");
-        return "el saldo se ha actualizado";
+        if (trayendoTarjeta.getTipo().equalsIgnoreCase("Credito")) {
+            tarjetaCredito.modificarSaldoMaximo(MontoCompra, IdTarjeta);
+        }
+        modelo.put("exito", "La compra se ha realizado correctamente y el saldo se ha actualizado");
+        return "La compra se ha realizado correctamente  y el saldo se ha actualizado. Su saldo actual es de "+ trayendoTarjeta.getSaldo();
     }
 
     @DeleteMapping("/EliminarTarjeta")

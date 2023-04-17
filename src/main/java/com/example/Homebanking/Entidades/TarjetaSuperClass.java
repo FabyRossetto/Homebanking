@@ -46,4 +46,5 @@ public class TarjetaSuperClass {
     protected Boolean Alta=Boolean.TRUE;
     
     protected String tipo;
+    
 }

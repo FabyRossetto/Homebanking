@@ -5,8 +5,6 @@
  */
 package com.example.Homebanking.Entidades;
 
-import javax.persistence.Entity;
-
 
 /**
  *
@@ -14,6 +12,5 @@ import javax.persistence.Entity;
  */
 
 public class TarjetaCreditoSubClass extends TarjetaSuperClass{
-
-  
+    
 }
