@@ -42,10 +42,17 @@ public class Usuario {
     Cuenta Cuenta;
     
     @Column(nullable= false)
-    int clave;
+    Integer clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
+    
     
     @OneToOne
-    TarjetaSuperClass tarjeta;
+    TarjetaSuperClass tarjetaDebito;
+    
+    @OneToOne
+    TarjetaSuperClass tarjetaCredito;
+    
+    
+    Boolean Alta;
     
     @Temporal(TemporalType.TIMESTAMP)
     Date fechaAlta;

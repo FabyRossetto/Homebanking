@@ -8,9 +8,9 @@ package com.example.Homebanking.Servicios;
 import com.example.Homebanking.Entidades.TarjetaSuperClass;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
-import com.example.Homebanking.Repositorios.UsuarioRepo;
+
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.time.LocalDate;
-import java.util.Date;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,19 +22,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class TarjetaCreditoServicio extends TarjetaServicio{
     @Autowired
-    TarjetaSuperClass tarjeta;
+    TarjetaSuperClass tarjetaCredito;
 
     @Autowired
     TarjetaRepositorio tarjetaRepo;
     
     @Autowired
-    UsuarioRepo ure;
+    UsuarioRepositorio ure;
 
     @Override
     public TarjetaSuperClass CrearTarjeta(String IdUsuario,Long IdTarjeta,Integer pin) throws Exception {
         validacion1( IdUsuario,IdTarjeta, pin);
           Usuario usuario = ure.getById(IdUsuario);
-        if(usuario.getTarjeta()==null){
+        if(usuario.getTarjetaCredito()==null){
         tarjeta.setUsuario(usuario);
         tarjeta.setId(IdTarjeta);
         tarjeta.setPin(pin);
@@ -47,6 +47,7 @@ public class TarjetaCreditoServicio extends TarjetaServicio{
         return tarjetaRepo.save(tarjeta);
 }
     @Transactional
+    @Override
     public TarjetaSuperClass modificarTarjeta(Long IdTarjeta, String IdUsuario, Integer pin) throws Exception {
        validacion1( IdUsuario,IdTarjeta, pin);
         TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);

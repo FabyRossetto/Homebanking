@@ -5,25 +5,21 @@
  */
 package com.example.Homebanking.Servicios;
 
-import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.TarjetaSuperClass;
 import com.example.Homebanking.Entidades.Usuario;
-import com.example.Homebanking.Errores.Excepcion;
+
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
-import com.example.Homebanking.Repositorios.UsuarioRepo;
-import java.time.Instant;
+
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
+
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Tarjeta (Fabi) crearTarjeta eliminarTarjeta darBaja actualizarSaldo
- * validarTarjeta (límite de tarjeta disponible, usuario, no esté vencida)
+ *
  * Cuando hagamos la autorizacion de usuarios, es importante que a algunos
  * metodos solo puedan acceder los administradores: como modificar,eliminar o
  * dar de baja.
@@ -39,13 +35,13 @@ public class TarjetaServicio {
     TarjetaRepositorio tarjetaRepo;
 
     @Autowired
-    UsuarioRepo ure;
+    UsuarioRepositorio ure;
 
     @Transactional
     public TarjetaSuperClass CrearTarjeta(String IdUsuario, Long IdTarjeta, Integer pin) throws Exception {//repensar el parametro idTarjeta,creo q no es necesario
 
         Usuario usuario = ure.getById(IdUsuario);
-        if (usuario.getTarjeta() == null) {
+        if (usuario.getTarjetaDebito()== null) {
             tarjeta.setUsuario(usuario);
             tarjeta.setId(IdTarjeta);
             tarjeta.setPin(pin);
@@ -72,8 +68,8 @@ public class TarjetaServicio {
         }
         return tarjetaRepo.save(trayendoTarjeta);
     }
-    
-     public void EliminarTarjeta(Long IdTarjeta) {
+
+    public void EliminarTarjeta(Long IdTarjeta) {
         TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
         if (trayendoTarjeta != null) {
             tarjetaRepo.delete(trayendoTarjeta);
@@ -90,7 +86,6 @@ public class TarjetaServicio {
         }
 
     }
-    
 
     public void validacion1(String IdUsuario, Long Id, Integer pin) throws Exception {
         if (IdUsuario == null) {
