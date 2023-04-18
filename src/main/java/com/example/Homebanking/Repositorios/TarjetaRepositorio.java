@@ -5,7 +5,7 @@
  */
 package com.example.Homebanking.Repositorios;
 
-import com.example.Homebanking.Entidades.Tarjeta;
+import com.example.Homebanking.Entidades.TarjetaSuperClass;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,8 +16,8 @@ import org.springframework.stereotype.Repository;
  * @author Fabi
  */
 @Repository
-public interface TarjetaRepositorio extends JpaRepository<Tarjeta,Long> {
+public interface TarjetaRepositorio extends JpaRepository<TarjetaSuperClass,Long> {
     
-    @Query("SELECT t FROM Tarjeta t WHERE t.IdTarjeta = :IdTarjeta ")
-    public Tarjeta buscarPorId(@Param("IdTarjeta") Long IdTarjeta);
+    @Query("SELECT t FROM TarjetaSuperClass t WHERE t.Id = :IdTarjeta ")
+    public TarjetaSuperClass buscarPorId(@Param("IdTarjeta") Long Id);
 }

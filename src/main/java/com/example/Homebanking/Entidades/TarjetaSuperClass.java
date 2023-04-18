@@ -5,6 +5,7 @@
  */
 package com.example.Homebanking.Entidades;
 
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -22,25 +24,27 @@ import lombok.Data;
  */
 @Data
 @Entity
-public class Tarjeta {
+@Component
+public class TarjetaSuperClass {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long Id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+   protected Long Id;
     
-    Double SaldoCredito=500000.00;//saldo maximo a gastar
-    
-    Double SaldoDebito;
+   protected Double Saldo;
     
     @Column(nullable= false)
-    Integer pin;
+   protected Integer pin;
     
-    @Temporal(TemporalType.DATE)
-    Date fechaVencimiento;
+    
+    protected LocalDate fechaVencimiento;
+    //2023/07/25(año,mes,dia).
     
     @OneToOne
-    Usuario usuario;
+    protected Usuario usuario;
     
-    Boolean Alta=Boolean.TRUE;
+    protected Boolean Alta=Boolean.TRUE;
+    
+    protected String tipo;
     
 }
