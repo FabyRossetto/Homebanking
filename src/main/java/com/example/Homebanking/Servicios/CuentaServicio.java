@@ -16,26 +16,28 @@ public class CuentaServicio {
 
     @Autowired
     private CuentaRepositorio cuentaRepositorio;
-//    @Autowired
-//    private UsuarioRepositorio usuarioRepositorio;
-//
-//    @Autowired
-//    private TransferenciaRepositorio transferenciaRepositorio;
+    @Autowired
+    private UsuarioRepositorio usuarioRepositorio;
+
+    @Autowired
+    private TransferenciaRepositorio transferenciaRepositorio;
 
     //el error se debe a que no tengo creado los repo de usuario y transfernecia 
     //GUARDAR UNA CUENTA: CREACIÓN (necesito transferencia para crearlo?)
-//    @Transactional
-//    public Cuenta guardar(Long Id,Usuario usuario, Transferencia transferencia) throws Excepcion {
-//
-//        //SETEO DE ATRIBUTOS
-//        Cuenta cuenta = new Cuenta();
-//        cuenta.setUsuario(usuario);
-//        cuenta.setTransferencia(transferencia);
-//
-//        //PERSISTENCIA DEL OBJETO
-//        return cuentaRepositorio.save(cuenta);
-//
-//    }
+    @Transactional
+    public Cuenta guardar(Long Id, Usuario usuario, Transferencia transferencia) throws Excepcion {
+
+        //SETEO DE ATRIBUTOS
+        Cuenta cuenta = new Cuenta();
+        cuenta.setUsuario(usuario);
+        cuenta.setSaldo(Double.NaN);
+        cuenta.setId(Id);
+        //cuenta.setTransferencia(transferencia);
+
+        //PERSISTENCIA DEL OBJETO
+        return cuentaRepositorio.save(cuenta);
+
+    }
 
     //ELIMINAR CUENTA
     @Transactional
@@ -50,7 +52,7 @@ public class CuentaServicio {
 
     //DAR DE BAJA: necesito el alta para luego darlo de baja.Agregar esto a la entidad cuenta
     @Transactional
-    public void darDeBaja(Long Id,Date Alta) throws Excepcion {
+    public void darDeBaja(Long Id, Date Alta) throws Excepcion {
         Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
         if (respuesta.isPresent()) {
 
@@ -62,14 +64,68 @@ public class CuentaServicio {
 
     }
 
-    //MODIFICAR SALDO
+    //MODIFICAR SALDO: Método para INGRESAR: sumar saldo + deposito
     @Transactional
-    public void modificarSaldo(Double Saldo,Transferencia transferencia,Usuario usuario,Long Id){
+    public void ingresarDinero(Double saldoActual, Double saldo, Double deposito, Long Id, Date fecha) throws Excepcion {
+//        Deposito deposito = new deposito();
+//        deposito.setFecha(New Date());
+        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id); //busco la cuenta, y si existe una con ese id la materializamos
+        if (respuesta.isPresent()) {
+            Cuenta cuenta = respuesta.get();
+            cuenta.setSaldoActual(cuenta.getSaldo() + deposito);
+            cuenta.setFecha(fecha);
+
+            cuentaRepositorio.save(cuenta);
+
+        }
+    }
+
+    //MODIFICAR SALDO: Método para RETIRAR dinero : saldoActual-extraccion (retiro/compra)
+    @Transactional
+    public void retirarDinero(Double saldoActual, Double saldo, Double extraccion, Long Id, Date fecha) throws Excepcion {
+//        Extraccion extraccion=new extraccion();
+//        extraccion.setFecha(New Date());
         Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
         if (respuesta.isPresent()) {
-
             Cuenta cuenta = respuesta.get();
-            
+            cuenta.setSaldoActual(cuenta.getSaldo() - extraccion);
+            cuenta.setFecha(fecha);
+
+            cuentaRepositorio.save(cuenta);
+
+        }
     }
+
+    public void validar(Long Id, Double Saldo, Double saldoActual, Boolean Alta, Double deposito, Double extraccion,
+            Usuario usuario) throws Exception {
+
+        if (Id == null || Id.toString().trim().isEmpty()) {
+            throw new Exception(" El Id no puede ser nulo");
+        }
+        if (Saldo < 0) {
+
+            throw new Exception(" Su cuenta esta vacia");
+        }
+        if (saldoActual < 0) {
+
+            throw new Exception(" Su cuenta esta vacia");
+        }
+
+        if (deposito < 0.00) {
+
+            throw new Exception(" Debe ingresar un monto superior a cero");
+        }
+
+        if (extraccion < 0.00) {
+
+            throw new Exception(" Debe extraer un monto superior a cero");
+        }
+
+        if (usuario == null) {
+            throw new Exception(" El usuario no puede ser nulo");
+        }
+
     }
 }
+
+//podria buscar la cuenta por su usuario y lueg realizar ciertas validaciones
