@@ -25,13 +25,16 @@ public class CuentaServicio {
     //el error se debe a que no tengo creado los repo de usuario y transfernecia 
     //GUARDAR UNA CUENTA: CREACIÓN (necesito transferencia para crearlo?)
     @Transactional
-    public Cuenta guardar(Long Id, Usuario usuario, Transferencia transferencia) throws Excepcion {
+    public Cuenta guardar(Long Id, Usuario usuario,Double saldo, Boolean alta, Date fecha) throws Excepcion {
 
         //SETEO DE ATRIBUTOS
         Cuenta cuenta = new Cuenta();
         cuenta.setUsuario(usuario);
         cuenta.setSaldo(Double.NaN);
+        cuenta.setAlta(alta);
+        cuenta.setFecha(fecha);
         cuenta.setId(Id);
+        
         //cuenta.setTransferencia(transferencia);
 
         //PERSISTENCIA DEL OBJETO
@@ -82,14 +85,17 @@ public class CuentaServicio {
 
     //MODIFICAR SALDO: Método para RETIRAR dinero : saldoActual-extraccion (retiro/compra)
     @Transactional
-    public void retirarDinero(Double saldoActual, Double saldo, Double extraccion, Long Id, Date fecha) throws Excepcion {
-//        Extraccion extraccion=new extraccion();
-//        extraccion.setFecha(New Date());
+    public void retirarDinero(Double saldoActual, Double saldo, Double extraccion, Long Id, Date fecha,String IdUsuario) throws Excepcion {
+  //      Extraccion extraccion=new extraccion();
+    //   extraccion.setFecha(New Date());
         Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
         if (respuesta.isPresent()) {
             Cuenta cuenta = respuesta.get();
             cuenta.setSaldoActual(cuenta.getSaldo() - extraccion);
             cuenta.setFecha(fecha);
+
+ 
+    
 
             cuentaRepositorio.save(cuenta);
 
