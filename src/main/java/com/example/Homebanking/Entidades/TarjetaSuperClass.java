@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 public class TarjetaSuperClass {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
    protected Long Id;
     
    protected Double Saldo;

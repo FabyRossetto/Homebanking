@@ -32,18 +32,18 @@ public class TarjetaDebitoServicio extends TarjetaServicio{
     UsuarioRepositorio ure;
 
     @Override
-    public TarjetaSuperClass CrearTarjeta(String IdUsuario,Long IdTarjeta,Integer pin) throws Exception {
-        validacion1( IdUsuario,IdTarjeta, pin);
+    public TarjetaSuperClass CrearTarjeta(String IdUsuario,Integer pin) throws Exception {
+        
           Usuario usuario = ure.getById(IdUsuario);
         if(usuario.getTarjetaDebito()==null){
         tarjeta.setUsuario(usuario);
-        tarjeta.setId(IdTarjeta);
+        
         tarjeta.setPin(pin);
         tarjeta.setSaldo(usuario.getCuenta().getSaldo());//saldo en la cuenta
         tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
         tarjeta.setTipo("Debito");
         }
-        validacion2(tarjeta.getSaldo(), tarjeta.getFechaVencimiento(), tarjeta.getAlta());
+//        validacion2(tarjeta.getSaldo(), tarjeta.getFechaVencimiento(), tarjeta.getAlta());
         return tarjetaRepo.save(tarjeta);
 }
      @Override

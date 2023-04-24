@@ -31,19 +31,19 @@ public class TarjetaCreditoServicio extends TarjetaServicio{
     UsuarioRepositorio ure;
 
     @Override
-    public TarjetaSuperClass CrearTarjeta(String IdUsuario,Long IdTarjeta,Integer pin) throws Exception {
-        validacion1( IdUsuario,IdTarjeta, pin);
+    public TarjetaSuperClass CrearTarjeta(String IdUsuario,Integer pin) throws Exception {
+        
           Usuario usuario = ure.getById(IdUsuario);
         if(usuario.getTarjetaCredito()==null){
         tarjeta.setUsuario(usuario);
-        tarjeta.setId(IdTarjeta);
+       
         tarjeta.setPin(pin);
         tarjeta.setSaldo(500000.00);//saldo limite
         tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));
         tarjeta.setTipo("Credito");
          
         }
-        validacion2(tarjeta.getSaldo(), tarjeta.getFechaVencimiento(), tarjeta.getAlta());//ver si esta validacion la necesito aca o en un metodo para gastar
+//        validacion2(tarjeta.getSaldo(), tarjeta.getFechaVencimiento(), tarjeta.getAlta());//ver si esta validacion la necesito aca o en un metodo para gastar
         return tarjetaRepo.save(tarjeta);
 }
     @Transactional

@@ -38,12 +38,12 @@ public class TarjetaServicio {
     UsuarioRepositorio ure;
 
     @Transactional
-    public TarjetaSuperClass CrearTarjeta(String IdUsuario, Long IdTarjeta, Integer pin) throws Exception {//repensar el parametro idTarjeta,creo q no es necesario
+    public TarjetaSuperClass CrearTarjeta(String IdUsuario, Integer pin) throws Exception {//repensar el parametro idTarjeta,creo q no es necesario
 
         Usuario usuario = ure.getById(IdUsuario);
         if (usuario.getTarjetaDebito()== null) {
             tarjeta.setUsuario(usuario);
-            tarjeta.setId(IdTarjeta);
+           
             tarjeta.setPin(pin);
             tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));
             tarjeta.setTipo(tarjeta.getTipo());
