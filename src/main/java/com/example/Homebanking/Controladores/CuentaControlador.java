@@ -1,9 +1,13 @@
 package com.example.Homebanking.Controladores;
 
+import com.example.Homebanking.Entidades.Cuenta;
+import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.CuentaRepositorio;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
+import com.example.Homebanking.Repositorios.UsuarioRepo;
 import com.example.Homebanking.Servicios.CuentaServicio;
 import com.example.Homebanking.Servicios.TarjetaServicio;
+import com.example.Homebanking.Servicios.UsuarioServicio;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +25,7 @@ public class CuentaControlador {
     private CuentaRepositorio cuentaRepositorio;
 
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepo usuarioRepo;
 
     @Autowired
     private TarjetaRepositorio tarjetaRepositorio;
@@ -43,11 +47,11 @@ public class CuentaControlador {
 
         return "administracionCuenta"; //me devuelve la vista
     }
-    
-     @PostMapping("/guardarCuenta")
-    public String guardarEditorial(@RequestParam Usuario usuario,Double saldo, Date fecha,Boolean alta, ModelMap modelo) throws Exception {
+
+    @PostMapping("/guardarCuenta")
+    public String guardarCuenta(@RequestParam Usuario usuario, @RequestParam Double saldo, @RequestParam Date fecha, @RequestParam Boolean alta, ModelMap modelo) throws Exception {
         try {
-            cuentaservicio.guardar(Long.MIN_VALUE, usuario,saldo,fecha,alta);
+            cuentaservicio.guardar(Long.MIN_VALUE, usuario, saldo, alta, fecha);
             modelo.put("Gracias por elegirnos", ("Cuenta dada de alta con éxito"));
         } catch (Exception e) {
             e.getMessage();
@@ -56,5 +60,37 @@ public class CuentaControlador {
         return "administracionCuenta";
     }
 
+    @PostMapping("/ingresarDinero")
+    public String ingresarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Long Id, @RequestParam Date fecha, ModelMap modelo) throws Exception {
+        Cuenta cuenta = cuentaRepositorio.getById(Id);
+        try {
+            cuentaservicio.ingresarDinero(saldoActual, saldo, Id, fecha);
+            modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
+        } catch (Exception e) {
+            e.getMessage();
+            modelo.put("Error", "Intente nuevamente");
+        }
+        return "administracionCuenta"; //o lo redirigo al html de ingresar dinero?
+    }
+
+    @PostMapping("/retirarDinero")
+    public String retirarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Double extraccion, @RequestParam Long Id, @RequestParam Date fecha, ModelMap modelo) throws Exception { 
+        Cuenta cuenta = cuentaRepositorio.getById(Id);
+
+        try {
+            cuentaservicio.retirarDinero(saldoActual, saldo, extraccion, Id, fecha);
+            modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
+        } catch (Exception e) {
+            e.getMessage();
+            modelo.put("Error", "Intente nuevamente");
+        }
+
+        return "administracionCuenta";
+
+    }
+
 }
+
+
+
 //alta?
