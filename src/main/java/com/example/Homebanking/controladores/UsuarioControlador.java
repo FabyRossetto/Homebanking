@@ -39,8 +39,8 @@ public class UsuarioControlador {
 
     }
     @PostMapping("/cargarCuentayTarjetas")
-    public String CargarCuentayTarjetas(ModelMap modelo, @RequestParam String Id, @RequestParam Integer clave) throws Exception{
-        uSer.cargarTarjetasyCuenta(Id, clave);
+    public String CargarCuentayTarjetas(ModelMap modelo, @RequestParam String Id,@RequestParam Double saldo, @RequestParam Integer clave) throws Exception{
+        uSer.cargarTarjetasyCuenta(Id,saldo, clave);
         return "se creo su cuenta y se cargaron sus tarjetas de debito y credito";
     }
 }

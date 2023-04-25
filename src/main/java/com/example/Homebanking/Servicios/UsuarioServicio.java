@@ -1,6 +1,8 @@
 package com.example.Homebanking.servicios;
 
 import com.example.Homebanking.Entidades.Cuenta;
+import com.example.Homebanking.Entidades.TarjetaCreditoSubClass;
+import com.example.Homebanking.Entidades.TarjetaDebitoSubClass;
 import com.example.Homebanking.Entidades.Usuario;
 
 import com.example.Homebanking.Entidades.TarjetaSuperClass;
@@ -41,6 +43,9 @@ public class UsuarioServicio {
 
     @Autowired
     com.example.Homebanking.Servicios.TarjetaDebitoServicio tarjetaDebito;
+    
+    @Autowired
+    com.example.Homebanking.Entidades.Cuenta cuenta;
 
     @Transactional
     public Usuario crear(String Id, String nombre, String apellido, String Email, Integer clave) throws ErrorServicio, Exception {
@@ -64,7 +69,7 @@ public class UsuarioServicio {
         return usuarioRepositorio.save(usuario);
     }
 
-    public void cargarTarjetasyCuenta(String IdUsuario, Integer clave) throws Excepcion, Exception {
+    public void cargarTarjetasyCuenta(String IdUsuario, Double saldoCuenta,Integer clave) throws Excepcion, Exception {
 
         Optional<Usuario> usuario = usuarioRepositorio.findById(IdUsuario);
         
@@ -72,15 +77,17 @@ public class UsuarioServicio {
             Usuario usu = usuario.get();
             
             if (usu.getRol() == USUARIO) {
-//                Cuenta cuenta = new Cuenta();//no se crea la cuenta
-//                cuentaSer.guardar(cuenta.getId(), usu);
-//                usu.setCuenta(cuenta);
-
-//                TarjetaSuperClass debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave);
-//                usu.setTarjetaDebito(debito);//no puede tomar el valor del sldo por ende arroja error
-
+               
+               Cuenta cuen=cuentaSer.guardar(cuenta.getId(), IdUsuario, saldoCuenta);
+               usu.setCuenta(cuen);
+                 if (usu.getTarjetaDebito() == null) {
+                TarjetaSuperClass debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave);
+               usu.setTarjetaDebito(debito);//no puede tomar el valor del sldo por ende arroja error
+                 }
+                 if(usu.getTarjetaCredito()==null){
                 TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(IdUsuario, clave);
                 usu.setTarjetaCredito(credito);
+                 }
                 usuarioRepositorio.save(usu);
             }
              

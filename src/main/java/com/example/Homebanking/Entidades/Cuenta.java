@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -22,6 +23,7 @@ import lombok.Data;
  */
 @Data
 @Entity
+@Component
 public class Cuenta {
 
     @Id
