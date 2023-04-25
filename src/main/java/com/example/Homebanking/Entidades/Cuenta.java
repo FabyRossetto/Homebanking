@@ -6,7 +6,6 @@
 package com.example.Homebanking.Entidades;
 
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -23,20 +23,29 @@ import lombok.Data;
  */
 @Data
 @Entity
+@Component
 public class Cuenta {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long Id;
+
+    Boolean Alta = Boolean.TRUE;
+
+    //saldoActual=saldo+deposito
     
+    Double saldo;
+
+    Double deposito = 0.00;
+    Double extraccion = 0.00;
     
-    Boolean Alta=Boolean.TRUE; 
-    
-    Double Saldo;
-   
-    @OneToMany
-    List<Transferencia> transferencia;//tuve que cambiar esto porque no me dejaba mapearla con el oneToMany al ser transferencia un solo objeto.
-    
+    @Temporal(TemporalType.TIMESTAMP)   
+    Date fecha;
+
+//    @OneToMany
+//    Transferencia transferencia;
+
     @OneToOne
     Usuario usuario;
-    
+
 }

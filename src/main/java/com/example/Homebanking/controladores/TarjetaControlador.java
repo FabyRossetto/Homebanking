@@ -43,9 +43,9 @@ public class TarjetaControlador {
     TarjetaRepositorio tarjetaRepo;
 
     @PostMapping("/crearTarjetaCredito")
-    public String CrearTarjetas(ModelMap modelo, @RequestParam String IdUsuario, @RequestParam Long IdTarjeta, @RequestParam Integer pin) throws Exception {
-        tarjetaCredito.CrearTarjeta(IdUsuario, IdTarjeta, pin);
-        tarjetaDebito.CrearTarjeta(IdUsuario, IdTarjeta, pin);
+    public String CrearTarjetas(ModelMap modelo, @RequestParam String IdUsuario, @RequestParam Integer pin) throws Exception {
+        tarjetaCredito.CrearTarjeta(IdUsuario, pin);
+        tarjetaDebito.CrearTarjeta(IdUsuario, pin);
         modelo.put("exito", "sus tarjetas de debito y credito se han creado con exito");
         return "sus tarjetas se han creado con exito";
     }
