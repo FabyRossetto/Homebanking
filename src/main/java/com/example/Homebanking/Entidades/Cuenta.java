@@ -6,7 +6,6 @@
 package com.example.Homebanking.Entidades;
 
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,19 +23,27 @@ import lombok.Data;
 @Data
 @Entity
 public class Cuenta {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
-    
-    
-    Boolean Alta=Boolean.TRUE; 
-    
+
+    Boolean Alta = Boolean.TRUE;
+
+    //saldoActual=saldo+deposito
     Double Saldo;
-   
-    @OneToMany
-    List<Transferencia> transferencia;//tuve que cambiar esto porque no me dejaba mapearla con el oneToMany al ser transferencia un solo objeto.
+    Double saldoActual;
+
+    Double deposito = 0.00;
+    Double extraccion = 0.00;
     
+    @Temporal(TemporalType.TIMESTAMP)   
+    Date fecha;
+
+    @OneToMany
+    Transferencia transferencia;
+
     @OneToOne
     Usuario usuario;
-    
+
 }

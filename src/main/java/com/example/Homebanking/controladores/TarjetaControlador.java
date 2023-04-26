@@ -5,9 +5,14 @@
  */
 package com.example.Homebanking.controladores;
 
+import com.example.Homebanking.Entidades.TarjetaSuperClass;
 import com.example.Homebanking.Entidades.Usuario;
+import com.example.Homebanking.Repositorios.TarjetaRepositorio;
+import com.example.Homebanking.Servicios.TarjetaCreditoServicio;
+import com.example.Homebanking.Servicios.TarjetaDebitoServicio;
 import com.example.Homebanking.Servicios.TarjetaServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,57 +28,72 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/tarjeta")
 public class TarjetaControlador {
+
+    @Autowired
+    TarjetaCreditoServicio tarjetaCredito;
+
+    @Autowired
+    TarjetaDebitoServicio tarjetaDebito;
     
     @Autowired
-    TarjetaServicio tarjetaServ;
-    
-     @PostMapping("/crearTarjetaCredito")
-     public String CrearTarjetaCredito (ModelMap modelo, @RequestParam String IdUsuario,@RequestParam Long IdTarjeta, @RequestParam Integer pin) throws Exception {
-        
-        tarjetaServ.CrearTarjetaCredito(IdUsuario,IdTarjeta,  pin);
-        modelo.put("exito", "su tarjeta se ha creado con exito");
-        return "su tarjeta se ha creado con exito";
+    @Qualifier("tarjetaServicio")//esta anotacion es para indicarle que clase quiero que utilice,porque al ser la clase padre,el programa no sabia cual de las 3 usar
+    TarjetaServicio tarjetaServicio;
+
+    @Autowired
+    TarjetaRepositorio tarjetaRepo;
+
+    @PostMapping("/crearTarjetaCredito")
+    public String CrearTarjetas(ModelMap modelo, @RequestParam String IdUsuario, @RequestParam Long IdTarjeta, @RequestParam Integer pin) throws Exception {
+        tarjetaCredito.CrearTarjeta(IdUsuario, IdTarjeta, pin);
+        tarjetaDebito.CrearTarjeta(IdUsuario, IdTarjeta, pin);
+        modelo.put("exito", "sus tarjetas de debito y credito se han creado con exito");
+        return "sus tarjetas se han creado con exito";
     }
-     
-//      @PostMapping("/crearTarjetaDebito")
-//     public String CrearTarjetaDebito (ModelMap modelo,@RequestParam Long IdTarjeta, @RequestParam Usuario usuario, @RequestParam Integer pin) throws Exception {
-//        
-//        tarjetaServ.CrearTarjetaDebito(IdTarjeta, usuario, pin);
-//        modelo.put("exito", "su tarjeta se ha creado con exito");
-//        return "su tarjeta se ha creado con exito";
-//    }
-//     
-//     @PutMapping("/ModificarTarjetaDebito")
-//     public String ModificarTarjetaDebito (ModelMap modelo,@RequestParam Long IdTarjeta, @RequestParam Usuario usuario, @RequestParam Integer pin) throws Exception {
-//        
-//        tarjetaServ.modificarTarjetaDebito(IdTarjeta, usuario, pin);
-//        modelo.put("exito", "ha modificado su tarjeta de debito correctamente");
-//        return "ha modificado su tarjeta de debito correctamente";
-//    }
-//     
-//     @PutMapping("/actualizarSaldo")
-//     public String ActualizarSaldoTarjetaDebito (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
-//        
-//        tarjetaServ.ActualizarSaldoTarjetaDebito(IdTarjeta);
-//        modelo.put("exito", "el saldo se ha actualizado");
-//        return "el saldo se ha actualizado";
-//    }
-//     
-//     @DeleteMapping("/EliminarTarjeta")
-//     public String EliminarTarjeta (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
-//        
-//        tarjetaServ.EliminarTarjeta(IdTarjeta);
-//        modelo.put("exito", "se ha eliminado la tarjeta");
-//        return "se ha eliminado la tarjeta";
-//     }
-//     
-     @PutMapping("/darDeBaja")
-     public String DarDeBaja (ModelMap modelo,@RequestParam Long IdTarjeta) throws Exception {
-        
-        tarjetaServ.DarDeBajaTarjeta(IdTarjeta);
-        modelo.put("exito", "su tarjeta se ha dado de baja");
-        return "su tarjeta se ha dado de baja";
+
+    @PutMapping("/ModificarTarjeta")
+    public String ModificarTarjetaDebito(ModelMap modelo, @RequestParam Long IdTarjeta, @RequestParam String IdUsuario, @RequestParam Integer pin) throws Exception {
+        TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+        if (trayendoTarjeta.getTipo().equalsIgnoreCase("Credito")) {
+            tarjetaCredito.modificarTarjeta(IdTarjeta, IdUsuario, pin);
+        } else if (trayendoTarjeta.getTipo().equalsIgnoreCase("Debito")) {
+            tarjetaDebito.modificarTarjeta(IdTarjeta, IdUsuario, pin);
+        }
+
+        return "ha modificado su tarjeta correctamente";
     }
-     
-    
+
+    @PutMapping("/actualizarSaldo")
+    public String ActualizarSaldo(ModelMap modelo, @RequestParam Long IdTarjeta,@RequestParam Double MontoCompra) throws Exception {
+        TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+        if (trayendoTarjeta.getTipo().equalsIgnoreCase("Debito")) {
+            tarjetaDebito.ActualizarSaldoTarjetaDebito(IdTarjeta);
+        }
+        if (trayendoTarjeta.getTipo().equalsIgnoreCase("Credito")) {
+            tarjetaCredito.modificarSaldoMaximo(MontoCompra, IdTarjeta);
+        }
+        modelo.put("exito", "La compra se ha realizado correctamente y el saldo se ha actualizado");
+        return "La compra se ha realizado correctamente  y el saldo se ha actualizado. Su saldo actual es de "+ trayendoTarjeta.getSaldo();
+    }
+
+    @DeleteMapping("/EliminarTarjeta")
+    public String EliminarTarjeta(ModelMap modelo, @RequestParam Long IdTarjeta) throws Exception {
+
+        tarjetaServicio.EliminarTarjeta(IdTarjeta);
+        modelo.put("exito", "se ha eliminado la tarjeta");
+        return "se ha eliminado la tarjeta";
+
+    }
+
+    @PutMapping("/darDeBaja")
+    public String DarDeBaja(ModelMap modelo, @RequestParam Long IdTarjeta) throws Exception {
+        try {
+            tarjetaServicio.DarDeBajaTarjeta(IdTarjeta);
+            modelo.put("exito", "su tarjeta se ha dado de baja");
+            return "su tarjeta se ha dado de baja";
+        } catch (Exception exception) {
+            throw new Exception(" su tarjeta no existe o ya ha sido dada de baja");
+        }
+
+    }
+
 }

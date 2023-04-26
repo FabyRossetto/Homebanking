@@ -45,7 +45,7 @@ public class Usuario {
     int clave;
     
     @OneToOne
-    Tarjeta tarjeta;
+    TarjetaSuperClass tarjeta;
     
     @Temporal(TemporalType.TIMESTAMP)
     Date fechaAlta;
