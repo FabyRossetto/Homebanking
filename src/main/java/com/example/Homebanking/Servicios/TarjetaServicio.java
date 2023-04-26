@@ -9,7 +9,7 @@ import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Tarjeta;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
-import com.example.Homebanking.Repositorios.UsuarioRepo;
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class TarjetaServicio {
     TarjetaRepositorio tarjetaRepo;
     
     @Autowired
-    UsuarioRepo ure;
+    UsuarioRepositorio ure;
 
     @Transactional
     public Tarjeta CrearTarjetaCredito(String IdUsuario,Long IdTarjeta,Integer pin) throws Exception {
