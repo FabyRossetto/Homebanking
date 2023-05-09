@@ -84,6 +84,7 @@ public class TarjetaCreditoServicio extends TarjetaServicio{
 
 }
         }
+    //hacer metodo de eliminar en ambas tarjetas!
         
     }
     

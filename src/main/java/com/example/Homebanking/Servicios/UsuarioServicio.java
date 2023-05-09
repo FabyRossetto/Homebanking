@@ -1,8 +1,9 @@
-package com.example.Homebanking.servicios;
+package com.example.Homebanking.Servicios;
 
 import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.TarjetaCreditoSubClass;
 import com.example.Homebanking.Entidades.TarjetaDebitoSubClass;
+
 import com.example.Homebanking.Entidades.Usuario;
 
 import com.example.Homebanking.Entidades.TarjetaSuperClass;
@@ -18,7 +19,7 @@ import java.util.Date;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.Homebanking.Servicios.CuentaServicio;
+
 import java.util.Optional;
 //Usuario Servicio 
 //crearUsuario
@@ -43,10 +44,11 @@ public class UsuarioServicio {
 
     @Autowired
     com.example.Homebanking.Servicios.TarjetaDebitoServicio tarjetaDebito;
-    
+
     @Autowired
     com.example.Homebanking.Entidades.Cuenta cuenta;
 
+    //se crea el usuario con sus datos personales en este metodo 
     @Transactional
     public Usuario crear(String Id, String nombre, String apellido, String Email, Integer clave) throws ErrorServicio, Exception {
 //        validar(nombre, apellido, Email, clave);
@@ -69,60 +71,84 @@ public class UsuarioServicio {
         return usuarioRepositorio.save(usuario);
     }
 
-    public void cargarTarjetasyCuenta(String IdUsuario, Double saldoCuenta,Integer clave) throws Excepcion, Exception {
+    //se le agregan al usuario la cuenta y las tarjetas de debito y credito
+    @Transactional
+    public void cargarTarjetasyCuenta(String IdUsuario, Double saldoCuenta, Integer clave) throws Excepcion, Exception {
 
         Optional<Usuario> usuario = usuarioRepositorio.findById(IdUsuario);
-        
+
         if (usuario.isPresent()) {
             Usuario usu = usuario.get();
-            
+
             if (usu.getRol() == USUARIO) {
-               
-               Cuenta cuen=cuentaSer.guardar(cuenta.getId(), IdUsuario, saldoCuenta);
-               usu.setCuenta(cuen);
-                 if (usu.getTarjetaDebito() == null) {
-                TarjetaSuperClass debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave);
-               usu.setTarjetaDebito(debito);//no puede tomar el valor del sldo por ende arroja error
-                 }
-                 if(usu.getTarjetaCredito()==null){
-                TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(IdUsuario, clave);
-                usu.setTarjetaCredito(credito);
-                 }
+
+                Cuenta cuen = cuentaSer.guardar(cuenta.getId(), IdUsuario, saldoCuenta);
+                usu.setCuenta(cuen);
+
+                if (usu.getTarjetaDebito() == null) {
+                    TarjetaSuperClass debito = new TarjetaDebitoSubClass(); // crear una nueva instancia para la tarjeta de débito
+                    debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave);
+                    usu.setTarjetaDebito(debito);
+                }
+
+                if (usu.getTarjetaCredito() == null) {
+                    TarjetaSuperClass credito = new TarjetaCreditoSubClass(); // crear una nueva instancia para la tarjeta de crédito
+                    credito = tarjetaCredito.CrearTarjeta(IdUsuario, clave);
+                    usu.setTarjetaCredito(credito);
+                }
+                //la de credito sobreesribe la de debito,volver a probar!
                 usuarioRepositorio.save(usu);
             }
-             
-        }  
 
         }
-    
-        //    
-        //        public void modificar (String Id, String nombre, String apellido, String Email, String clave) throws ErrorServicio { 
-        //        validar(nombre,apellido,Email,clave);
-        //        
-        //         Optional <Usuario> respuesta= usuarioRepositorio.findById(Id);
-        //         if(respuesta.isPresent()){
-        //        
-        //        Usuario usuario = respuesta.get();
-        //        usuario.setNombre(nombre);
-        //        usuario.setApellido(apellido);
-        //        usuario.setEmail(Email);
-        //        //usuario.setClave (clave);
-        //        /*Luego guardamos en el repositorio los datos del usuario modificados*/
-        //        usuarioRepositorio.save(usuario);
-        //    }else{
-        //             throw new ErrorServicio ("No se encontró el usuario solicitado");
-        //         }
-        //             }
-        //    public void darBaja (String Id)throws ErrorServicio{
-        //        Optional <Usuario> respuesta= usuarioRepositorio.findById(Id);
-        //         if(respuesta.isPresent()){
-        //        Usuario usuario = respuesta.get();
-        //        //usuario.setBaja(new Date());
-        //         usuarioRepositorio.save(usuario);
-        //    }
-        //    
-        //    }
 
+    }
+
+    //se modifican los datos personales del usuario. Aca me quede!No lo probe! 
+    public void modificar(String IdUsuario, String nombre, String apellido, String Email, Integer clave) throws ErrorServicio, Exception {
+        //validar(nombre,apellido,Email,clave);
+
+        Optional<Usuario> usuario = usuarioRepositorio.findById(IdUsuario);
+
+        if (usuario.isPresent()) {
+            Usuario usu = usuario.get();
+            usu.setNombre(nombre);
+            usu.setApellido(apellido);
+            usu.setEmail(Email);
+            usu.setClave(clave);
+
+            usuarioRepositorio.save(usu);
+
+            cargarTarjetasyCuenta(IdUsuario, usu.getCuenta().getSaldo(), clave);
+            
+            //modifica los datos pero la de credito sobreescribe la de debito de todas formas
+        } else {
+            throw new ErrorServicio("No se encontró el usuario solicitado");
+        }
+    }
+
+    //se da de baja al usuario,por lo que tambien se da de baja su cuenta y las tarjetas de credito y debito,y me retorna la fecha de la baja 
+    public Date darBaja(String Id) throws ErrorServicio {//funciona bien
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(Id);
+        Date fechaBaja = new Date();
+        if (respuesta.isPresent()) {
+            Usuario usuario = respuesta.get();
+            usuario.setAlta(Boolean.FALSE);
+            usuarioRepositorio.save(usuario);
+        }
+        return fechaBaja;
+    }
+
+    //CREAR ELIMINAR, se elimina al usuario, asi como la cuenta y sus tarjetas de debito y credito
+    
+     public void EliminarUsuario(String IdUsuario) {
+         //primero debo eliminar los objetos relacionados,como la cuenta y las tarjetas.
+        Usuario usuario = usuarioRepositorio.getById(IdUsuario);
+        if (usuario != null) {
+            usuarioRepositorio.delete(usuario);
+        }
+    }
+//validaciones
     public void validar(String nombre, String apellido, String Email, Integer clave) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {
             throw new ErrorServicio("El nombre del usuario no puede ser nulo");
