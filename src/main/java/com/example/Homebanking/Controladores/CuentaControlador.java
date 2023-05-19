@@ -9,12 +9,14 @@ import com.example.Homebanking.Servicios.CuentaServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/administracionCuenta")
 public class CuentaControlador {
 
@@ -42,15 +44,23 @@ public class CuentaControlador {
     }
     
      @PostMapping("/guardarCuenta")
-    public String guardarEditorial(@RequestParam Long IdCuenta,@RequestParam String Idusuario,Double saldo, ModelMap modelo) throws Exception {
+    public String guardar(@RequestParam Long IdCuenta,Double saldo, ModelMap modelo) throws Exception {
         try {
-            cuentaservicio.guardar(IdCuenta, Idusuario, saldo);
+            cuentaservicio.guardar(IdCuenta, saldo);
             modelo.put("Gracias por elegirnos", ("Cuenta dada de alta con éxito"));
         } catch (Exception e) {
             e.getMessage();
             modelo.put("Error", "La cuenta no ha podido ser dada de alta");
         }
         return "administracionCuenta";
+    }
+    
+    
+    @DeleteMapping("/eliminarCuenta")
+    public String eliminarCenta(@RequestParam Long IdCuenta) throws Exception{
+        cuentaservicio.borrarPorId(IdCuenta);
+       
+        return "la cuenta fue eliminada";
     }
 
 }

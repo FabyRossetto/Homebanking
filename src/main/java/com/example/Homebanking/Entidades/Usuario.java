@@ -30,7 +30,7 @@ public class Usuario {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    String IdUsuario;
+    protected String IdUsuario;
     
     @Column(nullable= false)
     String nombre;
@@ -39,7 +39,7 @@ public class Usuario {
     String apellido;
     
     @OneToOne
-    Cuenta Cuenta;
+    protected Cuenta Cuenta;
     
     @Column(nullable= false)
     Integer clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR

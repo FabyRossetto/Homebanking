@@ -12,10 +12,9 @@ public interface CuentaRepositorio extends JpaRepository<Cuenta,Long>{
     //buscar cuenta por Id y por usuario
     
     @Query("SELECT c FROM Cuenta c WHERE c.id=:id" )
-    public Cuenta buscarPorId(@Param("id")String id);
+    public Cuenta buscarPorId(@Param("id")Long id);
     
-    @Query("SELECT c FROM Cuenta c WHERE c.usuario.id = :idUsuario")
-    public Cuenta buscarPorUsuario(@Param("idUsuario") String idUsuario);
+    
     
     
 }

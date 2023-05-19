@@ -80,7 +80,9 @@ public class UsuarioControlador {
             uSer.EliminarUsuario(Id);
             
             modelo.put("exito", "el usuario fue eliminado");
+            
             return "usted fue eliminado de la base de datos";
+            
         } catch (Exception e) {
 
             return e.getMessage();

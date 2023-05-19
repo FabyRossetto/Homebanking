@@ -82,7 +82,7 @@ public class UsuarioServicio {
 
             if (usu.getRol() == USUARIO) {
 
-                Cuenta cuen = cuentaSer.guardar(cuenta.getId(), IdUsuario, saldoCuenta);
+                Cuenta cuen = cuentaSer.guardar(cuenta.getId(), saldoCuenta);
                 usu.setCuenta(cuen);
 
                 if (usu.getTarjetaDebito() == null) {
@@ -141,13 +141,26 @@ public class UsuarioServicio {
 
     //CREAR ELIMINAR, se elimina al usuario, asi como la cuenta y sus tarjetas de debito y credito
     
-     public void EliminarUsuario(String IdUsuario) {
+     public void EliminarUsuario(String IdUsuario) throws Exception {
          //primero debo eliminar los objetos relacionados,como la cuenta y las tarjetas.
+         //probar cada metodo por separado,el de eliminar cuenta no funciona.y no se puede eliminar el usuario.
+         
         Usuario usuario = usuarioRepositorio.getById(IdUsuario);
-        if (usuario != null) {
-            usuarioRepositorio.delete(usuario);
+       
+        Cuenta EliminarCuenta=usuario.getCuenta();
+        
+        cuentaSer.darDeBaja(EliminarCuenta.getId(),EliminarCuenta.getAlta());
+        if(EliminarCuenta.getAlta()== Boolean.FALSE){
+        
+//            tarjetaCredito.EliminarTarjeta(eliminarCredito.getId());
+//            tarjetaDebito.EliminarTarjeta(eliminarDebito.getId());
+//           cuentaSer.borrarPorId(EliminarCuenta.getId());
+            EliminarCuenta.setId(null);
         }
-    }
+        
+    
+        usuarioRepositorio.delete(usuario);
+     }
 //validaciones
     public void validar(String nombre, String apellido, String Email, Integer clave) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {

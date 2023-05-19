@@ -27,53 +27,47 @@ public class CuentaServicio {
     //el error se debe a que no tengo creado los repo de usuario y transfernecia 
     //GUARDAR UNA CUENTA: CREACIÓN (necesito transferencia para crearlo?)
     @Transactional
-    public Cuenta guardar(Long Id, String Idusuario,Double saldo) throws Excepcion {
-        Optional<Usuario> usu=usuarioRepositorio.findById(Idusuario);
-        Usuario usuario= usu.get();
-        if(usuario.getCuenta()==null){
-        //SETEO DE ATRIBUTOS
+    public Cuenta guardar(Long Id,Double saldo) throws Excepcion {
+        
         Cuenta cuenta = new Cuenta();
-        cuenta.setUsuario(usuario);
+        
         cuenta.setSaldo(saldo);
         cuenta.setAlta(Boolean.TRUE);
         cuenta.setFecha(new Date());
         cuenta.setId(Id);
-        
-        //cuenta.setTransferencia(transferencia);
+       
 
         //PERSISTENCIA DEL OBJETO
         return cuentaRepositorio.save(cuenta);
 
-    }else{
-            return usuario.getCuenta();
-        }
-}
 }
 
-//    //ELIMINAR CUENTA
-//    @Transactional
-//    public void borrarPorId(Long Id) throws Excepcion {
-//        Optional<Cuenta> optional = cuentaRepositorio.findById(Id);
-//
-//        if (optional.isPresent()) {
-//            cuentaRepositorio.delete(optional.get());
-//        }
-//
-//    }
+
+    //ELIMINAR CUENTA
+  
+    public void borrarPorId(Long Id)  {
+      
+            cuentaRepositorio.deleteById(Id);
+       
+   
+}
+
 //
 //    //DAR DE BAJA: necesito el alta para luego darlo de baja.Agregar esto a la entidad cuenta
-//    @Transactional
-//    public void darDeBaja(Long Id, Date Alta) throws Excepcion {
-//        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
-//        if (respuesta.isPresent()) {
-//
-//            Cuenta cuenta = respuesta.get();
-//
-//            cuenta.setAlta(false);
-//            cuentaRepositorio.save(cuenta);
-//        }
-//
-//    }
+    @Transactional
+    public void darDeBaja(Long Id, Boolean Alta) throws Excepcion {
+        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
+        if (respuesta.isPresent()) {
+
+            Cuenta cuenta = respuesta.get();
+
+            cuenta.setAlta(false);
+            cuentaRepositorio.save(cuenta);
+        }
+
+    }
+}
+
 //
 //    //MODIFICAR SALDO: Método para INGRESAR: sumar saldo + deposito
 //    @Transactional

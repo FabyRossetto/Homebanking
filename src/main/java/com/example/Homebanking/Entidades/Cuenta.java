@@ -28,7 +28,7 @@ public class Cuenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long Id;
+    protected Long Id;
 
     Boolean Alta = Boolean.TRUE;
 
@@ -45,7 +45,7 @@ public class Cuenta {
 //    @OneToMany
 //    Transferencia transferencia;
 
-    @OneToOne
-    Usuario usuario;
+//    @OneToOne
+//    protected Usuario usuario;
 
 }
