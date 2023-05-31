@@ -48,7 +48,6 @@ public class CuentaServicio {
     public void borrarPorId(Long Id)  {
       
             cuentaRepositorio.deleteById(Id);
-       
    
 }
 

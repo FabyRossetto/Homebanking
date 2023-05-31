@@ -36,15 +36,31 @@ public class TarjetaSuperClass {
     @Column(nullable= false)
    protected Integer pin;
     
-    
     protected LocalDate fechaVencimiento;
     //2023/07/25(año,mes,dia).
     
-    @OneToOne
-    protected Usuario usuario;
-    
+   
     protected Boolean Alta=Boolean.TRUE;
     
     protected String tipo;
+
+    public TarjetaSuperClass() {
+    }
+    
+
+    public TarjetaSuperClass(Long Id, Double Saldo, Integer pin, LocalDate fechaVencimiento, String tipo) {
+        this.Id = Id;
+        this.Saldo = Saldo;
+        this.pin = pin;
+        this.fechaVencimiento = fechaVencimiento;
+        this.tipo = tipo;
+    }
+     public TarjetaSuperClass(String idUsuario, String clave) {
+        
+    }
+     
+      public TarjetaSuperClass(String clave) {
+        
+    }
     
 }

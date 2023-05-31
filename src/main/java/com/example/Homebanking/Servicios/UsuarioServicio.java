@@ -21,14 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-//Usuario Servicio 
-//crearUsuario
-//eliminarUsuario
-//darBaja
-//modificarUsuario
-//enviarEmail
-//cambiarContraseña
-//validaciones
+
 
 @Service
 public class UsuarioServicio {
@@ -50,17 +43,18 @@ public class UsuarioServicio {
 
     //se crea el usuario con sus datos personales en este metodo 
     @Transactional
-    public Usuario crear(String Id, String nombre, String apellido, String Email, Integer clave) throws ErrorServicio, Exception {
-//        validar(nombre, apellido, Email, clave);
+    public Usuario crear(String nombre, String apellido, String Email, Integer clave,String DNI) throws ErrorServicio, Exception {
+        validar(nombre, apellido, Email, clave,DNI);
 
         Usuario usuario = new Usuario();
-        usuario.setIdUsuario(Id);
+        usuario.getIdUsuario();
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
         usuario.setEmail(Email);
         usuario.setClave(clave);
         usuario.setAlta(Boolean.TRUE);
         usuario.setFechaAlta(new Date());
+        usuario.setDNI(DNI);
 
         if (usuario.getClave() == 19582023) {
             usuario.setRol(Rol.ADMINISTRADOR);
@@ -82,19 +76,19 @@ public class UsuarioServicio {
 
             if (usu.getRol() == USUARIO) {
 
-                Cuenta cuen = cuentaSer.guardar(cuenta.getId(), saldoCuenta);
-                usu.setCuenta(cuen);
+                    Cuenta cuen = cuentaSer.guardar(cuenta.getId(), saldoCuenta);
+                   usu.setCuenta(cuen);
 
-                if (usu.getTarjetaDebito() == null) {
-                    TarjetaSuperClass debito = new TarjetaDebitoSubClass(); // crear una nueva instancia para la tarjeta de débito
-                    debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave);
-                    usu.setTarjetaDebito(debito);
-                }
+               
+                    TarjetaSuperClass debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave); 
+                    
+                    usu.setTarjetaDebito((TarjetaDebitoSubClass)debito);
+                
 
-                if (usu.getTarjetaCredito() == null) {
-                    TarjetaSuperClass credito = new TarjetaCreditoSubClass(); // crear una nueva instancia para la tarjeta de crédito
-                    credito = tarjetaCredito.CrearTarjeta(IdUsuario, clave);
-                    usu.setTarjetaCredito(credito);
+                
+                    TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(clave);
+                    
+                    usu.setTarjetaCredito((TarjetaCreditoSubClass)credito);
                 }
                 //la de credito sobreesribe la de debito,volver a probar!
                 usuarioRepositorio.save(usu);
@@ -102,11 +96,11 @@ public class UsuarioServicio {
 
         }
 
-    }
+    
 
-    //se modifican los datos personales del usuario. Aca me quede!No lo probe! 
-    public void modificar(String IdUsuario, String nombre, String apellido, String Email, Integer clave) throws ErrorServicio, Exception {
-        //validar(nombre,apellido,Email,clave);
+    //se modifican los datos personales del usuario. Para modificar tarjetas y cuenta tienen sus propios metodos
+    public void modificarDatosPersonales(String IdUsuario, String nombre, String apellido, String Email, Integer clave,String DNI) throws ErrorServicio, Exception {
+        validar(nombre,apellido,Email,clave,DNI);
 
         Optional<Usuario> usuario = usuarioRepositorio.findById(IdUsuario);
 
@@ -116,12 +110,10 @@ public class UsuarioServicio {
             usu.setApellido(apellido);
             usu.setEmail(Email);
             usu.setClave(clave);
+            usu.setDNI(DNI);
 
             usuarioRepositorio.save(usu);
 
-            cargarTarjetasyCuenta(IdUsuario, usu.getCuenta().getSaldo(), clave);
-            
-            //modifica los datos pero la de credito sobreescribe la de debito de todas formas
         } else {
             throw new ErrorServicio("No se encontró el usuario solicitado");
         }
@@ -149,20 +141,36 @@ public class UsuarioServicio {
        
         Cuenta EliminarCuenta=usuario.getCuenta();
         
-        cuentaSer.darDeBaja(EliminarCuenta.getId(),EliminarCuenta.getAlta());
-        if(EliminarCuenta.getAlta()== Boolean.FALSE){
-        
-//            tarjetaCredito.EliminarTarjeta(eliminarCredito.getId());
-//            tarjetaDebito.EliminarTarjeta(eliminarDebito.getId());
-//           cuentaSer.borrarPorId(EliminarCuenta.getId());
-            EliminarCuenta.setId(null);
-        }
+         tarjetaCredito.EliminarTarjeta(usuario.getTarjetaCredito().getId());
+         tarjetaDebito.EliminarTarjeta(usuario.getTarjetaDebito().getId());
+         cuentaSer.borrarPorId(EliminarCuenta.getId());
         
     
         usuarioRepositorio.delete(usuario);
      }
+     
+     public Usuario BuscarUsuarioPorDNI(String DNI){
+         Usuario usuario=usuarioRepositorio.findByDNI(DNI);
+         return usuario;
+     }
+     
+     public Usuario BuscarUsuarioPorApellido(String apellido){
+         Usuario usuario=usuarioRepositorio.findByApellido(apellido);
+         return usuario;
+         
+     }
+     
+     public Usuario BucarUsuarioPorEmail(String email){
+         Usuario usuario=usuarioRepositorio.findByEmail(email);
+         return usuario;
+     }
+     
+     public Usuario BuscarPorCuenta(Long IdCuenta){
+         Usuario usuario= usuarioRepositorio.findByCuenta(IdCuenta);
+         return usuario;
+     }
 //validaciones
-    public void validar(String nombre, String apellido, String Email, Integer clave) throws ErrorServicio {
+    public void validar(String nombre, String apellido, String Email, Integer clave,String DNI) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {
             throw new ErrorServicio("El nombre del usuario no puede ser nulo");
         }
@@ -170,10 +178,13 @@ public class UsuarioServicio {
             throw new ErrorServicio("El apellido del usuario no puede ser nulo");
         }
         if (Email == null || Email.isEmpty()) {
-            throw new ErrorServicio("El mail del usuario no puede ser nulo");
+            throw new ErrorServicio("El email del usuario no puede ser nulo");
         }
         if (clave == null || clave.toString().isEmpty() || clave.toString().length() < 6) {
             throw new ErrorServicio("La clave del usuario no puede ser nula y tiene que tener 6 digitos o mas");
+        }
+        if (DNI == null || DNI.isEmpty() || DNI.length() < 7) {
+            throw new ErrorServicio("El DNI no es correcto");
         }
 
     }

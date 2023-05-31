@@ -46,10 +46,10 @@ public class Usuario {
     
     
     @OneToOne
-    TarjetaSuperClass tarjetaDebito;
+    TarjetaDebitoSubClass tarjetaDebito;
     
     @OneToOne
-    TarjetaSuperClass tarjetaCredito;
+    TarjetaCreditoSubClass tarjetaCredito;
     
     
     Boolean Alta;
@@ -63,5 +63,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Rol rol;
     
+     @Column(unique = true)
+    String DNI;
 
 }
