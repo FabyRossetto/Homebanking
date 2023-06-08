@@ -40,10 +40,12 @@ public class Cuenta {
     @Temporal(TemporalType.TIMESTAMP)   
     Date fecha;
 
-    @OneToMany
-    Transferencia transferencia;
+//    @OneToMany
+//    Transferencia transferencia;
 
-    @OneToOne
-    Usuario usuario;
-
+//    @OneToOne
+//    Usuario usuario;
+//  
+    
+    
 }

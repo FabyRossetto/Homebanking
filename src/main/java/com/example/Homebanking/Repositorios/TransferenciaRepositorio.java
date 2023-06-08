@@ -5,10 +5,12 @@
  */
 package com.example.Homebanking.Repositorios;
 
-/**
- *
- * @author admin
- */
-public class TransferenciaRepositorio {
+import com.example.Homebanking.Entidades.Transferencia;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+
+@Repository
+public interface TransferenciaRepositorio extends JpaRepository<Transferencia,Long>{
     
 }

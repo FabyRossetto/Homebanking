@@ -12,12 +12,14 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/administracionCuenta")
 public class CuentaControlador {
 
@@ -36,12 +38,10 @@ public class CuentaControlador {
     @Autowired
     private CuentaServicio cuentaservicio;
 
-    @Autowired
-    private UsuarioServicio usuarioservicio;
-
-    @Autowired
-    TarjetaServicio tarjetaservicio;
-
+//    @Autowired
+//    private UsuarioServicio usuarioservicio;
+//    @Autowired
+//    TarjetaServicio tarjetaservicio;
     @GetMapping("/guardarCuenta")
     public String guardarCuenta(ModelMap vista) {
 
@@ -49,9 +49,9 @@ public class CuentaControlador {
     }
 
     @PostMapping("/guardarCuenta")
-    public String guardarCuenta(@RequestParam Usuario usuario, @RequestParam Double saldo, @RequestParam Date fecha, @RequestParam Boolean alta, ModelMap modelo) throws Exception {
+    public String guardarCuenta(@RequestParam Long Id, @RequestParam Double saldo, ModelMap modelo) throws Exception {
         try {
-            cuentaservicio.guardar(Long.MIN_VALUE, usuario, saldo, alta, fecha);
+            cuentaservicio.guardar(Id, saldo);
             modelo.put("Gracias por elegirnos", ("Cuenta dada de alta con éxito"));
         } catch (Exception e) {
             e.getMessage();
@@ -59,12 +59,15 @@ public class CuentaControlador {
         }
         return "administracionCuenta";
     }
+    
+        
+    
 
     @PostMapping("/ingresarDinero")
-    public String ingresarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Long Id, @RequestParam Date fecha, ModelMap modelo) throws Exception {
+    public String ingresarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Long Id, @RequestParam Double deposito, ModelMap modelo) throws Exception {
         Cuenta cuenta = cuentaRepositorio.getById(Id);
         try {
-            cuentaservicio.ingresarDinero(saldoActual, saldo, Id, fecha);
+            cuentaservicio.ingresarDinero(saldoActual, saldo, deposito, Id);
             modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
         } catch (Exception e) {
             e.getMessage();
@@ -73,12 +76,13 @@ public class CuentaControlador {
         return "administracionCuenta"; //o lo redirigo al html de ingresar dinero?
     }
 
+
     @PostMapping("/retirarDinero")
-    public String retirarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Double extraccion, @RequestParam Long Id, @RequestParam Date fecha, ModelMap modelo) throws Exception { 
+    public String retirarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Double extraccion, @RequestParam Long Id, ModelMap modelo) throws Exception {
         Cuenta cuenta = cuentaRepositorio.getById(Id);
 
         try {
-            cuentaservicio.retirarDinero(saldoActual, saldo, extraccion, Id, fecha);
+            cuentaservicio.ingresarDinero(saldoActual, saldo, extraccion, Id);
             modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
         } catch (Exception e) {
             e.getMessage();
@@ -89,8 +93,24 @@ public class CuentaControlador {
 
     }
 
-}
+    @DeleteMapping("/eliminarCuenta")
+    public String eliminarCuenta(@RequestParam Long Id, ModelMap modelo) throws Exception {
+        try {
+             cuentaservicio.borrarPorId(Id);
+              modelo.put("Gracias por utilizar nuestros servicios", "Cuenta eliminada");
+        } catch (Exception e) {
+            modelo.put("Error","No se puede eliminar la cuenta");
+        }
+       
+        return "administracionCuenta";
+
+   
+         }
+     }
 
 
-
-//alta?
+//}
+//
+//
+//
+////alta?
