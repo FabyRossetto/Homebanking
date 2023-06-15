@@ -42,7 +42,7 @@ public class Usuario {
     protected Cuenta Cuenta;
     
     @Column(nullable= false)
-    Integer clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
+    String clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
     
     
     @OneToOne
