@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -53,6 +54,10 @@ public class UsuarioServicio implements UserDetailsService{
 
     @Autowired
     com.example.Homebanking.Entidades.Cuenta cuenta;
+    
+    @Autowired
+    @Qualifier("tarjetaServicio")
+    TarjetaServicio tarjeta;
 
     //se registra el usuario con sus datos personales en este metodo 
     @Transactional
@@ -111,15 +116,15 @@ public class UsuarioServicio implements UserDetailsService{
                
                     TarjetaSuperClass debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave); 
                     
-                    usu.setTarjetaDebito((TarjetaDebitoSubClass)debito);
+                    usu.setTarjetaDebito(debito);
                 
 
                 
                     TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(clave);
                     
-                    usu.setTarjetaCredito((TarjetaCreditoSubClass)credito);
+                    usu.setTarjetaCredito(credito);
                 }
-                //la de credito sobreesribe la de debito,volver a probar!
+                
                 usuarioRepositorio.save(usu);
             }
 
@@ -195,8 +200,8 @@ public class UsuarioServicio implements UserDetailsService{
        
         Cuenta EliminarCuenta=usuario.getCuenta();
         
-         tarjetaCredito.EliminarTarjeta(usuario.getTarjetaCredito().getId());
-         tarjetaDebito.EliminarTarjeta(usuario.getTarjetaDebito().getId());
+         tarjeta.EliminarTarjeta(usuario.getTarjetaCredito().getId());
+         tarjeta.EliminarTarjeta(usuario.getTarjetaDebito().getId());
          cuentaSer.borrarPorId(EliminarCuenta.getId());
         
     
@@ -219,10 +224,10 @@ public class UsuarioServicio implements UserDetailsService{
          return usuario;
      }
      
-     public Usuario BuscarPorCuenta(Long IdCuenta){
-         Usuario usuario= usuarioRepositorio.findByCuenta(IdCuenta);
-         return usuario;
-     }
+//     public Usuario BuscarPorCuenta(Long IdCuenta){
+//         Usuario usuario= usuarioRepositorio.findByCuenta(IdCuenta);
+//         return usuario;
+//     }
 //validaciones
     public void validar(String nombre, String apellido, String Email, String clave,String DNI) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {

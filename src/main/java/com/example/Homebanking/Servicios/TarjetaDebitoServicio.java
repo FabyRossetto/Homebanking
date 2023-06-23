@@ -34,7 +34,7 @@ public class TarjetaDebitoServicio extends TarjetaServicio{
     public TarjetaSuperClass CrearTarjeta(String IdUsuario,Integer pin) throws Exception {
         
         Usuario usuario = ure.getById(IdUsuario);
-        TarjetaSuperClass tarjeta= new TarjetaDebitoSubClass();
+        TarjetaSuperClass tarjeta= new TarjetaSuperClass();
         tarjeta.setPin(pin);
         tarjeta.setSaldo(usuario.getCuenta().getSaldo());//saldo en la cuenta
         tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));

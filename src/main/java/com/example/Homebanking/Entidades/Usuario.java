@@ -46,10 +46,10 @@ public class Usuario {
     
     
     @OneToOne
-    TarjetaDebitoSubClass tarjetaDebito;
+    TarjetaSuperClass tarjetaDebito;
     
     @OneToOne
-    TarjetaCreditoSubClass tarjetaCredito;
+    TarjetaSuperClass tarjetaCredito;
     
     
     Boolean Alta;

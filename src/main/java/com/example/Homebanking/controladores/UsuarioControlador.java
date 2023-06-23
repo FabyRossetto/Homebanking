@@ -30,7 +30,7 @@ public class UsuarioControlador {
     com.example.Homebanking.Servicios.UsuarioServicio uSer;
 
     @PostMapping("/crearUsuario")
-    public String CrearUsuario(ModelMap modelo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam Integer clave,@RequestParam String DNI) throws Exception {
+    public String CrearUsuario(ModelMap modelo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI) throws Exception {
         try {
             uSer.crear(nombre, apellido, Email, clave,DNI);
             
@@ -44,12 +44,12 @@ public class UsuarioControlador {
     }
     @PostMapping("/cargarCuentayTarjetas")
     public String CargarCuentayTarjetas(ModelMap modelo, @RequestParam String Id,@RequestParam Double saldo, @RequestParam Integer clave) throws Exception{
-        uSer.cargarTarjetasyCuenta(Id,saldo, clave);
+        uSer.cargarTarjetasyCuenta(Id,saldo, clave);//es el IdUsuario
         return "se creo su cuenta y se cargaron sus tarjetas de debito y credito";
     }
     
      @PutMapping("/modificarUsuario")
-    public String ModificarUsuario(ModelMap modelo, @RequestParam String Id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam Integer clave,@RequestParam String DNI) throws Exception {
+    public String ModificarUsuario(ModelMap modelo, @RequestParam String Id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI) throws Exception {
         try {
             uSer.modificarDatosPersonales(Id, nombre, apellido, Email, clave,DNI);
             
@@ -61,13 +61,28 @@ public class UsuarioControlador {
         }
 
     }
+    
+    @PutMapping("/modificarPass")
+    public String CambiarContrasena(ModelMap modelo, @RequestParam Integer codigo, @RequestParam String claveNueva, @RequestParam String email) throws Exception {
+        try {
+            uSer.cambiarContraseña(codigo, claveNueva, email);
+            
+            modelo.put("exito", "la contraseña ha sido modificada con exito");
+            return "usted ha modificado su contraseña con exito";
+        } catch (Exception e) {
+
+            return e.getMessage();
+        }
+
+    }
+    
      @PatchMapping("/darDeBajaUsuario")
     public String DarDeBajaUsuario(ModelMap modelo, @RequestParam String Id) throws Exception {
         try {
             uSer.darBaja(Id);
             
             modelo.put("exito", "usted fue dado de baja");
-            return "usted fue dado de baja";
+            return "el usuario ha sido dado de baja";
         } catch (Exception e) {
 
             return e.getMessage();
@@ -105,8 +120,8 @@ public class UsuarioControlador {
         return "El usuario es :  " + uSer.BucarUsuarioPorEmail(email);
     }
     
-    @GetMapping("/BuscarUsuarioPorDNI")
-    public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long IdCuenta)  {
-        return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
-    }
+//    @GetMapping("/BuscarUsuarioPorDNI")
+//    public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long IdCuenta)  {
+//        return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
+//    }
 }

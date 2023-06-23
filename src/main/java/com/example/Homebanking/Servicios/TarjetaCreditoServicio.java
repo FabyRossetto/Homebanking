@@ -34,7 +34,7 @@ public class TarjetaCreditoServicio extends TarjetaServicio{
     @Override
     public TarjetaSuperClass CrearTarjeta(Integer pin) throws Exception {
         
-        TarjetaSuperClass tarjeta= new TarjetaCreditoSubClass();
+        TarjetaSuperClass tarjeta= new TarjetaSuperClass();
         tarjeta.setPin(pin);
         tarjeta.setSaldo(500000.00);//saldo limite
         tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));
