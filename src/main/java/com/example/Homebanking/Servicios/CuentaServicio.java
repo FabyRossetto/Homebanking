@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CuentaServicio {
+    
+    @Autowired
+    private NotificacionServicio notificacionServicio;
 
     @Autowired
     private CuentaRepositorio cuentaRepositorio;
@@ -56,6 +59,8 @@ public class CuentaServicio {
         cuenta.setId(Id);
 
         return cuentaRepositorio.save(cuenta);
+        
+//        notificacionServicio.enviar("Gracias por elegirnos", "HomeBanking", mail); deberia ir en usuario no acá
 
 //    }else{
 //            return usuario.getCuenta();
