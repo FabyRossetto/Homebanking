@@ -6,7 +6,7 @@ import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Errores.Excepcion;
 import com.example.Homebanking.Repositorios.CuentaRepositorio;
 import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
-import com.example.Homebanking.Repositorios.UsuarioRepo;
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.util.Date;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -22,7 +22,7 @@ public class CuentaServicio {
     @Autowired
     private CuentaRepositorio cuentaRepositorio;
     @Autowired
-    private UsuarioRepo usuarioRepo;
+    private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
     private TransferenciaRepositorio transferenciaRepositorio;
