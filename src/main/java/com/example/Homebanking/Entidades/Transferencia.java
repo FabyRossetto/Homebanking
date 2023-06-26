@@ -1,5 +1,6 @@
 package com.example.Homebanking.Entidades;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -20,7 +22,8 @@ import lombok.Data;
  */
 @Data
 @Entity
-public class Transferencia {
+@Component
+public class Transferencia implements Serializable {
 
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
