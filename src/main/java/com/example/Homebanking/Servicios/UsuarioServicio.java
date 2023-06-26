@@ -203,7 +203,7 @@ public class UsuarioServicio implements UserDetailsService{
          tarjeta.EliminarTarjeta(usuario.getTarjetaCredito().getId());
          tarjeta.EliminarTarjeta(usuario.getTarjetaDebito().getId());
          cuentaSer.borrarPorId(EliminarCuenta.getId());
-        
+        //probar de guardar estos cambios y despues eliminar el user
     
         usuarioRepositorio.delete(usuario);
      }
