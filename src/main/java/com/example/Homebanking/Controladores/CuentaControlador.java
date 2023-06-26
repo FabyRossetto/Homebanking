@@ -4,7 +4,7 @@ import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.CuentaRepositorio;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
-import com.example.Homebanking.Repositorios.UsuarioRepo;
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import com.example.Homebanking.Servicios.CuentaServicio;
 import com.example.Homebanking.Servicios.TarjetaServicio;
 import com.example.Homebanking.Servicios.UsuarioServicio;
@@ -27,7 +27,7 @@ public class CuentaControlador {
     private CuentaRepositorio cuentaRepositorio;
 
     @Autowired
-    private UsuarioRepo usuarioRepo;
+    private UsuarioRepositorio usuarioRepo;
 
     @Autowired
     private TarjetaRepositorio tarjetaRepositorio;
