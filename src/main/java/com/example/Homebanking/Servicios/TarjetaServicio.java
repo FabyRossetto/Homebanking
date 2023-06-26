@@ -13,6 +13,8 @@ import com.example.Homebanking.Repositorios.TarjetaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +40,14 @@ public class TarjetaServicio {
     UsuarioRepositorio ure;
 
     @Transactional
-    public TarjetaSuperClass CrearTarjeta(String IdUsuario, Integer pin) throws Exception {//repensar el parametro idTarjeta,creo q no es necesario
+    public TarjetaSuperClass CrearTarjeta( Integer pin) throws Exception {//repensar el parametro idTarjeta,creo q no es necesario
 
-        Usuario usuario = ure.getById(IdUsuario);
-        if (usuario.getTarjetaDebito()== null) {
-            tarjeta.setUsuario(usuario);
-           
+        
             tarjeta.setPin(pin);
             tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));
             tarjeta.setTipo(tarjeta.getTipo());
 
-        }
+        
         return tarjetaRepo.save(tarjeta);
     }
 
@@ -59,7 +58,7 @@ public class TarjetaServicio {
         Usuario usuario = ure.getById(IdUsuario);
 
         if (trayendoTarjeta != null) {
-            trayendoTarjeta.setUsuario(usuario);
+           
             trayendoTarjeta.setPin(pin);
             trayendoTarjeta.setSaldo(usuario.getCuenta().getSaldo());
             trayendoTarjeta.setFechaVencimiento(LocalDate.of(2035, 12, 31));
@@ -86,12 +85,43 @@ public class TarjetaServicio {
         }
 
     }
+    public List <TarjetaSuperClass> BuscarTarjetaPorUsuario(String IdUsuario){
+        Usuario usuario=ure.getById(IdUsuario);
+        List<TarjetaSuperClass>tarjeta=new ArrayList();
+        
+        for (TarjetaSuperClass tarjetaSuperClass : tarjeta) {
+            tarjeta.add(usuario.getTarjetaCredito());
+            tarjeta.add(usuario.getTarjetaDebito());
+        }
+        
+        return tarjeta;
+    }
+    
+    public List <TarjetaSuperClass> BuscarPorFechaDeVto(LocalDate fechaVto){
+        
+        List<TarjetaSuperClass>tarjeta=new ArrayList();
+        
+        for (TarjetaSuperClass tarjetaSuperClass : tarjeta) {
+            if(tarjetaSuperClass.getFechaVencimiento()==fechaVto ){
+            tarjeta.add(tarjetaSuperClass);
+        }
+            
+        }
+        return tarjeta;
+    }
+    
+    public TarjetaSuperClass BuscarPorId(Long IdTarjeta){
+        TarjetaSuperClass tarjetaEncontrada= tarjetaRepo.buscarPorId(IdTarjeta);
+        return tarjetaEncontrada;
+    }
+    
+    //hacer un metodo que muestre los ultimos movimientos!
 
-    public void validacion1(String IdUsuario, Long Id, Integer pin) throws Exception {
+    public void validacion1(String IdUsuario, Long IdTarjeta, Integer pin) throws Exception {
         if (IdUsuario == null) {
             throw new Exception(" El usuario no puede ser nulo");
         }
-        if (Id == null || Id.toString().trim().isEmpty()) {
+        if (IdTarjeta == null || IdTarjeta.toString().trim().isEmpty()) {
             throw new Exception(" El Id no puede ser nulo");
         }
 

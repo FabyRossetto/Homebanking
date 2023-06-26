@@ -29,7 +29,7 @@ public class Cuenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    Long Id;
+    protected Long Id;
 
     Boolean Alta = Boolean.TRUE;
 
@@ -46,7 +46,7 @@ public class Cuenta {
     @OneToMany
     List <Transferencia> listaTransferencias;
 
-    @OneToOne
-    Usuario usuario;
+//    @OneToOne
+//    protected Usuario usuario;
 
 }

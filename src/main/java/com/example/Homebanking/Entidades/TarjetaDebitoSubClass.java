@@ -16,4 +16,18 @@ import lombok.Data;
 
 public class TarjetaDebitoSubClass extends TarjetaSuperClass{
 
+    
+       public TarjetaDebitoSubClass(String idUsuario, String clave) {
+        super(idUsuario, clave);
+        
+    }
+
+    public TarjetaDebitoSubClass() {
+        super();
+    }
+
+    public TarjetaDebitoSubClass(TarjetaSuperClass CrearTarjeta) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

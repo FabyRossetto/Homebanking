@@ -11,10 +11,12 @@ import com.example.Homebanking.Repositorios.TarjetaRepositorio;
 import com.example.Homebanking.Servicios.TarjetaCreditoServicio;
 import com.example.Homebanking.Servicios.TarjetaDebitoServicio;
 import com.example.Homebanking.Servicios.TarjetaServicio;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +46,7 @@ public class TarjetaControlador {
 
     @PostMapping("/crearTarjetaCredito")
     public String CrearTarjetas(ModelMap modelo, @RequestParam String IdUsuario, @RequestParam Integer pin) throws Exception {
-        tarjetaCredito.CrearTarjeta(IdUsuario, pin);
+        tarjetaCredito.CrearTarjeta(pin);
         tarjetaDebito.CrearTarjeta(IdUsuario, pin);
         modelo.put("exito", "sus tarjetas de debito y credito se han creado con exito");
         return "sus tarjetas se han creado con exito";
@@ -63,10 +65,10 @@ public class TarjetaControlador {
     }
 
     @PutMapping("/actualizarSaldo")
-    public String ActualizarSaldo(ModelMap modelo, @RequestParam Long IdTarjeta,@RequestParam Double MontoCompra) throws Exception {
+    public String ActualizarSaldo(ModelMap modelo,@RequestParam String IdUsuario, @RequestParam Long IdTarjeta,@RequestParam Double MontoCompra) throws Exception {
         TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
         if (trayendoTarjeta.getTipo().equalsIgnoreCase("Debito")) {
-            tarjetaDebito.ActualizarSaldoTarjetaDebito(IdTarjeta);
+            tarjetaDebito.ActualizarSaldoTarjetaDebito(IdUsuario);
         }
         if (trayendoTarjeta.getTipo().equalsIgnoreCase("Credito")) {
             tarjetaCredito.modificarSaldoMaximo(MontoCompra, IdTarjeta);
@@ -95,5 +97,24 @@ public class TarjetaControlador {
         }
 
     }
+     @GetMapping("/BuscarTarjetaPorUsuario")
+    public String BuscarTarjetaPorUsuario(ModelMap modelo, @RequestParam String IdUsuario) throws Exception {
+
+        return "Las tarjetas encontradas para ese usuario son:  " + tarjetaServicio.BuscarTarjetaPorUsuario(IdUsuario); 
+
+    }
+     @GetMapping("/BuscarTarjetaPorVto")
+    public String BuscarTarjetaPorVto(ModelMap modelo, @RequestParam LocalDate Fecha) throws Exception {
+
+        return "Las tarjetas con ese vencimiento son: " + tarjetaServicio.BuscarPorFechaDeVto(Fecha); 
+
+    }
+     @GetMapping("/BuscarTarjetaPorId")
+    public String BuscarTarjetaPorId(ModelMap modelo, @RequestParam Long IdTarjeta) throws Exception {
+
+        return "su tarjeta es " + tarjetaServicio.BuscarPorId(IdTarjeta);
+
+    }
+    
 
 }

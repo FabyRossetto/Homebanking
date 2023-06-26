@@ -13,4 +13,11 @@ package com.example.Homebanking.Entidades;
 
 public class TarjetaCreditoSubClass extends TarjetaSuperClass{
     
+    public TarjetaCreditoSubClass(String clave) {
+        super(clave);
+}
+
+    public TarjetaCreditoSubClass() {
+    }
+    
 }
