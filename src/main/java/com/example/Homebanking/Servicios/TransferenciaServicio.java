@@ -7,10 +7,13 @@ package com.example.Homebanking.Servicios;
 
 import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Transferencia;
+import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.CuentaRepositorio;
 import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,37 +37,55 @@ public class TransferenciaServicio {
     
     @Autowired
     CuentaRepositorio cuentaRepositorio;
+    
+    @Autowired
+    UsuarioRepositorio usuarioRepositorio;
 
     @Transactional
-    public void crearTransferencia(Long Id, Cuenta cuentaReceptora, double monto) throws Exception {
+    public void crearTransferencia(Long Id, double monto, String DNI) throws Exception {
 
-        try {
-            validar(Id, cuentaReceptora, monto);
+        /*try {
+            validar(Id, monto, DNI);
 
             Transferencia nuevaTransferencia = new Transferencia();
             transferencia.setId(Id);
-            transferencia.setCuentaReceptora(cuentaReceptora);
+            //buscar cuenta vinculada al usuario
+            Optional<Usuario> usuario = usuarioRepositorio.findByDNI(DNI);
+        Usuario usuario= usuario.get();
+        if(usuario.getCuenta()==null){
+         //mensaje de error
+        } else{
+
+            transferencia.setCuentaReceptora(usuario.getCuenta());
+            
             transferencia.setFecha(new Date());
             transferencia.setMonto(monto);
             transferenciaRepositorio.save(nuevaTransferencia);
-        } catch (Exception ex) {
+        } 
+        
+        }catch (Exception ex) {
             throw new Exception("Error al transferir");
-        }
+        }*/
 
     }
 
     //lo pongo en private porque sólo voy a usar este método dentro del servicio
-    private void validar(Long Id, Cuenta cuentaReceptora, double monto) throws Exception {
+    private void validar(Long Id, double monto, String DNI) throws Exception {
         //si ingresa el campo vacío de cuentaEmisora
        
         //si ingresa el campo vacío de cuentaReceptora
-        if (cuentaReceptora == null) {
+        /*if (cuentaReceptora == null) {
             throw new Exception("No ha ingresado una cuenta receptora");
-        }
+        }*/
         //si cuentaEmisora es igual a cuentaReceptora
         
         //que el monto sea mayor al disponible en la cuenta y al mínimo, y que no exceda el máximo
         //fijar monto minimo y máximo para la transferencia
+        
+        if(DNI.length() < 8){
+            throw new Exception ("El DNI es inválido");
+        }
+        
         if (monto < cuenta.getSaldo() || monto < 1000 || monto > 300000) {
             throw new Exception("El monto de la transferencia no es correcto");
         }
