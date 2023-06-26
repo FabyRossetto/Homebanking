@@ -6,6 +6,7 @@
 package com.example.Homebanking.Entidades;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,8 +43,8 @@ public class Cuenta {
     @Temporal(TemporalType.TIMESTAMP)   
     Date fecha;
 
-//    @OneToMany
-//    Transferencia transferencia;
+    @OneToMany
+    List <Transferencia> listaTransferencias;
 
     @OneToOne
     Usuario usuario;
