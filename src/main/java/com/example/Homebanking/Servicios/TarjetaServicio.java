@@ -40,7 +40,7 @@ public class TarjetaServicio {
     UsuarioRepositorio ure;
 
     @Transactional
-    public TarjetaSuperClass CrearTarjeta( Integer pin) throws Exception {//repensar el parametro idTarjeta,creo q no es necesario
+    public TarjetaSuperClass CrearTarjeta( Integer pin) throws Exception {
 
         
             tarjeta.setPin(pin);

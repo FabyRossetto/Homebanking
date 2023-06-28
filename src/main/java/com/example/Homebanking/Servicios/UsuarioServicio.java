@@ -192,21 +192,25 @@ public class UsuarioServicio implements UserDetailsService{
 
     //se elimina al usuario, asi como la cuenta y sus tarjetas de debito y credito
     
-     public void EliminarUsuario(String IdUsuario) throws Exception {
-         //primero debo eliminar los objetos relacionados,como la cuenta y las tarjetas.
-         //probar cada metodo por separado,el de eliminar cuenta no funciona.y no se puede eliminar el usuario.
-         
+    public void EliminarUsuario(String IdUsuario) throws Exception {
+        //primero debo eliminar los objetos relacionados,como la cuenta y las tarjetas.
+        //probar cada metodo por separado,el de eliminar cuenta no funciona.y no se puede eliminar el usuario.
+
         Usuario usuario = usuarioRepositorio.getById(IdUsuario);
-       
-        Cuenta EliminarCuenta=usuario.getCuenta();
-        
-         tarjeta.EliminarTarjeta(usuario.getTarjetaCredito().getId());
-         tarjeta.EliminarTarjeta(usuario.getTarjetaDebito().getId());
-         cuentaSer.borrarPorId(EliminarCuenta.getId());
-        //probar de guardar estos cambios y despues eliminar el user
-    
+
+//        if (usuario.getTarjetaCredito() != null) {
+//            tarjeta.EliminarTarjeta(usuario.getTarjetaCredito().getId());
+//        }
+//        if (usuario.getTarjetaDebito() != null) {
+//            tarjeta.EliminarTarjeta(usuario.getTarjetaDebito().getId());
+//        }
+//        if (usuario.getCuenta() != null) {
+//            cuentaSer.borrarPorId(usuario.getCuenta().getId());
+//        }
+
+        //ver que funcionen los metodos por separado.
         usuarioRepositorio.delete(usuario);
-     }
+    }
      
      public Usuario BuscarUsuarioPorDNI(String DNI){
          Usuario usuario=usuarioRepositorio.findByDNI(DNI);

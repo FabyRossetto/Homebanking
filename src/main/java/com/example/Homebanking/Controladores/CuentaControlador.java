@@ -27,7 +27,7 @@ public class CuentaControlador {
     private CuentaRepositorio cuentaRepositorio;
 
     @Autowired
-    private UsuarioRepo usuarioRepo;
+    private UsuarioRepositorio usuarioRepo;
 
     @Autowired
     private TarjetaRepositorio tarjetaRepositorio;
