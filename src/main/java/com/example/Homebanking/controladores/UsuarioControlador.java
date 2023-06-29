@@ -7,6 +7,9 @@ package com.example.Homebanking.controladores;
 
 
 
+import com.example.Homebanking.Entidades.Usuario;
+import com.example.Homebanking.Errores.Excepcion;
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -123,5 +126,28 @@ public class UsuarioControlador {
 //    @GetMapping("/BuscarUsuarioPorDNI")
 //    public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long IdCuenta)  {
 //        return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
+//    }
+    
+    
+//     @PostMapping("/recuperarClave")
+//    public String recuperarClave(ModelMap modelo, @RequestParam String Email) throws Excepcion {
+//
+//
+//        Usuario usuarioRecuperar = UsuarioRepositorio.BuscarUsuarioPorEmail(Email);
+//
+//        if(usuarioRecuperar != null) {
+//
+//            usuarioServicio.recuperarClave(usuarioRecuperar);
+//
+//             modelo.put("cambioClave", "Por favor revisá tu correo electrónico (cambio de clave)");
+//
+//
+//        } else {
+//
+//            modelo.put("error", "No existe un usuario registrado con ese correo electrónico");
+//        }
+//
+//
+//        return "login.html";
 //    }
 }
