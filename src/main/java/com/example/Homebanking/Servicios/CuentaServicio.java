@@ -22,7 +22,7 @@ public class CuentaServicio {
     @Autowired
     private CuentaRepositorio cuentaRepositorio;
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepositorio usuarioRepo;
 
     @Autowired
     private TransferenciaRepositorio transferenciaRepositorio;
