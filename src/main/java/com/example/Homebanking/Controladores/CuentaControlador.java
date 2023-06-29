@@ -27,7 +27,7 @@ public class CuentaControlador {
     private CuentaRepositorio cuentaRepositorio;
 
     @Autowired
-    private UsuarioRepo usuarioRepo;
+    private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
     private TarjetaRepositorio tarjetaRepositorio;
@@ -52,7 +52,7 @@ public class CuentaControlador {
     public String guardarCuenta(@RequestParam Long Id, @RequestParam Double saldo, ModelMap modelo) throws Exception {
         try {
             cuentaservicio.guardar(Id, saldo);
-            modelo.put("Gracias por elegirnos", ("Cuenta dada de alta con éxito"));
+            modelo.put("Gracias por elegirnos", ("Cuenta dada de alta con Ã©xito"));
         } catch (Exception e) {
             e.getMessage();
             modelo.put("Error", "La cuenta no ha podido ser dada de alta");
@@ -68,7 +68,7 @@ public class CuentaControlador {
         Cuenta cuenta = cuentaRepositorio.getById(Id);
         try {
             cuentaservicio.ingresarDinero(saldoActual, saldo, deposito, Id);
-            modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
+            modelo.put("OperaciÃ³n realizada con Ã©xito", ("Gracias por utilizar nuestros servicios"));
         } catch (Exception e) {
             e.getMessage();
             modelo.put("Error", "Intente nuevamente");
@@ -83,7 +83,7 @@ public class CuentaControlador {
 
         try {
             cuentaservicio.ingresarDinero(saldoActual, saldo, extraccion, Id);
-            modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
+            modelo.put("OperaciÃ³n realizada con Ã©xito", ("Gracias por utilizar nuestros servicios"));
         } catch (Exception e) {
             e.getMessage();
             modelo.put("Error", "Intente nuevamente");

@@ -65,7 +65,7 @@ public class UsuarioControlador {
     @PutMapping("/modificarPass")
     public String CambiarContrasena(ModelMap modelo, @RequestParam Integer codigo, @RequestParam String claveNueva, @RequestParam String email) throws Exception {
         try {
-            uSer.cambiarContraseña(codigo, claveNueva, email);
+            uSer.cambiarContrasena(codigo, claveNueva, email);
             
             modelo.put("exito", "la contraseña ha sido modificada con exito");
             return "usted ha modificado su contraseña con exito";
