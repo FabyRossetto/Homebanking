@@ -31,6 +31,9 @@ public class UsuarioControlador {
 
     @Autowired
     com.example.Homebanking.Servicios.UsuarioServicio uSer;
+    
+    @Autowired
+     private UsuarioRepositorio usuarioRepo;
 
     @PostMapping("/crearUsuario")
     public String CrearUsuario(ModelMap modelo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI) throws Exception {
@@ -65,10 +68,33 @@ public class UsuarioControlador {
 
     }
     
+     @PostMapping("/recuperarClave")
+    public String recuperarClave(ModelMap modelo, @RequestParam String Email) throws Excepcion {
+
+       
+        Usuario usuarioRecuperar = usuarioRepo.findByEmail(Email);
+        
+        if(usuarioRecuperar != null) {
+            
+            uSer.recuperarClave(usuarioRecuperar);
+            
+             modelo.put("cambioClave", "Por favor revisá tu correo electrónico (cambio de clave)");
+            
+            
+        } else {
+            
+            modelo.put("error", "No existe un usuario registrado con ese correo electrónico");
+        }
+           
+
+        return "login.html";
+    }
+    
+    
     @PutMapping("/modificarPass")
     public String CambiarContrasena(ModelMap modelo, @RequestParam Integer codigo, @RequestParam String claveNueva, @RequestParam String email) throws Exception {
         try {
-            uSer.cambiarContrasena(codigo, claveNueva, email);
+            uSer.cambiarContraseña(codigo, claveNueva, email);
             
             modelo.put("exito", "la contraseña ha sido modificada con exito");
             return "usted ha modificado su contraseña con exito";
