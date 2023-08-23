@@ -120,8 +120,8 @@ public class UsuarioControlador {
         return "El usuario es :  " + uSer.BucarUsuarioPorEmail(email);
     }
     
-//    @GetMapping("/BuscarUsuarioPorDNI")
-//    public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long IdCuenta)  {
-//        return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
-//    }
+    @GetMapping("/BuscarUsuarioPorCuenta")
+    public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long IdCuenta)  {
+        return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
+    }
 }

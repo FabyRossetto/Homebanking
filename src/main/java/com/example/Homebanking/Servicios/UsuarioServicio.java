@@ -228,10 +228,11 @@ public class UsuarioServicio implements UserDetailsService{
          return usuario;
      }
      
-//     public Usuario BuscarPorCuenta(Long IdCuenta){
-//         Usuario usuario= usuarioRepositorio.findByCuenta(IdCuenta);
-//         return usuario;
-//     }
+     public Usuario BuscarPorCuenta(Long IdCuenta){
+         
+         Usuario usuario= usuarioRepositorio.findByCuenta(IdCuenta);
+         return usuario;
+     }
 //validaciones
     public void validar(String nombre, String apellido, String Email, String clave,String DNI) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {

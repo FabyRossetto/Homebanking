@@ -76,6 +76,16 @@ public class CuentaServicio {
         }
 
     }
+    
+    public Cuenta buscarPorId(Long Id){
+        Optional<Cuenta> cuenta= cuentaRepositorio.findById(Id);
+        if (cuenta.isPresent()) {
+            Cuenta cuen= cuenta.get();
+        return cuen;
+    }else {
+            return null;
+        }
+    }
 
     //DAR DE BAJA: necesito el alta para luego darlo de baja.Agregar esto a la entidad cuenta
     @Transactional

@@ -41,7 +41,7 @@ public class Usuario {
     String apellido;
     
     @OneToOne
-    protected Cuenta Cuenta;
+    protected Cuenta cuenta;
     
     @Column(nullable= false)
     String clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
