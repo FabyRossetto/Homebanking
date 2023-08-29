@@ -1,8 +1,6 @@
 package com.example.Homebanking.Servicios;
 
 import com.example.Homebanking.Entidades.Cuenta;
-import com.example.Homebanking.Entidades.TarjetaCreditoSubClass;
-import com.example.Homebanking.Entidades.TarjetaDebitoSubClass;
 
 import com.example.Homebanking.Entidades.Usuario;
 
@@ -24,7 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -52,12 +50,12 @@ public class UsuarioServicio implements UserDetailsService{
     @Autowired
     com.example.Homebanking.Servicios.TarjetaDebitoServicio tarjetaDebito;
 
-    @Autowired
-    com.example.Homebanking.Entidades.Cuenta cuenta;
+//    @Autowired
+//    com.example.Homebanking.Entidades.Cuenta cuenta;
     
-    @Autowired
-    @Qualifier("tarjetaServicio")
-    TarjetaServicio tarjeta;
+//    @Autowired
+//    @Qualifier("tarjetaServicio")
+//    TarjetaServicio tarjeta;
 
     //se registra el usuario con sus datos personales en este metodo 
     @Transactional
@@ -110,7 +108,7 @@ public class UsuarioServicio implements UserDetailsService{
 
             if (usu.getRol() == USUARIO) {
 
-                    Cuenta cuen = cuentaSer.guardar(cuenta.getId(), saldoCuenta);
+                    Cuenta cuen = cuentaSer.guardar(IdUsuario, saldoCuenta);
                    usu.setCuenta(cuen);
 
                
@@ -120,7 +118,7 @@ public class UsuarioServicio implements UserDetailsService{
                 
 
                 
-                    TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(clave);
+                    TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(IdUsuario, clave);
                     
                     usu.setTarjetaCredito(credito);
                 }
@@ -156,19 +154,21 @@ public class UsuarioServicio implements UserDetailsService{
     //este metodo le toca hacer a Giani
 //     public int enviar(String mail) throws ErrorServicio {
 //        int codigoDeRecuperacion = (int) (Math.random() * 9000 + 1);
-//        ns.enviar("Usted esta queriendo cambiar su contraseña de RecetApp", "Su código de recuperacion es " + codigoDeRecuperacion, mail);
+//        ns.enviar("Usted esta queriendo cambiar su contraseña de Homebanking", "Su código de recuperacion es " + codigoDeRecuperacion, mail);
 //        return codigoDeRecuperacion;
 //    }
 
     @Transactional
     public void cambiarContraseña(Integer codigoIngresado, String claveNueva, String email) throws ErrorServicio {
-        try {
+        try{
+        Usuario usuario = usuarioRepositorio.findByEmail(email);
 
-            Usuario usu = usuarioRepositorio.findByEmail(email);
+        if (usuario!=null) {
 
             String claveEnc = new BCryptPasswordEncoder().encode(claveNueva);
-            usu.setClave(claveEnc);
-            usuarioRepositorio.save(usu);
+            usuario.setClave(claveEnc);
+            usuarioRepositorio.save(usuario);
+        }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -193,22 +193,9 @@ public class UsuarioServicio implements UserDetailsService{
     //se elimina al usuario, asi como la cuenta y sus tarjetas de debito y credito
     
     public void EliminarUsuario(String IdUsuario) throws Exception {
-        //primero debo eliminar los objetos relacionados,como la cuenta y las tarjetas.
-        //probar cada metodo por separado,el de eliminar cuenta no funciona.y no se puede eliminar el usuario.
-
+        
         Usuario usuario = usuarioRepositorio.getById(IdUsuario);
 
-//        if (usuario.getTarjetaCredito() != null) {
-//            tarjeta.EliminarTarjeta(usuario.getTarjetaCredito().getId());
-//        }
-//        if (usuario.getTarjetaDebito() != null) {
-//            tarjeta.EliminarTarjeta(usuario.getTarjetaDebito().getId());
-//        }
-//        if (usuario.getCuenta() != null) {
-//            cuentaSer.borrarPorId(usuario.getCuenta().getId());
-//        }
-
-        //ver que funcionen los metodos por separado.
         usuarioRepositorio.delete(usuario);
     }
      
@@ -233,6 +220,7 @@ public class UsuarioServicio implements UserDetailsService{
          Usuario usuario= usuarioRepositorio.findByCuenta(IdCuenta);
          return usuario;
      }
+     
 //validaciones
     public void validar(String nombre, String apellido, String Email, String clave,String DNI) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {

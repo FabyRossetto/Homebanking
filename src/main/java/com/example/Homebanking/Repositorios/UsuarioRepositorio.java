@@ -18,8 +18,8 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, String> {
     public Usuario findByEmail (@Param ("email") String email);
     
    
-     @Query ("SELECT u from Usuario u WHERE u.cuenta.id= IdCuenta")
-    public Usuario findByCuenta (@Param ("IdCuenta") Long IdCuenta);
+     @Query ("SELECT u from Usuario u WHERE cuenta_id = cuenta_id")
+    public Usuario findByCuenta (@Param ("cuenta_id") Long IdCuenta);
     
      @Query ("SELECT u from Usuario u WHERE u.DNI = DNI")
     public Usuario findByDNI (@Param ("DNI") String DNI);

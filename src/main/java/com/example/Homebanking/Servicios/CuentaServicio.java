@@ -45,25 +45,28 @@ public class CuentaServicio {
 //        return cuentaRepositorio.save(cuenta);
 //
 //    }
-    @Transactional //saco el IdUsuario
-    public Cuenta guardar(Long Id, Double saldo) throws Excepcion {
-        //Optional<Usuario> usu=usuarioRepo.findById(Idusuario);
-        // Usuario usuario= usu.get();
-        //  if(usuario.getCuenta()==null){
+    @Transactional //Funciona Perfecto
+    public Cuenta guardar(String idUser, Double saldo) throws Excepcion {
+        Optional<Usuario> usu=usuarioRepo.findById(idUser);
+         Usuario usuario= usu.get();
+          if(usuario.getCuenta()==null){
         //SETEO DE ATRIBUTOS
         Cuenta cuenta = new Cuenta();
-        // cuenta.setUsuario(usuario);
+        
         cuenta.setSaldo(saldo);
         cuenta.setAlta(Boolean.TRUE);
         cuenta.setFecha(new Date());
-        cuenta.setId(Id);
+        cuentaRepositorio.save(cuenta);
+        usuario.setCuenta(cuenta);
+        usuarioRepo.save(usuario);
 
-        return cuentaRepositorio.save(cuenta);
+        return cuenta;
         
 //        notificacionServicio.enviar("Gracias por elegirnos", "HomeBanking", mail); deberia ir en usuario no acá
 
-//    }else{
-//            return usuario.getCuenta();
+    }else{
+            return usuario.getCuenta();
+    }
     }
 
 //    //ELIMINAR CUENTA
