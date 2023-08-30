@@ -1,20 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.Homebanking.Entidades;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -22,17 +22,19 @@ import lombok.Data;
  */
 @Data
 @Entity
-public class Transferencia {
+@Component
+public class Transferencia implements Serializable {
 
-    @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
 
-    @OneToOne
+    /*@ManyToOne
+    @JoinColumn (name="Id")
     Cuenta CuentaEmisora;
     // nested exception is org.hibernate.AnnotationException:@Column(s) not allowed on a @OneToOne property: com.example.Homebanking.Entidades.Transferencia.CuentaEmisora
-
-    @OneToOne
+*/
+   @OneToOne
     Cuenta CuentaReceptora;
     
     @Temporal(TemporalType.TIMESTAMP)

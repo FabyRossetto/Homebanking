@@ -15,100 +15,129 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CuentaServicio {
+    
+    @Autowired
+    private NotificacionServicio notificacionServicio;
 
     @Autowired
     private CuentaRepositorio cuentaRepositorio;
     @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
+    private UsuarioRepositorio usuarioRepo;
 
     @Autowired
     private TransferenciaRepositorio transferenciaRepositorio;
 
     //el error se debe a que no tengo creado los repo de usuario y transfernecia 
     //GUARDAR UNA CUENTA: CREACIÓN (necesito transferencia para crearlo?)
-    @Transactional
-    public Cuenta guardar(Long Id, String Idusuario,Double saldo) throws Excepcion {
-        Optional<Usuario> usu=usuarioRepositorio.findById(Idusuario);
-        Usuario usuario= usu.get();
-        if(usuario.getCuenta()==null){
+//    @Transactional
+//    public Cuenta guardar(Long Id, Usuario usuario, Double saldo, Boolean alta) throws Excepcion {
+//
+//        //SETEO DE ATRIBUTOS
+//        Cuenta cuenta = new Cuenta();
+//        cuenta.setUsuario(usuario);
+//        cuenta.setSaldo(Double.NaN);
+//        cuenta.setAlta(alta);
+//        // cuenta.setFecha(fecha);
+//        cuenta.setId(Id);
+//
+//        //cuenta.setTransferencia(transferencia);
+//        //PERSISTENCIA DEL OBJETO
+//        return cuentaRepositorio.save(cuenta);
+//
+//    }
+    @Transactional //Funciona Perfecto
+    public Cuenta guardar(String idUser, Double saldo) throws Excepcion {
+        Optional<Usuario> usu=usuarioRepo.findById(idUser);
+         Usuario usuario= usu.get();
+          if(usuario.getCuenta()==null){
         //SETEO DE ATRIBUTOS
         Cuenta cuenta = new Cuenta();
-        cuenta.setUsuario(usuario);
+        
         cuenta.setSaldo(saldo);
         cuenta.setAlta(Boolean.TRUE);
         cuenta.setFecha(new Date());
-        cuenta.setId(Id);
-        
-        //cuenta.setTransferencia(transferencia);
+        cuentaRepositorio.save(cuenta);
+        usuario.setCuenta(cuenta);
+        usuarioRepo.save(usuario);
 
-        //PERSISTENCIA DEL OBJETO
-        return cuentaRepositorio.save(cuenta);
+        return cuenta;
+        
+//        notificacionServicio.enviar("Gracias por elegirnos", "HomeBanking", mail); deberia ir en usuario no acá
 
     }else{
             return usuario.getCuenta();
-        }
-}
-}
+    }
+    }
 
 //    //ELIMINAR CUENTA
-//    @Transactional
-//    public void borrarPorId(Long Id) throws Excepcion {
-//        Optional<Cuenta> optional = cuentaRepositorio.findById(Id);
-//
-//        if (optional.isPresent()) {
-//            cuentaRepositorio.delete(optional.get());
-//        }
-//
-//    }
-//
-//    //DAR DE BAJA: necesito el alta para luego darlo de baja.Agregar esto a la entidad cuenta
-//    @Transactional
-//    public void darDeBaja(Long Id, Date Alta) throws Excepcion {
-//        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
-//        if (respuesta.isPresent()) {
-//
-//            Cuenta cuenta = respuesta.get();
-//
-//            cuenta.setAlta(false);
-//            cuentaRepositorio.save(cuenta);
-//        }
-//
-//    }
-//
-//    //MODIFICAR SALDO: Método para INGRESAR: sumar saldo + deposito
-//    @Transactional
-//    public void ingresarDinero(Double saldoActual, Double saldo, Double deposito, Long Id, Date fecha) throws Excepcion {
-////        Deposito deposito = new deposito();
-////        deposito.setFecha(New Date());
-//        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id); //busco la cuenta, y si existe una con ese id la materializamos
-//        if (respuesta.isPresent()) {
-//            Cuenta cuenta = respuesta.get();
-//            cuenta.setSaldoActual(cuenta.getSaldo() + deposito);
-//            cuenta.setFecha(fecha);
-//
-//            cuentaRepositorio.save(cuenta);
-//
-//        }
-//    }
-//
-//    //MODIFICAR SALDO: Método para RETIRAR dinero : saldoActual-extraccion (retiro/compra)
-//    @Transactional
-//    public void retirarDinero(Double saldoActual, Double saldo, Double extraccion, Long Id, Date fecha,String IdUsuario) throws Excepcion {
-//  //      Extraccion extraccion=new extraccion();
-//    //   extraccion.setFecha(New Date());
-//        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
-//        if (respuesta.isPresent()) {
-//            Cuenta cuenta = respuesta.get();
-//            cuenta.setSaldoActual(cuenta.getSaldo() - extraccion);
-//            cuenta.setFecha(fecha);
-//
-// 
-//    
-//
-//            cuentaRepositorio.save(cuenta);
-//
-//        }
-//    }
+    @Transactional
+    public void borrarPorId(Long Id) throws Excepcion {
+        Optional<Cuenta> optional = cuentaRepositorio.findById(Id);
+
+        if (optional.isPresent()) {
+            cuentaRepositorio.delete(optional.get());
+        }
+
+    }
+    
+    public Cuenta buscarPorId(Long Id){
+        Optional<Cuenta> cuenta= cuentaRepositorio.findById(Id);
+        if (cuenta.isPresent()) {
+            Cuenta cuen= cuenta.get();
+        return cuen;
+    }else {
+            return null;
+        }
+    }
+
+    //DAR DE BAJA: necesito el alta para luego darlo de baja.Agregar esto a la entidad cuenta
+    @Transactional
+    public void darDeBaja(Long Id, Boolean Alta) throws Excepcion {
+        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
+        if (respuesta.isPresent()) {
+
+            Cuenta cuenta = respuesta.get();
+
+            cuenta.setAlta(false);
+            cuentaRepositorio.save(cuenta);
+        }
+
+    }
+
+    //MODIFICAR SALDO: Método para INGRESAR: sumar saldo + deposito
+    @Transactional
+    public void ingresarDinero(Double saldoActual, Double saldo, Double deposito, Long Id) throws Excepcion {
+//        Deposito deposito = new deposito();
+//        deposito.setFecha(New Date());
+//       
+        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id); //busco la cuenta, y si existe una con ese id la materializamos
+        if (respuesta.isPresent()) {
+            Cuenta cuenta = respuesta.get();
+            cuenta.setSaldoActual(cuenta.getSaldo() + deposito);
+            cuenta.setFecha(new Date());
+            
+            cuentaRepositorio.save(cuenta);
+
+        }
+    }
+
+    //MODIFICAR SALDO: Método para RETIRAR dinero : saldoActual-extraccion (retiro/compra)
+    @Transactional
+    public void retirarDinero(Double saldoActual, Double saldo, Double extraccion, Long Id) throws Excepcion {
+        //      Extraccion extraccion=new extraccion();
+        //   extraccion.setFecha(New Date());
+        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
+        if (respuesta.isPresent()) {
+            Cuenta cuenta = respuesta.get();
+            cuenta.setSaldoActual(cuenta.getSaldo() - extraccion);
+            cuenta.setFecha(new Date());
+
+            cuentaRepositorio.save(cuenta);
+
+        }
+    }
+}
+
 //
 //    public void validar(Long Id, Double Saldo, Double saldoActual, Boolean Alta, Double deposito, Double extraccion,
 //            Usuario usuario) throws Exception {
@@ -139,6 +168,14 @@ public class CuentaServicio {
 //            throw new Exception(" El usuario no puede ser nulo");
 //        }
 //
+//    }
+//
+//    public void retirarDinero(Double saldoActual, Double saldo, Double saldo0, Long Id, Date fecha) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    public void ingresarDinero(Double saldoActual, Double saldo, Long Id, Date fecha) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
 //}
 //

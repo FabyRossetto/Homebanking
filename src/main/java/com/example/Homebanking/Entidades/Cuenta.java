@@ -27,14 +27,14 @@ import org.springframework.stereotype.Component;
 public class Cuenta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
 
     Boolean Alta = Boolean.TRUE;
 
     //saldoActual=saldo+deposito
-    
-    Double saldo;
+    Double Saldo;
+    Double saldoActual;
 
     Double deposito = 0.00;
     Double extraccion = 0.00;
@@ -45,7 +45,9 @@ public class Cuenta {
 //    @OneToMany
 //    Transferencia transferencia;
 
-    @OneToOne
-    Usuario usuario;
-
+//    @OneToOne
+//    Usuario usuario;
+//  
+    
+    
 }

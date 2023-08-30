@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package com.example.Homebanking.Servicios;
-
 import com.example.Homebanking.Entidades.TarjetaSuperClass;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
@@ -21,8 +20,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TarjetaCreditoServicio extends TarjetaServicio{
-    @Autowired
-    TarjetaSuperClass tarjetaCredito;
+  
 
     @Autowired
     TarjetaRepositorio tarjetaRepo;
@@ -32,38 +30,33 @@ public class TarjetaCreditoServicio extends TarjetaServicio{
 
     @Override
     public TarjetaSuperClass CrearTarjeta(String IdUsuario,Integer pin) throws Exception {
-        
-          Usuario usuario = ure.getById(IdUsuario);
-        if(usuario.getTarjetaCredito()==null){
-        tarjeta.setUsuario(usuario);
-       
-        tarjeta.setPin(pin);
-        tarjeta.setSaldo(500000.00);//saldo limite
-        tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));
-        tarjeta.setTipo("Credito");
-         
-        }
-//        validacion2(tarjeta.getSaldo(), tarjeta.getFechaVencimiento(), tarjeta.getAlta());//ver si esta validacion la necesito aca o en un metodo para gastar
-        return tarjetaRepo.save(tarjeta);
-}
-    @Transactional
-    @Override
-    public TarjetaSuperClass modificarTarjeta(Long IdTarjeta, String IdUsuario, Integer pin) throws Exception {
-       validacion1( IdUsuario,IdTarjeta, pin);
-        TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+        TarjetaSuperClass tarjetaCredito = super.CrearTarjeta(IdUsuario, pin);
         Usuario usuario = ure.getById(IdUsuario);
         
-        if (trayendoTarjeta != null) {
-            trayendoTarjeta.setUsuario(usuario);
-            trayendoTarjeta.setPin(pin);
-            trayendoTarjeta.setSaldo(usuario.getCuenta().getSaldo());
-            trayendoTarjeta.setFechaVencimiento(LocalDate.of(2035, 12, 31));
-            trayendoTarjeta.setTipo("Credito");
-            
-        }
+        tarjetaCredito.setSaldo(500000.00);//saldo limite
+        
+        tarjetaCredito.setTipo("Credito");
+        
+       validacion2(tarjetaCredito.getSaldo(), tarjetaCredito.getFechaVencimiento(), tarjetaCredito.getAlta());
+       usuario.setTarjetaCredito(tarjetaCredito);
+        ure.save(usuario);
+        return tarjetaRepo.save(tarjetaCredito);
+}
+    
+    @Transactional
+    @Override
+    public TarjetaSuperClass modificarTarjeta(Long IdTarjeta, String IdUsuario, Integer pinViejo,Integer pinNuevo) throws Exception {
+       TarjetaSuperClass trayendoTarjeta =super.modificarTarjeta(IdTarjeta, IdUsuario, pinViejo, pinNuevo);
+        validacion1( IdUsuario,IdTarjeta, pinViejo);
+        
+        Usuario user=ure.getById(IdUsuario);
+        trayendoTarjeta.setSaldo(user.getTarjetaCredito().getSaldo());
         validacion2(trayendoTarjeta.getSaldo(), trayendoTarjeta.getFechaVencimiento(), trayendoTarjeta.getAlta());
+        user.setTarjetaCredito(trayendoTarjeta);
+        ure.save(user);
         return tarjetaRepo.save(trayendoTarjeta); 
     }
+    
     
     
     @Transactional
@@ -84,7 +77,8 @@ public class TarjetaCreditoServicio extends TarjetaServicio{
 
 }
         }
-    //hacer metodo de eliminar en ambas tarjetas!
+    
+    //usa el metodo darDeBaja,eliminar,todos los buscar y la validaciones de la clase padre.
         
     }
     
