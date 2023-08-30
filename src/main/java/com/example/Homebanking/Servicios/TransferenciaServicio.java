@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.Homebanking.Servicios;
 
 import com.example.Homebanking.Entidades.Cuenta;
@@ -13,11 +8,9 @@ import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 /**
  *
@@ -26,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransferenciaServicio {
 
-   @Autowired
+    @Autowired
     Transferencia transferencia;
 
     @Autowired
@@ -34,80 +27,99 @@ public class TransferenciaServicio {
 
     @Autowired
     Cuenta cuenta;
-    
+
+    @Autowired
+    Usuario usuario;
+
     @Autowired
     CuentaRepositorio cuentaRepositorio;
-    
+
     @Autowired
     UsuarioRepositorio usuarioRepositorio;
 
-    @Transactional
-    public void crearTransferencia(Long Id, double monto, String DNI) throws Exception {
+    /*@Transactional
+    public Transferencia crearTransferencia(double monto,
+            Usuario usuarioEmisor, String DNIReceptor) throws Exception {
 
-        /*try {
+        try {
+            validar(monto, usuarioEmisor, DNIReceptor);
+            Transferencia tf= new Transferencia();
+            tf.setCuentaEmisora(usuario.getCuenta());
+            tf.setCuentaReceptora(usuarioRepositorio.findByDNI(DNIReceptor).getCuenta());
+            tf.setFecha(new Date());
+            tf.setMonto(monto);
+        } catch (Exception ex) {
+            throw new Exception("Ha ocurrido un error.");
+        }
+        return transferenciaRepositorio.save(this.transferencia);
+    }
+
+    /*@Transactional
+    public void crearTransferencia(Long Id, double monto, String DNI) throws Exception {
+        
+        try {
             validar(Id, monto, DNI);
 
             Transferencia nuevaTransferencia = new Transferencia();
             transferencia.setId(Id);
             //buscar cuenta vinculada al usuario
-            Optional<Usuario> usuario = usuarioRepositorio.findByDNI(DNI);
-        Usuario usuario= usuario.get();
-        if(usuario.getCuenta()==null){
-         //mensaje de error
-        } else{
-
+            Usuario usuario = usuarioRepositorio.findByDNI(DNI);
+            if (usuario.isPresent()) {
             transferencia.setCuentaReceptora(usuario.getCuenta());
-            
             transferencia.setFecha(new Date());
             transferencia.setMonto(monto);
             transferenciaRepositorio.save(nuevaTransferencia);
-        } 
-        
+        }
         }catch (Exception ex) {
             throw new Exception("Error al transferir");
-        }*/
-
-    }
-
-    //lo pongo en private porque sólo voy a usar este método dentro del servicio
-    private void validar(Long Id, double monto, String DNI) throws Exception {
-        //si ingresa el campo vacío de cuentaEmisora
-       
-        //si ingresa el campo vacío de cuentaReceptora
-        /*if (cuentaReceptora == null) {
-            throw new Exception("No ha ingresado una cuenta receptora");
-        }*/
-        //si cuentaEmisora es igual a cuentaReceptora
-        
-        //que el monto sea mayor al disponible en la cuenta y al mínimo, y que no exceda el máximo
-        //fijar monto minimo y máximo para la transferencia
-        
-        if(DNI.length() < 8){
-            throw new Exception ("El DNI es inválido");
         }
-        
-        if (monto < cuenta.getSaldo() || monto < 1000 || monto > 300000) {
+
+    }*/
+    //lo pongo en private porque sólo voy a usar este método dentro del servicio
+    private void validar(double monto, Usuario usuarioEmisor, String DNIReceptor) throws Exception {
+
+        if (DNIReceptor == null) {
+            throw new Exception("Debe ingresar un DNI "
+                    + "válido para realizar la tranferencia");
+        }
+
+        if (DNIReceptor.length() < 8) {
+            throw new Exception("El DNI es inválido");
+        }
+
+        if (DNIReceptor.equalsIgnoreCase(usuarioEmisor.getDNI())) {
+            throw new Exception("No puede transferir a su misma cuenta");
+        }
+
+        if (!DNIReceptor.equalsIgnoreCase(usuarioRepositorio.findByDNI(DNIReceptor).getDNI())) {
+            throw new Exception("No se ha encontrado el usuario con dicho DNI");
+        }
+
+        if (monto < usuarioEmisor.getCuenta().getSaldo() || monto < 1000 || monto > 300000) {
             throw new Exception("El monto de la transferencia no es correcto");
         }
 
-        //si la cuenta emisora es la misma que la receptora
-        //si la cuenta emisora existe
-        //si la cuenta recptora existe
-        //validación de fecha?? se crea de manera automática
     }
+    
+    /*public List<Transferencia> buscarTransferenciaXReceptor(String DNIReceptor){
+        return null;
+    }
+    cómo hago para generar la consulta a la base de datos para que me traiga la 
+    lista de transferencias según el DNI del usuario
+    */
 
-   /*public List<Transferencia> buscarTransferenciaXMonto(Double monto) {
+    /*public List<Transferencia> buscarTransferenciaXMonto(Double monto) {
         List<Transferencia> listaTransferenciaXMonto = transferenciaRepositorio.buscarTransferenciaXMonto(monto);
         return listaTransferenciaXMonto;
     }
 
-    /*public List<Transferencia> buscarTransferenciaXFecha(int dia, int mes, int anio) {
+    public List<Transferencia> buscarTransferenciaXFecha(int dia, int mes, int anio) {
         Date fecha = new Date(dia, mes, anio);
         List<Transferencia> listaTransferenciasXFecha = transferenciaRepositorio.buscarTransferenciaXFecha(fecha);
         return listaTransferenciasXFecha;
     }
 
-    public List<Transferencia> buscarTransferenciaXFecha(Date fecha){
+    /*public List<Transferencia> buscarTransferenciaXFecha(Date fecha){
         List <Transferencia> listaTransferenciasXFecha = transferenciaRepositorio.buscarTransferenciaXFecha(fecha);
         return listaTransferenciasXFecha;
     }*/

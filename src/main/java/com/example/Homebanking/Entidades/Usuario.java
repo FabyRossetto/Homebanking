@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -25,6 +27,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Data
+@Getter @Setter
 public class Usuario {
 
     @Id
@@ -65,5 +68,13 @@ public class Usuario {
     
      @Column(unique = true)
     String DNI;
+
+    public Usuario get() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean isPresent() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
