@@ -5,6 +5,7 @@
  */
 package com.example.Homebanking.Entidades;
 
+
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

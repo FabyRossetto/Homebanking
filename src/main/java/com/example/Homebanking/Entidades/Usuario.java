@@ -6,7 +6,7 @@
 package com.example.Homebanking.Entidades;
 
 import com.example.Homebanking.Enumeraciones.Rol;
-<<<<<<< Updated upstream
+
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -30,8 +30,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
->>>>>>> Stashed changes
+
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -40,6 +42,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Data
+@Getter @Setter
 public class Usuario {
 
     @Id
@@ -59,14 +62,14 @@ public class Usuario {
     @Column(nullable= false)
     String clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
     
-<<<<<<< Updated upstream
+
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tarjeta_debito_id")
 =======
-    //faltan anotaciones
+
     @OneToOne
->>>>>>> Stashed changes
+
     TarjetaSuperClass tarjetaDebito;
     
     @OneToOne(cascade = CascadeType.ALL)
@@ -88,9 +91,6 @@ public class Usuario {
      @Column(unique = true)
     String DNI;
 
-<<<<<<< Updated upstream
 =======
- 
 
->>>>>>> Stashed changes
 }
