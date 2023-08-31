@@ -7,7 +7,6 @@ package com.example.Homebanking.Entidades;
 
 
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,14 +28,14 @@ import org.springframework.stereotype.Component;
 public class Cuenta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    protected Long Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long Id;
 
     Boolean Alta = Boolean.TRUE;
 
     //saldoActual=saldo+deposito
-    
-    Double saldo;
+    Double Saldo;
+    Double saldoActual;
 
     Double deposito = 0.00;
     Double extraccion = 0.00;
@@ -44,10 +43,15 @@ public class Cuenta {
     @Temporal(TemporalType.TIMESTAMP)   
     Date fecha;
 
-    @OneToMany
-    List <Transferencia> listaTransferencias;
+<<<<<<< Updated upstream
+//    @OneToMany
+//    Transferencia transferencia;
+=======
+>>>>>>> Stashed changes
 
 //    @OneToOne
-//    protected Usuario usuario;
-
+//    Usuario usuario;
+//  
+    
+    
 }

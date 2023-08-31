@@ -6,16 +6,31 @@
 package com.example.Homebanking.Entidades;
 
 import com.example.Homebanking.Enumeraciones.Rol;
+
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+=======
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import java.time.LocalDate;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,23 +57,30 @@ public class Usuario {
     String apellido;
     
     @OneToOne
-    protected Cuenta Cuenta;
+    protected Cuenta cuenta;
     
     @Column(nullable= false)
     String clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
     
+
     
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tarjeta_debito_id")
+=======
+
     @OneToOne
+
     TarjetaSuperClass tarjetaDebito;
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tarjeta_credito_id")
     TarjetaSuperClass tarjetaCredito;
     
     
     Boolean Alta;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    Date fechaAlta;
+   
+    LocalDate fechaAlta;
     
     @Column(unique = true)
     String email;
@@ -69,12 +91,6 @@ public class Usuario {
      @Column(unique = true)
     String DNI;
 
-    public Usuario get() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public boolean isPresent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+=======
 
 }
