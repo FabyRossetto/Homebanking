@@ -1,13 +1,17 @@
 package com.example.Homebanking.Servicios;
 
 import com.example.Homebanking.Entidades.Cuenta;
-import com.example.Homebanking.Entidades.Transferencia;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Errores.Excepcion;
 import com.example.Homebanking.Repositorios.CuentaRepositorio;
+<<<<<<< Updated upstream
+=======
+import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
+import jakarta.transaction.Transactional;
+>>>>>>> Stashed changes
 import java.util.Date;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -9,10 +9,20 @@ import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Tarjeta;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
+<<<<<<< Updated upstream
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 import javax.transaction.Transactional;
+=======
+
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
+import jakarta.transaction.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> Stashed changes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +39,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TarjetaServicio {
 
+<<<<<<< Updated upstream
     @Autowired
     Tarjeta tarjeta;
+=======
+  
+>>>>>>> Stashed changes
 
     @Autowired
     TarjetaRepositorio tarjetaRepo;

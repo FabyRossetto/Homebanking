@@ -5,6 +5,7 @@
  */
 package com.example.Homebanking.Entidades;
 
+<<<<<<< Updated upstream
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,20 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+=======
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.TemporalType;
+import java.io.Serializable;
+import java.util.Date;
+import lombok.Data;
+import org.springframework.data.jpa.repository.Temporal;
+import org.springframework.stereotype.Component;
+>>>>>>> Stashed changes
 
 /**
  *
@@ -35,7 +50,7 @@ public class Transferencia {
     @OneToOne
     Cuenta CuentaReceptora;
     
-    @Temporal(TemporalType.TIMESTAMP)
+    //Temporal(TemporalType.TIMESTAMP)
     Date Fecha;
 
     @Column(nullable = false)

@@ -8,6 +8,7 @@ class HomebankingApplicationTests {
 
 	@Test
 	void contextLoads() {
+            System.out.println("Context is loaded successfully!");
 	}
 
 }
