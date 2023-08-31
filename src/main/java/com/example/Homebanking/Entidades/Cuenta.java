@@ -42,8 +42,11 @@ public class Cuenta {
     @Temporal(TemporalType.TIMESTAMP)   
     Date fecha;
 
+<<<<<<< Updated upstream
 //    @OneToMany
 //    Transferencia transferencia;
+=======
+>>>>>>> Stashed changes
 
 //    @OneToOne
 //    Usuario usuario;

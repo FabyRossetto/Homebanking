@@ -59,9 +59,14 @@ public class Usuario {
     @Column(nullable= false)
     String clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
     
+<<<<<<< Updated upstream
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tarjeta_debito_id")
+=======
+    //faltan anotaciones
+    @OneToOne
+>>>>>>> Stashed changes
     TarjetaSuperClass tarjetaDebito;
     
     @OneToOne(cascade = CascadeType.ALL)
@@ -83,4 +88,9 @@ public class Usuario {
      @Column(unique = true)
     String DNI;
 
+<<<<<<< Updated upstream
+=======
+ 
+
+>>>>>>> Stashed changes
 }
