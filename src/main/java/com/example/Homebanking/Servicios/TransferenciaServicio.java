@@ -1,9 +1,7 @@
 package com.example.Homebanking.Servicios;
 
-import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Transferencia;
 import com.example.Homebanking.Entidades.Usuario;
-import com.example.Homebanking.Repositorios.CuentaRepositorio;
 import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.util.Date;
@@ -20,61 +18,35 @@ import org.springframework.stereotype.Service;
 public class TransferenciaServicio {
 
     @Autowired
-    Transferencia transferencia;
+    private TransferenciaServicio transferenciaServicio;
+    
+    @Autowired
+    private Transferencia tf;
+    
+    @Autowired
+    private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
-    TransferenciaRepositorio transferenciaRepositorio;
+    private TransferenciaRepositorio transferenciaRepositorio;
 
-    @Autowired
-    Cuenta cuenta;
-
-    @Autowired
-    Usuario usuario;
-
-    @Autowired
-    CuentaRepositorio cuentaRepositorio;
-
-    @Autowired
-    UsuarioRepositorio usuarioRepositorio;
-
-    /*@Transactional
-    public Transferencia crearTransferencia(double monto,
-            Usuario usuarioEmisor, String DNIReceptor) throws Exception {
-
+    @Transactional
+    public Transferencia tf(double monto, Usuario usuarioEmisor, String DNIReceptor) throws Exception {
         try {
             validar(monto, usuarioEmisor, DNIReceptor);
-            Transferencia tf= new Transferencia();
-            tf.setCuentaEmisora(usuario.getCuenta());
+            //Transferencia tf = new Transferencia();
+            tf.setMonto(monto);
+            tf.setCuentaEmisora(usuarioEmisor.getCuenta());
             tf.setCuentaReceptora(usuarioRepositorio.findByDNI(DNIReceptor).getCuenta());
             tf.setFecha(new Date());
-            tf.setMonto(monto);
+
+            transferenciaRepositorio.save(tf);
+
+            return tf;
         } catch (Exception ex) {
-            throw new Exception("Ha ocurrido un error.");
-        }
-        return transferenciaRepositorio.save(this.transferencia);
-    }
-
-    /*@Transactional
-    public void crearTransferencia(Long Id, double monto, String DNI) throws Exception {
-        
-        try {
-            validar(Id, monto, DNI);
-
-            Transferencia nuevaTransferencia = new Transferencia();
-            transferencia.setId(Id);
-            //buscar cuenta vinculada al usuario
-            Usuario usuario = usuarioRepositorio.findByDNI(DNI);
-            if (usuario.isPresent()) {
-            transferencia.setCuentaReceptora(usuario.getCuenta());
-            transferencia.setFecha(new Date());
-            transferencia.setMonto(monto);
-            transferenciaRepositorio.save(nuevaTransferencia);
-        }
-        }catch (Exception ex) {
             throw new Exception("Error al transferir");
         }
+    }
 
-    }*/
     //lo pongo en private porque sólo voy a usar este método dentro del servicio
     private void validar(double monto, Usuario usuarioEmisor, String DNIReceptor) throws Exception {
 
@@ -100,27 +72,21 @@ public class TransferenciaServicio {
         }
 
     }
-    
-    /*public List<Transferencia> buscarTransferenciaXReceptor(String DNIReceptor){
-        return null;
-    }
-    cómo hago para generar la consulta a la base de datos para que me traiga la 
-    lista de transferencias según el DNI del usuario
-    */
 
-    /*public List<Transferencia> buscarTransferenciaXMonto(Double monto) {
+    public List<Transferencia> traerTodasTf() {
+        List<Transferencia> tf = transferenciaRepositorio.findAll();
+        return tf;
+    }
+
+
+    public List<Transferencia> buscarTransferenciaXMonto(Double monto) {
         List<Transferencia> listaTransferenciaXMonto = transferenciaRepositorio.buscarTransferenciaXMonto(monto);
         return listaTransferenciaXMonto;
     }
 
-    public List<Transferencia> buscarTransferenciaXFecha(int dia, int mes, int anio) {
+    /*public List<Transferencia> buscarTransferenciaXFecha(int dia, int mes, int anio) {
         Date fecha = new Date(dia, mes, anio);
         List<Transferencia> listaTransferenciasXFecha = transferenciaRepositorio.buscarTransferenciaXFecha(fecha);
-        return listaTransferenciasXFecha;
-    }
-
-    /*public List<Transferencia> buscarTransferenciaXFecha(Date fecha){
-        List <Transferencia> listaTransferenciasXFecha = transferenciaRepositorio.buscarTransferenciaXFecha(fecha);
         return listaTransferenciasXFecha;
     }*/
 }
