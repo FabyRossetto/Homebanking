@@ -5,6 +5,9 @@
  */
 package com.example.Homebanking.Entidades;
 
+import javax.persistence.Entity;
+import lombok.Data;
+
 /**
  *
  * @author Fabi

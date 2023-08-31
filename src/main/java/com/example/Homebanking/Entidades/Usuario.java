@@ -8,12 +8,14 @@ package com.example.Homebanking.Entidades;
 import com.example.Homebanking.Enumeraciones.Rol;
 <<<<<<< Updated upstream
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,7 +45,7 @@ public class Usuario {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    String IdUsuario;
+    protected String IdUsuario;
     
     @Column(nullable= false)
     String nombre;
@@ -52,13 +54,22 @@ public class Usuario {
     String apellido;
     
     @OneToOne
-    Cuenta Cuenta;
+    protected Cuenta cuenta;
     
     @Column(nullable= false)
-    int clave;
+    String clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
     
-    @OneToOne
-    Tarjeta tarjeta;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tarjeta_debito_id")
+    TarjetaSuperClass tarjetaDebito;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tarjeta_credito_id")
+    TarjetaSuperClass tarjetaCredito;
+    
+    
+    Boolean Alta;
     
    
     LocalDate fechaAlta;
@@ -69,5 +80,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Rol rol;
     
+     @Column(unique = true)
+    String DNI;
 
 }

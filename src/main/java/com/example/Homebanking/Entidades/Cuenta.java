@@ -5,14 +5,7 @@
  */
 package com.example.Homebanking.Entidades;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.TemporalType;
 import java.util.Date;
-<<<<<<< Updated upstream
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,11 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
-=======
-import lombok.Data;
-import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.stereotype.Component;
->>>>>>> Stashed changes
 
 /**
  *
@@ -34,26 +23,23 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Entity
+@Component
 public class Cuenta {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
-    
-    
-    Boolean Alta=Boolean.TRUE; 
-    
+
+    Boolean Alta = Boolean.TRUE;
+
+    //saldoActual=saldo+deposito
     Double Saldo;
-<<<<<<< Updated upstream
-   
-    @OneToMany
-    List<Transferencia> transferencia;//tuve que cambiar esto porque no me dejaba mapearla con el oneToMany al ser transferencia un solo objeto.
-=======
     Double saldoActual;
 
     Double deposito = 0.00;
     Double extraccion = 0.00;
     
-   // @Temporal(TemporalType.TIMESTAMP)   
+    @Temporal(TemporalType.TIMESTAMP)   
     Date fecha;
 
 //    @OneToMany
@@ -62,9 +48,6 @@ public class Cuenta {
 //    @OneToOne
 //    Usuario usuario;
 //  
->>>>>>> Stashed changes
     
-    @OneToOne
-    Usuario usuario;
     
 }

@@ -14,8 +14,8 @@ public interface CuentaRepositorio extends JpaRepository<Cuenta,Long>{
     @Query("SELECT c FROM Cuenta c WHERE c.id=:id" )
     public Cuenta buscarPorId(@Param("id")String id);
     
-    @Query("SELECT c FROM Cuenta c WHERE c.usuario.id = :idUsuario")
-    public Cuenta buscarPorUsuario(@Param("idUsuario") String idUsuario);
+//    @Query("SELECT c FROM Cuenta c WHERE c.usuario.id = :idUsuario")
+//    public Cuenta buscarPorUsuario(@Param("idUsuario") String idUsuario);
     
     
 }

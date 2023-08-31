@@ -5,139 +5,159 @@
  */
 package com.example.Homebanking.Servicios;
 
-import com.example.Homebanking.Entidades.Cuenta;
-import com.example.Homebanking.Entidades.Tarjeta;
+import com.example.Homebanking.Entidades.TarjetaSuperClass;
 import com.example.Homebanking.Entidades.Usuario;
+
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
-<<<<<<< Updated upstream
-import java.time.Instant;
-import java.util.Date;
-import java.util.Optional;
-import javax.transaction.Transactional;
-=======
 
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
-import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
->>>>>>> Stashed changes
+import java.util.Optional;
+
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Tarjeta (Fabi) 
- * crearTarjeta 
- * eliminarTarjeta 
- * darBaja 
- * actualizarSaldo
- * validarTarjeta (límite de tarjeta disponible, usuario, no esté vencida)
  *
- * @author Fabi
+ * Cuando hagamos la autorizacion de usuarios, es importante que a algunos
+ * metodos solo puedan acceder los administradores: como modificar,eliminar o
+ * dar de baja.
+ *
  */
 @Service
 public class TarjetaServicio {
 
-<<<<<<< Updated upstream
     @Autowired
-    Tarjeta tarjeta;
-=======
-  
->>>>>>> Stashed changes
+    TarjetaSuperClass tarjeta1;
 
     @Autowired
     TarjetaRepositorio tarjetaRepo;
 
+    @Autowired
+    UsuarioRepositorio ure;
+
+    //Este metodo es llamado por sus clases hijas para crear las tarjetas.
+    //Es sobreescrito solo para cambiar el saldo y el tipo,ya que en eso se diferencian la tarjeta de debito y la de credito.
     @Transactional
-    public Tarjeta CrearTarjetaCredito(Long IdTarjeta, String IdUsuario, Integer pin) throws Exception {
-        validaciones(IdTarjeta,IdUsuario,pin,tarjeta.getSaldoCredito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
-        tarjeta.setId(IdTarjeta);
-        tarjeta.getUsuario().setIdUsuario(IdUsuario);
+    public TarjetaSuperClass CrearTarjeta(String IdUsuario, Integer pin) throws Exception {
+
+        TarjetaSuperClass tarjeta = new TarjetaSuperClass();
         tarjeta.setPin(pin);
-        tarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
-        
-        Tarjeta tarjetaguardada = tarjetaRepo.save(tarjeta);
-        return tarjetaguardada;
+        tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));
+        tarjetaRepo.save(tarjeta);
+        return tarjeta;
     }
 
-//    @Transactional
-//    public Tarjeta CrearTarjetaDebito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
-//        validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoDebito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
-//        tarjeta.setId(IdTarjeta);
-//        tarjeta.setUsuario(usuario);
-//        tarjeta.setPin(pin);
-//        tarjeta.setSaldoDebito(usuario.getCuenta().getSaldo());
-//        tarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
-//        
-//        Tarjeta tarjetaguardada = tarjetaRepo.save(tarjeta);
-//        return tarjetaguardada;
-//    }
-//
-//    @Transactional
-//    public Tarjeta modificarTarjetaDebito(Long IdTarjeta, Usuario usuario, Integer pin) throws Exception {
-//        validaciones(IdTarjeta,usuario,pin,tarjeta.getSaldoDebito(),tarjeta.getFechaVencimiento(),tarjeta.getAlta());
-//        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
-//        
-//        if (trayendoTarjeta != null) {
-//            trayendoTarjeta.setUsuario(usuario);
-//            trayendoTarjeta.setPin(pin);
-//            trayendoTarjeta.setSaldoDebito(usuario.getCuenta().getSaldo());
-//            trayendoTarjeta.setFechaVencimiento(new Date());//averiguar como le agrego una fecha,de aca a 3 años , por ejemplo
-//            
-//
-//        }
-//        return tarjetaRepo.save(trayendoTarjeta);
-//    }
-//    
-//    @Transactional
-//    public void ActualizarSaldoTarjetaDebito(Long IdTarjeta){
-//        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
-//        Double SaldoUsuario=trayendoTarjeta.getUsuario().getCuenta().getSaldo();
-//        do{
-//            trayendoTarjeta.setSaldoDebito(SaldoUsuario);
-//            tarjetaRepo.save(trayendoTarjeta);
-//        }while(trayendoTarjeta.getSaldoDebito()!=SaldoUsuario);
-//    }
-//
-//    public void EliminarTarjeta(Long IdTarjeta) {
-//        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
-//        if (trayendoTarjeta != null) {
-//            tarjetaRepo.delete(trayendoTarjeta);
-//        }
-//    }
-   @Transactional
+    //Este metodo es llamado por sus clases hijas para modificar las tarjetas.
+    //Es sobreescrito solo por el saldo,ya que en eso se diferencian ambas tarjetas.
+    //Solo se va a poder modificar el pin y la fecha de vto,por cuestiones de seguridad.
+    //El saldo se setea con lo que le quede al usuario en su cuenta,para la de debito. Y con lo que le quede de saldo para la de credito
+    @Transactional
+    public TarjetaSuperClass modificarTarjeta(Long IdTarjeta, String IdUsuario, Integer pinViejo, Integer pinNuevo) throws Exception {
+
+        TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+        Usuario usuario = ure.getById(IdUsuario);
+
+        if (trayendoTarjeta != null && (usuario.getTarjetaCredito() == trayendoTarjeta || usuario.getTarjetaDebito() == trayendoTarjeta)) {
+
+            trayendoTarjeta.setPin(pinNuevo);
+
+            trayendoTarjeta.setFechaVencimiento(LocalDate.of(2035, 12, 31));
+            trayendoTarjeta.setTipo(trayendoTarjeta.getTipo());
+            if (trayendoTarjeta.getTipo().equalsIgnoreCase("Debito")) {
+                usuario.setTarjetaDebito(trayendoTarjeta);
+            }
+            if (trayendoTarjeta.getTipo().equalsIgnoreCase("Credito")) {
+                usuario.setTarjetaCredito(trayendoTarjeta);
+            }
+            ure.save(usuario);
+        }
+
+        return tarjetaRepo.save(trayendoTarjeta);
+    }
+
+    //Este metodo setea a null las tarjetas de debito y credito del usuario,para luego eliminarlas
+    @Transactional
+    public void EliminarTarjeta(String IdUsuario,Long IdTarjeta) {
+       Usuario user= ure.getById(IdUsuario);
+       TarjetaSuperClass tarjeta= tarjetaRepo.buscarPorId(IdTarjeta);
+       if(tarjeta.getTipo().equalsIgnoreCase("Credito")){
+       user.setTarjetaCredito(null);
+       }
+        if(tarjeta.getTipo().equalsIgnoreCase("Debito")){
+       user.setTarjetaDebito(null);
+       }
+       ure.save(user);
+       tarjetaRepo.delete(tarjeta);
+        
+
+    }
+
+    //Este metodo da de baja una tarjeta,sea de credito o debito
+    @Transactional
     public void DarDeBajaTarjeta(Long IdTarjeta) {
-        Tarjeta trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
-        if (trayendoTarjeta != null) {
+
+        TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+        if (trayendoTarjeta != null || trayendoTarjeta.getAlta() == true) {
             trayendoTarjeta.setAlta(false);
+
         }
 
     }
-    public void validaciones(Long Id,String IdUsuario,Integer pin,Double Saldo,Date fechaDeVencimiento,Boolean Alta) throws Exception {
 
-        if (Id == null || Id.toString().trim().isEmpty()) {
-            throw new Exception(" El Id no puede ser nulo");
-        }
-        if (Saldo<0) {
+    //Busca las tarjetas del usuario pasado por parametro.
+    public List<TarjetaSuperClass> BuscarTarjetaPorUsuario(String IdUsuario) {
+        Usuario usuario = ure.getById(IdUsuario);
+        List<TarjetaSuperClass> tarjeta = new ArrayList();
 
-            throw new Exception(" Su cuenta esta vacia");
-        }
-        if (pin == null || pin.toString().trim().isEmpty() || pin.toString().length() > 4) {
-            throw new Exception(" El pin es nulo o no lo esta ingresando bien");
-        }
-        
-        Date fechaActual=new Date();//ver si se crea con la fecha actual
-        if (fechaDeVencimiento.before(fechaActual)) {//ESTO ESTA FALLANDO,DA NULL
-            throw new Exception(" La tarjeta esta vencida");
-        }
+        tarjeta.add(usuario.getTarjetaCredito());
+        tarjeta.add(usuario.getTarjetaDebito());
+
+        return tarjeta;
+    }
+
+    //trae la lista de tarjetas que tengan como fecha de vto la que le introduimosc por parametro
+    public List<TarjetaSuperClass> BuscarPorFechaDeVto(LocalDate fechaVto) {
+
+        return tarjetaRepo.buscarPorVto(fechaVto);
+    }
+
+    //trae la tarjeta que tenga el id que le pasamos
+    public TarjetaSuperClass BuscarPorId(Long IdTarjeta) {
+        TarjetaSuperClass tarjetaEncontrada = tarjetaRepo.buscarPorId(IdTarjeta);
+        return tarjetaEncontrada;
+    }
+
+    //hacer un metodo que muestre los ultimos movimientos!
+    public void validacion1(String IdUsuario, Long IdTarjeta, Integer pin) throws Exception {
         if (IdUsuario == null) {
             throw new Exception(" El usuario no puede ser nulo");
         }
-        if (Alta == null || Alta==false) {
-            throw new Exception(" La tarjeta esta dada de baja");
+        if (IdTarjeta == null || IdTarjeta.toString().trim().isEmpty()) {
+            throw new Exception(" El Id no puede ser nulo");
         }
 
+        if (pin == null || pin.toString().trim().isEmpty() || pin.toString().length() > 4) {
+            throw new Exception(" El pin es nulo o no lo esta ingresando bien");
+        }
+
+    }
+
+    public void validacion2(Double Saldo, LocalDate fechaDeVencimiento, Boolean Alta) throws Exception {
+        if (Saldo < 0 || Saldo == null) {
+            throw new Exception(" Su cuenta esta vacia");
+        }
+        LocalDate fechaActual = LocalDate.now();
+        if (fechaActual.isAfter(fechaDeVencimiento)) {
+            System.out.println("La fecha de vencimiento ha pasado");
+        }
+        if (Alta == null || Alta == false) {
+            throw new Exception(" La tarjeta esta dada de baja");
+        }
     }
 
 }

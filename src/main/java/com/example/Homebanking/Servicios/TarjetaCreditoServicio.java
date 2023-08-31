@@ -9,7 +9,8 @@ import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
 
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
-import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

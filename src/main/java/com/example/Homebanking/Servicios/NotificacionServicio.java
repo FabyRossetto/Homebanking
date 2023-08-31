@@ -21,7 +21,7 @@ public class NotificacionServicio {
         message.setSubject(titulo);
         message.setText(cuerpo);
         
-        //mailsender.send(message);
+        mailsender.send(message);
     }
     
 }  

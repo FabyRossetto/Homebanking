@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioControlador {
-    //Hay que modificar los controladores cuando tengamos las vistas. Usar el HttpSession para traer al usuario
 
     @Autowired
     com.example.Homebanking.Servicios.UsuarioServicio uSer;
