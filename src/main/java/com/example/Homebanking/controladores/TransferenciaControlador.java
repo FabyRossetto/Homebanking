@@ -2,6 +2,7 @@
 package com.example.Homebanking.controladores;
 
 =======
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.CuentaRepositorio;
@@ -34,7 +35,7 @@ public class TransferenciaControlador {
     }
     
     @PostMapping("/realizarTransferencia")
-    public String crearTransferencia(@RequestParam double monto, Usuario usuarioEmisor, String DNIReceptor, ModelMap modelo) throws Exception {
+    public String crearTransferencia(@RequestParam double monto, @AuthenticationPrincipal Usuario usuarioEmisor, String DNIReceptor, ModelMap modelo) throws Exception {
         try {
             transferenciaServicio.tf(0, usuarioEmisor, DNIReceptor);
             modelo.put("Excelente", ("Transferencia realizada!"));
