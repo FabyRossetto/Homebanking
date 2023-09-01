@@ -41,7 +41,7 @@ public class Cuenta {
     
     @Temporal(TemporalType.TIMESTAMP)   
     Date fecha;
-
+//LOCAL DATE
 //    @OneToMany
 //    Transferencia transferencia;
 

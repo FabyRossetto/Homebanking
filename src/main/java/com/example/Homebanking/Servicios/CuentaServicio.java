@@ -64,8 +64,32 @@ public class CuentaServicio {
 
 //    }else{
 //            return usuario.getCuenta();
-    }
+    } 
+    
+    @Transactional //Funciona Perfecto
+    public Cuenta guardar(String idUser, Double saldo) throws Excepcion {
+        Optional<Usuario> usu=usuarioRepo.findById(idUser);
+         Usuario usuario= usu.get();
+          if(usuario.getCuenta()==null){
+        //SETEO DE ATRIBUTOS
+        Cuenta cuenta = new Cuenta();
+        
+        cuenta.setSaldo(saldo);
+        cuenta.setAlta(Boolean.TRUE);
+        cuenta.setFecha(new Date());
+        cuentaRepositorio.save(cuenta);
+        usuario.setCuenta(cuenta);
+        usuarioRepo.save(usuario);
 
+        return cuenta;
+        
+//        notificacionServicio.enviar("Gracias por elegirnos", "HomeBanking", mail); deberia ir en usuario no acá
+
+    }else{
+            return usuario.getCuenta();
+    }
+    }
+ 
 //    //ELIMINAR CUENTA
     @Transactional
     public void borrarPorId(Long Id) throws Excepcion {

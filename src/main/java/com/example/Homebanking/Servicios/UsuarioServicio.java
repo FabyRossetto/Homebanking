@@ -53,11 +53,11 @@ public class UsuarioServicio implements UserDetailsService {
     @Autowired
     com.example.Homebanking.Servicios.TarjetaCreditoServicio tarjetaCredito;
 
-    @Autowired
-    com.example.Homebanking.Servicios.TarjetaDebitoServicio tarjetaDebito;
-
-    @Autowired
-    com.example.Homebanking.Entidades.Cuenta cuenta;
+//    @Autowired
+//    com.example.Homebanking.Servicios.TarjetaDebitoServicio tarjetaDebito;
+//
+//    @Autowired
+//    com.example.Homebanking.Entidades.Cuenta cuenta;
 
     @Autowired
     @Qualifier("tarjetaServicio")
