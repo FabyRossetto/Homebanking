@@ -15,7 +15,6 @@ import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ import org.springframework.stereotype.Service;
 public class TarjetaServicio {
 
     @Autowired
-    TarjetaSuperClass tarjeta1;
+    TarjetaSuperClass tarjeta;
 
     @Autowired
     TarjetaRepositorio tarjetaRepo;
@@ -40,64 +39,42 @@ public class TarjetaServicio {
     @Autowired
     UsuarioRepositorio ure;
 
-    //Este metodo es llamado por sus clases hijas para crear las tarjetas.
-    //Es sobreescrito solo para cambiar el saldo y el tipo,ya que en eso se diferencian la tarjeta de debito y la de credito.
     @Transactional
-    public TarjetaSuperClass CrearTarjeta(String IdUsuario, Integer pin) throws Exception {
+    public TarjetaSuperClass CrearTarjeta( Integer pin) throws Exception {//repensar el parametro idTarjeta,creo q no es necesario
 
-        TarjetaSuperClass tarjeta = new TarjetaSuperClass();
-        tarjeta.setPin(pin);
-        tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));
-        tarjetaRepo.save(tarjeta);
-        return tarjeta;
+        
+            tarjeta.setPin(pin);
+            tarjeta.setFechaVencimiento(LocalDate.of(2028, 12, 31));
+            tarjeta.setTipo(tarjeta.getTipo());
+
+        
+        return tarjetaRepo.save(tarjeta);
     }
 
-    //Este metodo es llamado por sus clases hijas para modificar las tarjetas.
-    //Es sobreescrito solo por el saldo,ya que en eso se diferencian ambas tarjetas.
-    //Solo se va a poder modificar el pin y la fecha de vto,por cuestiones de seguridad.
-    //El saldo se setea con lo que le quede al usuario en su cuenta,para la de debito. Y con lo que le quede de saldo para la de credito
     @Transactional
-    public TarjetaSuperClass modificarTarjeta(Long IdTarjeta, String IdUsuario, Integer pinViejo, Integer pinNuevo) throws Exception {
+    public TarjetaSuperClass modificarTarjeta(Long IdTarjeta, String IdUsuario, Integer pin) throws Exception {
 
         TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
         Usuario usuario = ure.getById(IdUsuario);
 
-        if (trayendoTarjeta != null && (usuario.getTarjetaCredito() == trayendoTarjeta || usuario.getTarjetaDebito() == trayendoTarjeta)) {
-
-            trayendoTarjeta.setPin(pinNuevo);
-
+        if (trayendoTarjeta != null) {
+           
+            trayendoTarjeta.setPin(pin);
+            trayendoTarjeta.setSaldo(usuario.getCuenta().getSaldo());
             trayendoTarjeta.setFechaVencimiento(LocalDate.of(2035, 12, 31));
-            trayendoTarjeta.setTipo(trayendoTarjeta.getTipo());
-            if (trayendoTarjeta.getTipo().equalsIgnoreCase("Debito")) {
-                usuario.setTarjetaDebito(trayendoTarjeta);
-            }
-            if (trayendoTarjeta.getTipo().equalsIgnoreCase("Credito")) {
-                usuario.setTarjetaCredito(trayendoTarjeta);
-            }
-            ure.save(usuario);
-        }
+            trayendoTarjeta.setTipo(tarjeta.getTipo());
 
+        }
         return tarjetaRepo.save(trayendoTarjeta);
     }
 
-    //Este metodo setea a null las tarjetas de debito y credito del usuario,para luego eliminarlas
-    @Transactional
-    public void EliminarTarjeta(String IdUsuario,Long IdTarjeta) {
-       Usuario user= ure.getById(IdUsuario);
-       TarjetaSuperClass tarjeta= tarjetaRepo.buscarPorId(IdTarjeta);
-       if(tarjeta.getTipo().equalsIgnoreCase("Credito")){
-       user.setTarjetaCredito(null);
-       }
-        if(tarjeta.getTipo().equalsIgnoreCase("Debito")){
-       user.setTarjetaDebito(null);
-       }
-       ure.save(user);
-       tarjetaRepo.delete(tarjeta);
-        
-
+    public void EliminarTarjeta(Long IdTarjeta) {
+        TarjetaSuperClass trayendoTarjeta = tarjetaRepo.buscarPorId(IdTarjeta);
+        if (trayendoTarjeta != null) {
+            tarjetaRepo.delete(trayendoTarjeta);
+        }
     }
 
-    //Este metodo da de baja una tarjeta,sea de credito o debito
     @Transactional
     public void DarDeBajaTarjeta(Long IdTarjeta) {
 
@@ -108,31 +85,38 @@ public class TarjetaServicio {
         }
 
     }
-
-    //Busca las tarjetas del usuario pasado por parametro.
-    public List<TarjetaSuperClass> BuscarTarjetaPorUsuario(String IdUsuario) {
-        Usuario usuario = ure.getById(IdUsuario);
-        List<TarjetaSuperClass> tarjeta = new ArrayList();
-
-        tarjeta.add(usuario.getTarjetaCredito());
-        tarjeta.add(usuario.getTarjetaDebito());
-
+    public List <TarjetaSuperClass> BuscarTarjetaPorUsuario(String IdUsuario){
+        Usuario usuario=ure.getById(IdUsuario);
+        List<TarjetaSuperClass>tarjeta=new ArrayList();
+        
+        for (TarjetaSuperClass tarjetaSuperClass : tarjeta) {
+            tarjeta.add(usuario.getTarjetaCredito());
+            tarjeta.add(usuario.getTarjetaDebito());
+        }
+        
         return tarjeta;
     }
-
-    //trae la lista de tarjetas que tengan como fecha de vto la que le introduimosc por parametro
-    public List<TarjetaSuperClass> BuscarPorFechaDeVto(LocalDate fechaVto) {
-
-        return tarjetaRepo.buscarPorVto(fechaVto);
+    
+    public List <TarjetaSuperClass> BuscarPorFechaDeVto(LocalDate fechaVto){
+        
+        List<TarjetaSuperClass>tarjeta=new ArrayList();
+        
+        for (TarjetaSuperClass tarjetaSuperClass : tarjeta) {
+            if(tarjetaSuperClass.getFechaVencimiento()==fechaVto ){
+            tarjeta.add(tarjetaSuperClass);
+        }
+            
+        }
+        return tarjeta;
     }
-
-    //trae la tarjeta que tenga el id que le pasamos
-    public TarjetaSuperClass BuscarPorId(Long IdTarjeta) {
-        TarjetaSuperClass tarjetaEncontrada = tarjetaRepo.buscarPorId(IdTarjeta);
+    
+    public TarjetaSuperClass BuscarPorId(Long IdTarjeta){
+        TarjetaSuperClass tarjetaEncontrada= tarjetaRepo.buscarPorId(IdTarjeta);
         return tarjetaEncontrada;
     }
-
+    
     //hacer un metodo que muestre los ultimos movimientos!
+
     public void validacion1(String IdUsuario, Long IdTarjeta, Integer pin) throws Exception {
         if (IdUsuario == null) {
             throw new Exception(" El usuario no puede ser nulo");

@@ -1,7 +1,6 @@
 
 package com.example.Homebanking.controladores;
 
-=======
 import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.CuentaRepositorio;
@@ -15,13 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/adminTransferencia")
 public class TransferenciaControlador {
     
-
-=======
     @Autowired
     private TransferenciaServicio transferenciaServicio;
     
@@ -52,5 +48,4 @@ public class TransferenciaControlador {
         return "listaTransferencias";
     }
     
-
 }

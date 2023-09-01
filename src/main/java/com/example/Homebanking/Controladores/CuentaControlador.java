@@ -1,14 +1,11 @@
 package com.example.Homebanking.Controladores;
 
-import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.CuentaRepositorio;
 import com.example.Homebanking.Repositorios.TarjetaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import com.example.Homebanking.Servicios.CuentaServicio;
-import com.example.Homebanking.Servicios.TarjetaServicio;
-import com.example.Homebanking.Servicios.UsuarioServicio;
-import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,7 +24,7 @@ public class CuentaControlador {
     private CuentaRepositorio cuentaRepositorio;
 
     @Autowired
-    private UsuarioRepositorio usuarioRepo;
+    private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
     private TarjetaRepositorio tarjetaRepositorio;
@@ -38,20 +35,18 @@ public class CuentaControlador {
     @Autowired
     private CuentaServicio cuentaservicio;
 
-//    @Autowired
-//    private UsuarioServicio usuarioservicio;
-//    @Autowired
-//    TarjetaServicio tarjetaservicio;
+
+
     @GetMapping("/guardarCuenta")
     public String guardarCuenta(ModelMap vista) {
 
         return "administracionCuenta"; //me devuelve la vista
     }
-
-    @PostMapping("/guardarCuenta")
-    public String guardarCuenta(@RequestParam String idUser, @RequestParam Double saldo, ModelMap modelo) throws Exception {
+    
+     @PostMapping("/guardarCuenta")
+    public String guardar(@RequestParam Long IdCuenta,Double saldo, ModelMap modelo) throws Exception {
         try {
-            cuentaservicio.guardar(idUser, saldo);
+            cuentaservicio.guardar(IdCuenta, saldo);
             modelo.put("Gracias por elegirnos", ("Cuenta dada de alta con éxito"));
         } catch (Exception e) {
             e.getMessage();
@@ -60,57 +55,13 @@ public class CuentaControlador {
         return "administracionCuenta";
     }
     
-        
     
-
-    @PostMapping("/ingresarDinero")
-    public String ingresarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Long Id, @RequestParam Double deposito, ModelMap modelo) throws Exception {
-        Cuenta cuenta = cuentaRepositorio.getById(Id);
-        try {
-            cuentaservicio.ingresarDinero(saldoActual, saldo, deposito, Id);
-            modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
-        } catch (Exception e) {
-            e.getMessage();
-            modelo.put("Error", "Intente nuevamente");
-        }
-        return "administracionCuenta"; //o lo redirigo al html de ingresar dinero?
-    }
-
-
-    @PostMapping("/retirarDinero")
-    public String retirarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Double extraccion, @RequestParam Long Id, ModelMap modelo) throws Exception {
-        Cuenta cuenta = cuentaRepositorio.getById(Id);
-
-        try {
-            cuentaservicio.ingresarDinero(saldoActual, saldo, extraccion, Id);
-            modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
-        } catch (Exception e) {
-            e.getMessage();
-            modelo.put("Error", "Intente nuevamente");
-        }
-
-        return "administracionCuenta";
-
-    }
-
     @DeleteMapping("/eliminarCuenta")
-    public String eliminarCuenta(@RequestParam Long Id, ModelMap modelo) throws Exception {
-        try {
-             cuentaservicio.borrarPorId(Id);
-              modelo.put("Gracias por utilizar nuestros servicios", "Cuenta eliminada");
-        } catch (Exception e) {
-            modelo.put("Error","No se puede eliminar la cuenta");
-        }
+    public String eliminarCenta(@RequestParam Long IdCuenta) throws Exception{
+        cuentaservicio.borrarPorId(IdCuenta);
        
-        return "administracionCuenta";
+        return "la cuenta fue eliminada";
+    }
 
-   
-         }
-     }
-
-
-//}
-//
-//
-//
-////alta?
+}
+//alta?
