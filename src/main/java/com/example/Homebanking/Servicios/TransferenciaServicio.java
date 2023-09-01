@@ -24,6 +24,9 @@ public class TransferenciaServicio {
     
     @Autowired
     private Transferencia tf;
+
+    @Autowired
+    private NotificacionServicio notificacionServicio;
     
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
@@ -42,7 +45,7 @@ public class TransferenciaServicio {
             tf.setFecha(LocalDate.now());
 
             transferenciaRepositorio.save(tf);
-
+            enviar(usuarioEmisor.getEmail());
             return tf;
         } catch (Exception ex) {
             throw new Exception("Error al transferir");
@@ -91,5 +94,9 @@ public class TransferenciaServicio {
         LocalDate fecha = LocalDate.of(anio, mes, dia);
         List<Transferencia> listaTransferenciasXFecha = transferenciaRepositorio.buscarTransferenciaXFecha(fecha);
         return listaTransferenciasXFecha;
+    }
+
+    public void enviar(String email) throws Exception{
+      notificacionServicio.enviar("HomebankingApp", "Estado de transferencia: Realizada con éxito!", email);
     }
 }
