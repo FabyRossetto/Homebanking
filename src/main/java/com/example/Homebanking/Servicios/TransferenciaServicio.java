@@ -4,7 +4,7 @@ import com.example.Homebanking.Entidades.Transferencia;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,13 @@ public class TransferenciaServicio {
 
     @Autowired
     private TransferenciaServicio transferenciaServicio;
-    
+
     @Autowired
     private Transferencia tf;
     
+    @Autowired
+    private NotificacionServicio notificacionServicio;
+
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
 
@@ -37,10 +40,10 @@ public class TransferenciaServicio {
             tf.setMonto(monto);
             tf.setCuentaEmisora(usuarioEmisor.getCuenta());
             tf.setCuentaReceptora(usuarioRepositorio.findByDNI(DNIReceptor).getCuenta());
-            tf.setFecha(new Date());
+            tf.setFecha(LocalDate.now());
 
             transferenciaRepositorio.save(tf);
-
+            enviar(usuarioEmisor.getEmail());
             return tf;
         } catch (Exception ex) {
             throw new Exception("Error al transferir");
@@ -78,15 +81,18 @@ public class TransferenciaServicio {
         return tf;
     }
 
-
     public List<Transferencia> buscarTransferenciaXMonto(Double monto) {
         List<Transferencia> listaTransferenciaXMonto = transferenciaRepositorio.buscarTransferenciaXMonto(monto);
         return listaTransferenciaXMonto;
     }
 
-    /*public List<Transferencia> buscarTransferenciaXFecha(int dia, int mes, int anio) {
-        Date fecha = new Date(dia, mes, anio);
+    public List<Transferencia> buscarTransferenciaXFecha(int anio, int mes, int dia) {
+        LocalDate fecha = LocalDate.of(anio, mes, dia);
         List<Transferencia> listaTransferenciasXFecha = transferenciaRepositorio.buscarTransferenciaXFecha(fecha);
         return listaTransferenciasXFecha;
-    }*/
+    }
+    
+    public void enviar(String email) throws Exception{
+      notificacionServicio.enviar("HomebankingApp", "Estado de transferencia: Realizada con éxito!", email);
+    }
 }

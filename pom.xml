@@ -168,6 +168,11 @@
             <version>5.5.2</version>
             <type>jar</type>
         </dependency>
+   
+    <dependency>
+        <groupId>javax.persistence</groupId>
+        <artifactId>javax.persistence-api</artifactId>
+    </dependency>
     </dependencies>
    
 
@@ -195,7 +200,11 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            
+            <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.4</version> <!-- Cambia a la nueva versión -->
+    </plugin>
         </plugins>
 
     </build>

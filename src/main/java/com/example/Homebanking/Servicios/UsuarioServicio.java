@@ -1,8 +1,6 @@
 package com.example.Homebanking.Servicios;
 
 import com.example.Homebanking.Entidades.Cuenta;
-import com.example.Homebanking.Entidades.TarjetaCreditoSubClass;
-import com.example.Homebanking.Entidades.TarjetaDebitoSubClass;
 
 import com.example.Homebanking.Entidades.Usuario;
 
@@ -14,6 +12,7 @@ import static com.example.Homebanking.Enumeraciones.Rol.USUARIO;
 import com.example.Homebanking.Errores.ErrorServicio;
 import com.example.Homebanking.Errores.Excepcion;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,8 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Random;
 import javax.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -32,6 +32,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -45,6 +46,9 @@ public class UsuarioServicio implements UserDetailsService{
 
     @Autowired
     CuentaServicio cuentaSer;
+    
+    @Autowired
+    NotificacionServicio notificacionServicio;
 
     @Autowired
     com.example.Homebanking.Servicios.TarjetaCreditoServicio tarjetaCredito;
@@ -52,12 +56,12 @@ public class UsuarioServicio implements UserDetailsService{
     @Autowired
     com.example.Homebanking.Servicios.TarjetaDebitoServicio tarjetaDebito;
 
-    @Autowired
-    com.example.Homebanking.Entidades.Cuenta cuenta;
+//    @Autowired
+//    com.example.Homebanking.Entidades.Cuenta cuenta;
     
-    @Autowired
-    @Qualifier("tarjetaServicio")
-    TarjetaServicio tarjeta;
+//    @Autowired
+//    @Qualifier("tarjetaServicio")
+//    TarjetaServicio tarjeta;
 
     //se registra el usuario con sus datos personales en este metodo 
     @Transactional
@@ -110,7 +114,7 @@ public class UsuarioServicio implements UserDetailsService{
 
             if (usu.getRol() == USUARIO) {
 
-                    Cuenta cuen = cuentaSer.guardar(cuenta.getId(), saldoCuenta);
+                    Cuenta cuen = cuentaSer.guardar(IdUsuario, saldoCuenta);
                    usu.setCuenta(cuen);
 
                
@@ -120,7 +124,7 @@ public class UsuarioServicio implements UserDetailsService{
                 
 
                 
-                    TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(clave);
+                    TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(IdUsuario, clave);
                     
                     usu.setTarjetaCredito(credito);
                 }
@@ -156,19 +160,66 @@ public class UsuarioServicio implements UserDetailsService{
     //este metodo le toca hacer a Giani
 //     public int enviar(String mail) throws ErrorServicio {
 //        int codigoDeRecuperacion = (int) (Math.random() * 9000 + 1);
-//        ns.enviar("Usted esta queriendo cambiar su contraseña de RecetApp", "Su código de recuperacion es " + codigoDeRecuperacion, mail);
+//        ns.enviar("Usted esta queriendo cambiar su contraseña de Homebanking", "Su código de recuperacion es " + codigoDeRecuperacion, mail);
 //        return codigoDeRecuperacion;
 //    }
+    
+    //   Este código genera una nueva contraseña aleatoria, la encripta utilizando el algoritmo BCrypt, 
+    //actualiza la propiedad clave del objeto usuario con la contraseña encriptada, guarda el objeto 
+    //usuario en la base de datos y envía un correo electrónico al usuario con la nueva contraseña generada.
+    @Transactional
+    public void recuperarClave(@RequestParam Usuario usuario) throws Excepcion {
+
+        int length = 10;
+
+        final char[] lowercase = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        final char[] uppercase = "ABCDEFGJKLMNPRSTUVWXYZ".toCharArray();
+        final char[] numbers = "0123456789".toCharArray();
+        final char[] symbols = "^$?!@#%&".toCharArray();
+        final char[] allAllowed = "abcdefghijklmnopqrstuvwxyzABCDEFGJKLMNPRSTUVWXYZ0123456789^$?!@#%&".toCharArray();
+
+        //Use cryptographically secure random number generator
+        Random random = new SecureRandom();
+
+        StringBuilder password = new StringBuilder();
+
+        for (int i = 0; i < length; i++) {
+            password.append(allAllowed[random.nextInt(allAllowed.length)]);
+        }
+
+        //Ensure password policy is met by inserting required random chars in random positions
+        password.insert(random.nextInt(password.length()), lowercase[random.nextInt(lowercase.length)]);
+        password.insert(random.nextInt(password.length()), uppercase[random.nextInt(uppercase.length)]);
+        password.insert(random.nextInt(password.length()), numbers[random.nextInt(numbers.length)]);
+        password.insert(random.nextInt(password.length()), symbols[random.nextInt(symbols.length)]);
+
+        String nuevaClave = password.toString();
+
+        String encriptada = new BCryptPasswordEncoder().encode(nuevaClave);
+        usuario.setClave(encriptada);
+
+        usuarioRepositorio.save(usuario);
+
+        String asunto = "Tu nueva clave para ingresar a tu HomeBankingApp";
+        String contenido = "Hola " + usuario.getNombre() + ". Solicitaste recuperar tu contraseña de usuario de HomeBankingApp. Tu nueva contraseña es: " + nuevaClave
+                + ". Te aconsejamos cambiar tu contraseña a través de tu página de perfil tan pronto como ingreses con esta nueva clave. Si no solicitaste el cambio de clave, igualmente "
+                + "te sugerimos cambiarla ahora y frecuentemente";
+
+        notificacionServicio.enviar(usuario.getEmail(), asunto, contenido);
+
+    }
 
     @Transactional
     public void cambiarContraseña(Integer codigoIngresado, String claveNueva, String email) throws ErrorServicio {
-        try {
+        try{
+        Usuario usuario = usuarioRepositorio.findByEmail(email);
 
-            Usuario usu = usuarioRepositorio.findByEmail(email);
+        if (usuario!=null) {
 
             String claveEnc = new BCryptPasswordEncoder().encode(claveNueva);
-            usu.setClave(claveEnc);
-            usuarioRepositorio.save(usu);
+            usuario.setClave(claveEnc);
+            usuarioRepositorio.save(usuario);
+        }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -192,21 +243,12 @@ public class UsuarioServicio implements UserDetailsService{
 
     //se elimina al usuario, asi como la cuenta y sus tarjetas de debito y credito
     
-     public void EliminarUsuario(String IdUsuario) throws Exception {
-         //primero debo eliminar los objetos relacionados,como la cuenta y las tarjetas.
-         //probar cada metodo por separado,el de eliminar cuenta no funciona.y no se puede eliminar el usuario.
-         
-        Usuario usuario = usuarioRepositorio.getById(IdUsuario);
-       
-        Cuenta EliminarCuenta=usuario.getCuenta();
+    public void EliminarUsuario(String IdUsuario) throws Exception {
         
-         tarjeta.EliminarTarjeta(usuario.getTarjetaCredito().getId());
-         tarjeta.EliminarTarjeta(usuario.getTarjetaDebito().getId());
-         cuentaSer.borrarPorId(EliminarCuenta.getId());
-        //probar de guardar estos cambios y despues eliminar el user
-    
+        Usuario usuario = usuarioRepositorio.getById(IdUsuario);
+
         usuarioRepositorio.delete(usuario);
-     }
+    }
      
      public Usuario BuscarUsuarioPorDNI(String DNI){
          Usuario usuario=usuarioRepositorio.findByDNI(DNI);
@@ -224,10 +266,12 @@ public class UsuarioServicio implements UserDetailsService{
          return usuario;
      }
      
-//     public Usuario BuscarPorCuenta(Long IdCuenta){
-//         Usuario usuario= usuarioRepositorio.findByCuenta(IdCuenta);
-//         return usuario;
-//     }
+     public Usuario BuscarPorCuenta(Long IdCuenta){
+         
+         Usuario usuario= usuarioRepositorio.findByCuenta(IdCuenta);
+         return usuario;
+     }
+     
 //validaciones
     public void validar(String nombre, String apellido, String Email, String clave,String DNI) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {
