@@ -7,9 +7,6 @@ package com.example.Homebanking.controladores;
 
 
 
-import com.example.Homebanking.Entidades.Usuario;
-import com.example.Homebanking.Errores.Excepcion;
-import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,10 +28,9 @@ public class UsuarioControlador {
 
     @Autowired
     com.example.Homebanking.Servicios.UsuarioServicio uSer;
-    
-    @Autowired
-     private UsuarioRepositorio usuarioRepo;
 
+    
+    //Este metodo registra un usuario con sus datos basicos.
     @PostMapping("/crearUsuario")
     public String CrearUsuario(ModelMap modelo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI) throws Exception {
         try {
@@ -48,13 +44,16 @@ public class UsuarioControlador {
         }
 
     }
+    
+    //Este metodo le agrega a el usuario que le pasemos por parametro, una cuenta y tarjetas de debito y credito.
     @PostMapping("/cargarCuentayTarjetas")
     public String CargarCuentayTarjetas(ModelMap modelo, @RequestParam String Id,@RequestParam Double saldo, @RequestParam Integer clave) throws Exception{
         uSer.cargarTarjetasyCuenta(Id,saldo, clave);//es el IdUsuario
         return "se creo su cuenta y se cargaron sus tarjetas de debito y credito";
     }
     
-     @PutMapping("/modificarUsuario")
+    //Modifica todos los datos del usuario
+    @PutMapping("/modificarUsuario")
     public String ModificarUsuario(ModelMap modelo, @RequestParam String Id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI) throws Exception {
         try {
             uSer.modificarDatosPersonales(Id, nombre, apellido, Email, clave,DNI);
@@ -68,29 +67,7 @@ public class UsuarioControlador {
 
     }
     
-     @PostMapping("/recuperarClave")
-    public String recuperarClave(ModelMap modelo, @RequestParam String Email) throws Excepcion {
-
-       
-        Usuario usuarioRecuperar = usuarioRepo.findByEmail(Email);
-        
-        if(usuarioRecuperar != null) {
-            
-            uSer.recuperarClave(usuarioRecuperar);
-            
-             modelo.put("cambioClave", "Por favor revisá tu correo electrónico (cambio de clave)");
-            
-            
-        } else {
-            
-            modelo.put("error", "No existe un usuario registrado con ese correo electrónico");
-        }
-           
-
-        return "login.html";
-    }
-    
-    
+    //En este metodo se cambia la contraseña,requiere un codigo que es enviado al email.
     @PutMapping("/modificarPass")
     public String CambiarContrasena(ModelMap modelo, @RequestParam Integer codigo, @RequestParam String claveNueva, @RequestParam String email) throws Exception {
         try {
@@ -105,6 +82,7 @@ public class UsuarioControlador {
 
     }
     
+    //Da de baja el usuario
      @PatchMapping("/darDeBajaUsuario")
     public String DarDeBajaUsuario(ModelMap modelo, @RequestParam String Id) throws Exception {
         try {
@@ -119,6 +97,8 @@ public class UsuarioControlador {
        
 
     }
+    
+    //Elimina al usuario con todos sus datos de la BD
     @DeleteMapping("/EliminarUsuario")
     public String BorrarUsuario(ModelMap modelo, @RequestParam String Id) throws Exception {
         try {
@@ -134,46 +114,27 @@ public class UsuarioControlador {
         }
 }
     
+    //busca al usuario por DNI y lo trae con todos sus datos
      @GetMapping("/BuscarUsuarioPorDNI")
     public String BuscarUsuarioDNI(ModelMap modelo, @RequestParam String DNI)  {
         return "El usuario es :  " + uSer.BuscarUsuarioPorDNI(DNI);
     }
     
+    //Busca al usuario por Apellido y lo trae con todos sus datos
     @GetMapping("/BuscarUsuarioPorApellido")
     public String BuscarUsuarioPorApellido(ModelMap modelo, @RequestParam String Apellido)  {
         return "El usuario es :  " + uSer.BuscarUsuarioPorApellido(Apellido);
     }
     
+    //Busca al usuario por email y lo trae con todos sus datos
     @GetMapping("/BuscarUsuarioPorEmail")
     public String BuscarUsuarioPorEmail(ModelMap modelo, @RequestParam String email)  {
         return "El usuario es :  " + uSer.BucarUsuarioPorEmail(email);
     }
     
-//    @GetMapping("/BuscarUsuarioPorDNI")
-//    public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long IdCuenta)  {
-//        return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
-//    }
-    
-    
-//     @PostMapping("/recuperarClave")
-//    public String recuperarClave(ModelMap modelo, @RequestParam String Email) throws Excepcion {
-//
-//
-//        Usuario usuarioRecuperar = UsuarioRepositorio.BuscarUsuarioPorEmail(Email);
-//
-//        if(usuarioRecuperar != null) {
-//
-//            usuarioServicio.recuperarClave(usuarioRecuperar);
-//
-//             modelo.put("cambioClave", "Por favor revisá tu correo electrónico (cambio de clave)");
-//
-//
-//        } else {
-//
-//            modelo.put("error", "No existe un usuario registrado con ese correo electrónico");
-//        }
-//
-//
-//        return "login.html";
-//    }
+    //Busca al usuario por la cuenta que le sea pasada por parametro
+    @GetMapping("/BuscarUsuarioPorCuenta")
+    public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long IdCuenta)  {
+        return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
+    }
 }
