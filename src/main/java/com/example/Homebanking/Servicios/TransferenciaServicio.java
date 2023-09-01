@@ -87,9 +87,9 @@ public class TransferenciaServicio {
         return listaTransferenciaXMonto;
     }
 
-    /*public List<Transferencia> buscarTransferenciaXFecha(int dia, int mes, int anio) {
-        Date fecha = new Date(dia, mes, anio);
+   public List<Transferencia> buscarTransferenciaXFecha(int anio, int mes, int dia) {
+        LocalDate fecha = LocalDate.of(anio, mes, dia);
         List<Transferencia> listaTransferenciasXFecha = transferenciaRepositorio.buscarTransferenciaXFecha(fecha);
         return listaTransferenciasXFecha;
-    }*/
+    }
 }
