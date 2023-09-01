@@ -1,6 +1,6 @@
 package com.example.Homebanking.Entidades;
 
-import java.util.Date;
+import java.util.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +33,7 @@ public class Transferencia{
     Cuenta CuentaReceptora;
     
     @Temporal(TemporalType.TIMESTAMP)
-    Date Fecha;
+    LocalDate Fecha;
 
     @Column(nullable = false)
     Double monto;
