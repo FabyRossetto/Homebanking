@@ -4,7 +4,7 @@ import com.example.Homebanking.Entidades.Transferencia;
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
-import java.util.Date;
+import java.util.LocalDate;
 
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class TransferenciaServicio {
             tf.setMonto(monto);
             tf.setCuentaEmisora(usuarioEmisor.getCuenta());
             tf.setCuentaReceptora(usuarioRepositorio.findByDNI(DNIReceptor).getCuenta());
-            tf.setFecha(new Date());
+            tf.setFecha(LocalDate.now());
 
             transferenciaRepositorio.save(tf);
 
