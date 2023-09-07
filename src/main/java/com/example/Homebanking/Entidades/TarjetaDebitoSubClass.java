@@ -10,7 +10,7 @@ import lombok.Data;
 
 /**
  *
- * @author Fabi
+ * las clases subclass tienen solo constructores porque todo lo demas lo heredan de su clase padre
  */
 
 

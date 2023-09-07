@@ -8,7 +8,7 @@ package com.example.Homebanking.Entidades;
 
 /**
  *
- * @author Fabi
+ * las clases subclass tienen solo constructores porque todo lo demas lo heredan de su clase padre
  */
 
 public class TarjetaCreditoSubClass extends TarjetaSuperClass{
