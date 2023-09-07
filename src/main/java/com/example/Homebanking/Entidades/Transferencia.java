@@ -1,6 +1,6 @@
 package com.example.Homebanking.Entidades;
 
-import java.util.LocalDate;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,15 +40,15 @@ public class Transferencia{
 
     public Transferencia() {
     }
-    
 
-    public Transferencia(Long Id, Cuenta CuentaEmisora, Cuenta CuentaReceptora, Date Fecha, Double monto) {
+    public Transferencia(Long Id, Cuenta CuentaEmisora, Cuenta CuentaReceptora, LocalDate Fecha, Double monto) {
         this.Id = Id;
         this.CuentaEmisora = CuentaEmisora;
         this.CuentaReceptora = CuentaReceptora;
         this.Fecha = Fecha;
         this.monto = monto;
     }
+    
     
     
 

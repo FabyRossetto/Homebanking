@@ -1,14 +1,10 @@
 
 package com.example.Homebanking.controladores;
 
-=======
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Usuario;
-import com.example.Homebanking.Repositorios.CuentaRepositorio;
-import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
 import com.example.Homebanking.Servicios.TransferenciaServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/adminTransferencia")
 public class TransferenciaControlador {
     
-
-=======
     @Autowired
     private TransferenciaServicio transferenciaServicio;
     
@@ -33,7 +26,7 @@ public class TransferenciaControlador {
 
         return "adminTransferencia";
     }
-    
+
     @PostMapping("/realizarTransferencia")
     public String crearTransferencia(@RequestParam double monto, @AuthenticationPrincipal Usuario usuarioEmisor, String DNIReceptor, ModelMap modelo) throws Exception {
         try {
@@ -46,6 +39,9 @@ public class TransferenciaControlador {
         return "adminTransferencia";
     }
     
+    //la annotation @AuthenticationPrincipal la busqué para recuperar el usuario que
+    //ya está logueado y traer sus datos para pasar
+    
     @GetMapping("/listaTf")
     public String listarTodasLasRecetas(ModelMap modelMap) {
         modelMap.put("todas","Transferencias");
@@ -53,5 +49,4 @@ public class TransferenciaControlador {
         return "listaTransferencias";
     }
     
-
 }
