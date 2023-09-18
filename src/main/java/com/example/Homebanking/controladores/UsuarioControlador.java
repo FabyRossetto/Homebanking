@@ -7,11 +7,15 @@ package com.example.Homebanking.controladores;
 
 
 
+import com.example.Homebanking.Entidades.Usuario;
+import com.example.Homebanking.Errores.ErrorServicio;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +33,17 @@ public class UsuarioControlador {
     @Autowired
     com.example.Homebanking.Servicios.UsuarioServicio uSer;
 
-    
+    @GetMapping(path="/{id}")
+    public String perfilUsuario(ModelMap model, HttpSession session) {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
+        if (usuarioLogueado == null) {
+            return "redirect:/ingreso";
+        } else {
+            model.addAttribute("usuario", usuarioLogueado);
+            return "usuario";
+        }
+
+    }
     //Este metodo registra un usuario con sus datos basicos.
     @PostMapping("/crearUsuario")
     public String CrearUsuario(ModelMap modelo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI) throws Exception {
@@ -52,14 +66,37 @@ public class UsuarioControlador {
         return "se creo su cuenta y se cargaron sus tarjetas de debito y credito";
     }
     
+    
+    
+    
+    //@PathVariable= configurar variables dentro de los propios segmentos de la URL
+    //HttpSession= puede almacenar los datos de la sesión en el servidor y acceder a los mismos
+    @GetMapping("/modificarUsuario/{id}")
+    public String modificarUsuario(@PathVariable String id, ModelMap modelo, HttpSession session) throws ErrorServicio {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
+        if (uSer.BuscarPorId(id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())) {
+            modelo.addAttribute("usuario", uSer.BuscarPorId(id));
+       
+            return "Usuario";
+        } else {
+            return "redirect:/index";
+        }
+    }
+
+    
     //Modifica todos los datos del usuario
-    @PutMapping("/modificarUsuario")
-    public String ModificarUsuario(ModelMap modelo, @RequestParam String Id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI) throws Exception {
+    @PutMapping("/{id}")
+    public String ModificarUsuario(ModelMap modelo, @PathVariable String Id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI,HttpSession session) throws Exception {
         try {
+            Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
+        if (uSer.BuscarPorId(Id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())){
             uSer.modificarDatosPersonales(Id, nombre, apellido, Email, clave,DNI);
-            
+            session.setAttribute("usuariosession", uSer.BuscarPorId(Id));
             modelo.put("exito", "usted ha modificado sus datos con exito");
-            return "usted ha modificado sus datos con exito";
+        } else {
+            throw new ErrorServicio("No puedes modificar este perfil");
+        }
+        return "redirect:/usuario";
         } catch (Exception e) {
 
             return e.getMessage();

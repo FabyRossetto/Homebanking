@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../UsuarioPerfil.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Homebanking - Perfil de Usuario</title>
+  
+</head>
+
+<body>
+    <div class="collapse" id="navbarToggleExternalContent" data-bs-theme="dark">
+        <div class="bg-dark p-4">
+          <h5 class="text-body-emphasis h4">Cuenta</h5>
+          <h5 class="text-body-emphasis h4">Transferencia</h5>
+          <h5 class="text-body-emphasis h4">Tarjetas</h5>
+          <h5 class="text-body-emphasis h4">Log out</h5>
+        
+        </div>
+      </div>
+      <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </nav>
+      
+    <div class="l-form">
+        <form action="" class="form" th:switch="${usuario.alta}">
+            <h1 class="form_tittle">Hola !👋🏼</h1>
+
+            <div class="card" style="width: 18rem;" th:each="usuar : ${usuario}">
+            <div class="card-body">
+                <h2 class="card-title" th:text="*{usuar.nombre}"></h2>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:text="${usuar.apellido}"></li>
+                <li class="list-group-item" th:text="${usuar.DNI}"></li>
+                <li class="list-group-item" th:text="${usuar.rol}"></li>
+                <li class="list-group-item" th:text="${usuar.cuenta}"></li>
+                <li class="list-group-item" th:text="${usuar.email}"></li>
+                <li class="list-group-item" th:text="${usuar.fechaAlta}"></li>
+            </ul>
+
+    </div> <br>
+    <button type="button" class="btn btn-primary btn-lg">Mis Tarjetas</button>
+
+    <div class="d-grid gap-2 d-md-block botonesAbajo">
+        <a class="btn-default" th:href="@{/usuario/modificarUsuario/{id}(id=${usuario.id})}">Editar Perfil </a>
+        <a class="btn-default" th:href="@{/usuario/darDeBajaUsuario/{id}(id=${usuario.id})}">Eliminar Perfil</a>
+    </div>
+
+    </form>
+    </div>
+</body>
+
+</html>
