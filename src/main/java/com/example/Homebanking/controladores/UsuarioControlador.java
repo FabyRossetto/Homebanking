@@ -9,8 +9,11 @@ package com.example.Homebanking.controladores;
 
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Errores.ErrorServicio;
+
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,17 +36,19 @@ public class UsuarioControlador {
     @Autowired
     com.example.Homebanking.Servicios.UsuarioServicio uSer;
 
-    @GetMapping(path="/{id}")
-    public String perfilUsuario(ModelMap model, HttpSession session) {
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
-        if (usuarioLogueado == null) {
-            return "redirect:/ingreso";
+   @GetMapping("/{id}")
+    public ResponseEntity<Usuario> perfilUsuario(@PathVariable String id) {
+        // Supongamos que tienes un servicio para obtener los datos del usuario
+        Usuario usuario = uSer.BuscarPorId(id);
+       if (usuario != null) {
+            return ResponseEntity.ok(usuario);
         } else {
-            model.addAttribute("usuario", usuarioLogueado);
-            return "usuario";
+            return ResponseEntity.notFound().build();
         }
-
     }
+
+
+    
     //Este metodo registra un usuario con sus datos basicos.
     @PostMapping("/crearUsuario")
     public String CrearUsuario(ModelMap modelo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI) throws Exception {
