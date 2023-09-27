@@ -9,6 +9,7 @@ package com.example.Homebanking.controladores;
 
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Errores.ErrorServicio;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +41,7 @@ public class UsuarioControlador {
 
    @GetMapping("/{id}")
     public ResponseEntity<Usuario> perfilUsuario(@PathVariable String id) {
-        // Supongamos que tienes un servicio para obtener los datos del usuario
+        
         Usuario usuario = uSer.BuscarPorId(id);
        if (usuario != null) {
             return ResponseEntity.ok(usuario);
@@ -77,35 +80,47 @@ public class UsuarioControlador {
     //@PathVariable= configurar variables dentro de los propios segmentos de la URL
     //HttpSession= puede almacenar los datos de la sesión en el servidor y acceder a los mismos
     @GetMapping("/modificarUsuario/{id}")
-    public String modificarUsuario(@PathVariable String id, ModelMap modelo, HttpSession session) throws ErrorServicio {
-        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
-        if (uSer.BuscarPorId(id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())) {
-            modelo.addAttribute("usuario", uSer.BuscarPorId(id));
-       
-            return "Usuario";
+    public ResponseEntity<Usuario> modificarUsuario(@PathVariable String id, ModelMap modelo, HttpSession session) throws ErrorServicio {
+         Usuario usuario = uSer.BuscarPorId(id);
+       if (usuario != null) {
+            return ResponseEntity.ok(usuario);
         } else {
-            return "redirect:/index";
+            return ResponseEntity.notFound().build();
         }
     }
+        
+//        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
+//        if (uSer.BuscarPorId(id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())) {
+//            modelo.addAttribute("usuario", uSer.BuscarPorId(id));
+//       
+//            return "Usuario";
+//        } else {
+//            return "redirect:/index";
+//        }
+//    }
 
     
     //Modifica todos los datos del usuario
-    @PutMapping("/{id}")
-    public String ModificarUsuario(ModelMap modelo, @PathVariable String Id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI,HttpSession session) throws Exception {
-        try {
-            Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
-        if (uSer.BuscarPorId(Id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())){
-            uSer.modificarDatosPersonales(Id, nombre, apellido, Email, clave,DNI);
-            session.setAttribute("usuariosession", uSer.BuscarPorId(Id));
-            modelo.put("exito", "usted ha modificado sus datos con exito");
-        } else {
-            throw new ErrorServicio("No puedes modificar este perfil");
-        }
-        return "redirect:/usuario";
-        } catch (Exception e) {
-
-            return e.getMessage();
-        }
+    @PutMapping("/modificarUsuario/{Id}")
+    public void ModificarUsuario(ModelMap modelo, @PathVariable String Id, @ModelAttribute Usuario usuarioForm) throws Exception {
+//        try {
+//            Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
+//        if (uSer.BuscarPorId(Id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())){
+if(usuarioForm!=null){
+            uSer.modificarDatosPersonales(Id, usuarioForm.getNombre(), usuarioForm.getApellido(),usuarioForm.getEmail(),usuarioForm.getClave(),usuarioForm.getDNI());
+}else{
+    System.out.println("El controlador esta recibiendo un objeto nulo desde el Formulario");
+}
+            //session.setAttribute("usuariosession", uSer.BuscarPorId(Id));
+            //modelo.put("exito", "usted ha modificado sus datos con exito");
+//        } else {
+//            throw new ErrorServicio("No puedes modificar este perfil");
+//        }
+//        return "redirect:/usuario";
+//        } catch (Exception e) {
+//
+//            return e.getMessage();
+//        }
 
     }
     
