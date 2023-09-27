@@ -78,7 +78,7 @@ public class UsuarioServicio implements UserDetailsService{
                 }
             } else {
         
-        validar(nombre, apellido, Email, clave,DNI);
+       // validar(nombre, apellido, Email, clave,DNI);
 
         Usuario usuario = new Usuario();
         usuario.getIdUsuario();
@@ -249,6 +249,13 @@ public class UsuarioServicio implements UserDetailsService{
 
         usuarioRepositorio.delete(usuario);
     }
+    public Usuario BuscarPorId(String Id){
+        Optional<Usuario> usuario=usuarioRepositorio.findById(Id);
+        Usuario user= usuario.get();
+        return user;
+    }
+ 
+    
      
      public Usuario BuscarUsuarioPorDNI(String DNI){
          Usuario usuario=usuarioRepositorio.findByDNI(DNI);

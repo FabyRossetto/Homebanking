@@ -23,8 +23,8 @@ public class TransferenciaControlador {
     //vista con el form correpondiente para realizar la transferencia
     @GetMapping("/transferencia")
     public String crearTransferencia(ModelMap vistaTf) {
-
-        return "adminTransferencia";
+return "index.html";
+        //return "adminTransferencia";
     }
 
     @PostMapping("/realizarTransferencia")

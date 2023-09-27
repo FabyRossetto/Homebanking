@@ -32,7 +32,7 @@ public class Transferencia{
    @OneToOne
     Cuenta CuentaReceptora;
     
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     LocalDate Fecha;
 
     @Column(nullable = false)
