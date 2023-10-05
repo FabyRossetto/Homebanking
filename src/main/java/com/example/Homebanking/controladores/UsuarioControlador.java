@@ -31,7 +31,7 @@ public class UsuarioControlador {
 
     
     //Este metodo registra un usuario con sus datos basicos.
-    @PostMapping("/crearUsuario")
+    @PostMapping("/usuario") 
     public String CrearUsuario(ModelMap modelo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave,@RequestParam String DNI) throws Exception {
         try {
             uSer.crear(nombre, apellido, Email, clave,DNI);
@@ -42,9 +42,10 @@ public class UsuarioControlador {
 
             return e.getMessage();
         }
-
-    }
     
+    }
+    //mensaje / status/ no string/response entity
+    //cambie el form a usuario en el script/
     //Este metodo le agrega a el usuario que le pasemos por parametro, una cuenta y tarjetas de debito y credito.
     @PostMapping("/cargarCuentayTarjetas")
     public String CargarCuentayTarjetas(ModelMap modelo, @RequestParam String Id,@RequestParam Double saldo, @RequestParam Integer clave) throws Exception{
