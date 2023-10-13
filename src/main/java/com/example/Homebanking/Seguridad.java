@@ -13,22 +13,24 @@ public class Seguridad extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        http.cors();
         http
+               
                 .authorizeRequests()
-                .antMatchers("/administrador/*").hasRole("ADMINISTRADOR")
+                .antMatchers("/usuario/*").hasRole("USUARIO")
+                
                 .antMatchers("/css/*", "/js/*", "/img/*", "/**")
                 .permitAll()
             .and().formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/logincheck")
-                .usernameParameter("DNI")
+                .loginPage("http://127.0.0.1:5500/login.html")
+                .loginProcessingUrl("http://localhost:8080/usuario/logincheck")
+                .usernameParameter("email")
                 .passwordParameter("clave")
-                .defaultSuccessUrl("/index")
+                .defaultSuccessUrl("http://127.0.0.1:5500/perfil.html?id={id}")
                 .permitAll()
             .and().logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
+                .logoutSuccessUrl("http://127.0.0.1:5500/login.html")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
             .and().csrf().disable()
@@ -38,23 +40,5 @@ public class Seguridad extends WebSecurityConfigurerAdapter {
                 
 
     }
-}
-
-/*
-esta configuración estaba en el proyecto de recetapp pero lo dejé comentado
-porque Fabi ya había usado la configuración de la encriptación de contraseña 
-cuando se registra un usuario
-@Autowired
-    public Usuario usuarioServicio;
     
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(usuarioServicio)
-                .passwordEncoder(new BCryptPasswordEncoder());
-    }*/
-
- /*
-application properties
-server.servlet.session.timeout: 300 
-spring.security.sessions: if_required
- */
+}

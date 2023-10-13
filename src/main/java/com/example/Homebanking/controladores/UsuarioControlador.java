@@ -9,8 +9,10 @@ import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Errores.ErrorServicio;
 import java.util.Map;
 
+
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
@@ -22,8 +24,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -37,16 +41,35 @@ public class UsuarioControlador {
     @Autowired
     com.example.Homebanking.Servicios.UsuarioServicio uSer;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> perfilUsuario(@PathVariable String id) {
-
-        Usuario usuario = uSer.BuscarPorId(id);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    
+   @PostMapping("/logincheck")
+public ResponseEntity<String> loginCheck(@RequestBody Map<String, String> loginData, HttpSession session) {
+    String email = loginData.get("email");
+    String clave = loginData.get("clave");
+    
+    Usuario usuario = uSer.BucarUsuarioPorEmail(email);
+    
+    if (usuario != null && usuario.getClave().equals(clave)) {
+         session.setAttribute("usuariosession", usuario);
+        // Las credenciales son válidas
+        return ResponseEntity.status(HttpStatus.OK).build();
+    } else {
+        // Las credenciales son inválidas
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+}
+
+ 
+    @GetMapping("/perfil")// creo que no esta entrando en este controlador.
+    @ResponseBody
+public ResponseEntity<Usuario> perfilUsuario(HttpSession session) {
+    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
+    if (usuarioLogueado != null) {
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioLogueado);
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+}
 
     //Este metodo registra un usuario con sus datos basicos.
     @PostMapping("/crearUsuario")
@@ -82,36 +105,17 @@ public class UsuarioControlador {
         }
     }
 
-//        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
-//        if (uSer.BuscarPorId(id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())) {
-//            modelo.addAttribute("usuario", uSer.BuscarPorId(id));
-//       
-//            return "Usuario";
-//        } else {
-//            return "redirect:/index";
-//        }
-//    }
+
     //Modifica todos los datos del usuario
     @PutMapping("/modificarUsuario/{Id}")
     public void ModificarUsuario(ModelMap modelo, @PathVariable String Id, @ModelAttribute Usuario usuarioForm) throws Exception {
-//        try {
-//            Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
-//        if (uSer.BuscarPorId(Id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())){
+
         if (usuarioForm != null) {
             uSer.modificarDatosPersonales(Id, usuarioForm.getNombre(), usuarioForm.getApellido(), usuarioForm.getEmail(), usuarioForm.getClave(), usuarioForm.getDNI());
         } else {
             System.out.println("El controlador esta recibiendo un objeto nulo desde el Formulario");
         }
-        //session.setAttribute("usuariosession", uSer.BuscarPorId(Id));
-        //modelo.put("exito", "usted ha modificado sus datos con exito");
-//        } else {
-//            throw new ErrorServicio("No puedes modificar este perfil");
-//        }
-//        return "redirect:/usuario";
-//        } catch (Exception e) {
-//
-//            return e.getMessage();
-//        }
+       
 
     }
 
