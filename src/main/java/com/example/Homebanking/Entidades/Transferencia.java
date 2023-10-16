@@ -26,19 +26,23 @@ public class Transferencia{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
 
+   
     @OneToOne
     Cuenta CuentaEmisora;
 
    @OneToOne
     Cuenta CuentaReceptora;
     
-    //@Temporal(TemporalType.TIMESTAMP)
     LocalDate Fecha;
 
     @Column(nullable = false)
     Double monto;
 
     public Transferencia() {
+    }
+    
+    public Transferencia(Double monto) {
+    this.monto = monto;
     }
 
     public Transferencia(Long Id, Cuenta CuentaEmisora, Cuenta CuentaReceptora, LocalDate Fecha, Double monto) {
@@ -48,6 +52,20 @@ public class Transferencia{
         this.Fecha = Fecha;
         this.monto = monto;
     }
+
+    public Transferencia(Long Id, Cuenta CuentaReceptora, LocalDate Fecha, Double monto) {
+        this.Id = Id;
+        this.CuentaReceptora = CuentaReceptora;
+        this.Fecha = Fecha;
+        this.monto = monto;
+    }
+    
+     public Transferencia(LocalDate Fecha, Double monto) {
+        this.Fecha = Fecha;
+        this.monto = monto;
+    }
+    
+    
     
     
     

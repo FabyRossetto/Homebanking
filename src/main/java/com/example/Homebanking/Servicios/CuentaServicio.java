@@ -90,6 +90,7 @@ public class CuentaServicio {
         }
     }
 
+
     //DAR DE BAJA: necesito el alta para luego darlo de baja.Agregar esto a la entidad cuenta
     @Transactional
     public void darDeBaja(Long Id, Boolean Alta) throws Excepcion {

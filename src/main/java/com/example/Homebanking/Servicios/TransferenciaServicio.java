@@ -1,7 +1,9 @@
 package com.example.Homebanking.Servicios;
 
+import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Transferencia;
 import com.example.Homebanking.Entidades.Usuario;
+import com.example.Homebanking.Repositorios.CuentaRepositorio;
 import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.time.LocalDate;
@@ -31,27 +33,75 @@ public class TransferenciaServicio {
 
     @Autowired
     private TransferenciaRepositorio transferenciaRepositorio;
+    
+   @Autowired
+   private CuentaServicio cuentaServicio;
+   
+   @Autowired
+   private CuentaRepositorio cuentaRepositorio;
+    
+   /* @Transactional
+    public Transferencia tf2(Transferencia transferencia) throws Exception{
+    try {
+        //traer usuario por id y la cuenta vinculada a ese usuario.
+            Transferencia nuevatf = new Transferencia();
+            nuevatf.setCuentaEmisora(transferencia.getCuentaEmisora());
+            nuevatf.setCuentaReceptora(transferencia.getCuentaReceptora());
+            nuevatf.setMonto(transferencia.getMonto());
+            nuevatf.setFecha(LocalDate.now());
+            //tf.setCuentaEmisora(usuarioEmisor.getCuenta());
+            transferenciaRepositorio.save(nuevatf);
+            //enviar(usuarioEmisor.getEmail());
+            return nuevatf;
+        } catch (Exception ex) {
+            throw new Exception("Error al transferir");
+        }
+    }*/
 
     @Transactional
-    public Transferencia tf(double monto, Usuario usuarioEmisor, String DNIReceptor) throws Exception {
+    public Transferencia nvatf(double monto, String DNIReceptor) throws Exception {
         try {
-            validar(monto, usuarioEmisor, DNIReceptor);
-            //Transferencia tf = new Transferencia();
-            tf.setMonto(monto);
-            tf.setCuentaEmisora(usuarioEmisor.getCuenta());
-            tf.setCuentaReceptora(usuarioRepositorio.findByDNI(DNIReceptor).getCuenta());
-            tf.setFecha(LocalDate.now());
+            //setear con saldo emisor y receptor, usar métodos de cuenta extracción y depósito
+            validar(monto, DNIReceptor);
+            Transferencia nuevatf = new Transferencia();
+            Cuenta cuentaEmisora = usuarioRepositorio.findByDNI("35666666").getCuenta();
+           // cuentaEmisora.setSaldo(cuentaEmisora.getSaldoActual()-monto);
+            nuevatf.setMonto(monto);
+            //tf.setCuentaEmisora(usuarioEmisor.getCuenta());
+            nuevatf.setCuentaReceptora(usuarioRepositorio.findByDNI(DNIReceptor).getCuenta());
+            Cuenta cuentaReceptora = usuarioRepositorio.findByDNI(DNIReceptor).getCuenta();
+            //cuentaReceptora.setSaldo(cuentaReceptora.getSaldoActual()+monto);
+            
+            nuevatf.setFecha(LocalDate.now());
 
-            transferenciaRepositorio.save(tf);
-            enviar(usuarioEmisor.getEmail());
-            return tf;
+            transferenciaRepositorio.save(nuevatf);
+            //enviar(usuarioEmisor.getEmail());
+            return nuevatf;
         } catch (Exception ex) {
             throw new Exception("Error al transferir");
         }
     }
+    
+        /*@Transactional
+    public Transferencia crearTf(double monto, String DNIReceptor) throws Exception {
+        try {
+            validar(monto, usuarioEmisor, DNIReceptor);
+            //Transferencia tf = new Transferencia();
+            tf.setMonto(monto);
+            //tf.setCuentaEmisora(usuarioEmisor.getCuenta());
+            tf.setCuentaReceptora(usuarioRepositorio.findByDNI(DNIReceptor).getCuenta());
+            tf.setFecha(LocalDate.now());
+
+            transferenciaRepositorio.save(tf);
+            //enviar(usuarioEmisor.getEmail());
+            return tf;
+        } catch (Exception ex) {
+            throw new Exception("Error al transferir");
+        }
+    }*/
 
     //lo pongo en private porque sólo voy a usar este método dentro del servicio
-    private void validar(double monto, Usuario usuarioEmisor, String DNIReceptor) throws Exception {
+    private void validar(double monto, String DNIReceptor) throws Exception {
 
         if (DNIReceptor == null) {
             throw new Exception("Debe ingresar un DNI "
@@ -62,17 +112,17 @@ public class TransferenciaServicio {
             throw new Exception("El DNI es inválido");
         }
 
-        if (DNIReceptor.equalsIgnoreCase(usuarioEmisor.getDNI())) {
-            throw new Exception("No puede transferir a su misma cuenta");
-        }
+        //if (DNIReceptor.equalsIgnoreCase(usuarioEmisor.getDNI())) {
+          //  throw new Exception("No puede transferir a su misma cuenta");
+        //}
 
         if (!DNIReceptor.equalsIgnoreCase(usuarioRepositorio.findByDNI(DNIReceptor).getDNI())) {
             throw new Exception("No se ha encontrado el usuario con dicho DNI");
         }
 
-        if (monto < usuarioEmisor.getCuenta().getSaldo() || monto < 1000 || monto > 300000) {
-            throw new Exception("El monto de la transferencia no es correcto");
-        }
+        //if (monto < usuarioEmisor.getCuenta().getSaldo() || monto < 1000 || monto > 300000) {
+          //  throw new Exception("El monto de la transferencia no es correcto");
+        //}
 
     }
 
