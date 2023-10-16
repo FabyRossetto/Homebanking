@@ -136,6 +136,10 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
             <version>5.5.2</version>
@@ -154,12 +158,24 @@
             <type>jar</type>
         </dependency>
         <dependency>
-    <groupId>javax.mail</groupId>
-    <artifactId>javax.mail-api</artifactId>
-    <version>1.6.2</version>
-</dependency>
-
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>5.5.2</version>
+            <type>jar</type>
+        </dependency>
+   
+    <dependency>
+        <groupId>javax.persistence</groupId>
+        <artifactId>javax.persistence-api</artifactId>
+    </dependency>
     </dependencies>
+   
+
 
     <build>
         <plugins>
@@ -184,7 +200,13 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.4</version> <!-- Cambia a la nueva versión -->
+    </plugin>
         </plugins>
+
     </build>
 
 </project>

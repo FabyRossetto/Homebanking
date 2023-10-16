@@ -19,6 +19,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -27,6 +29,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Data
+@Getter @Setter
 public class Usuario {
 
     @Id
@@ -41,11 +44,10 @@ public class Usuario {
     String apellido;
     
     @OneToOne
-    protected Cuenta cuenta;
+    protected Cuenta Cuenta;
     
     @Column(nullable= false)
     String clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
-    
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tarjeta_debito_id")
@@ -70,4 +72,5 @@ public class Usuario {
      @Column(unique = true)
     String DNI;
 
+  
 }

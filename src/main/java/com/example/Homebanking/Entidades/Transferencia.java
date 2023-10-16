@@ -1,20 +1,17 @@
 package com.example.Homebanking.Entidades;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+
 
 /**
  *
@@ -23,24 +20,36 @@ import org.springframework.stereotype.Component;
 @Data
 @Entity
 @Component
-public class Transferencia implements Serializable {
+public class Transferencia{
 
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
 
-    /*@ManyToOne
-    @JoinColumn (name="Id")
+    @OneToOne
     Cuenta CuentaEmisora;
-    // nested exception is org.hibernate.AnnotationException:@Column(s) not allowed on a @OneToOne property: com.example.Homebanking.Entidades.Transferencia.CuentaEmisora
-*/
+
    @OneToOne
     Cuenta CuentaReceptora;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    Date Fecha;
+    //@Temporal(TemporalType.TIMESTAMP)
+    LocalDate Fecha;
 
     @Column(nullable = false)
     Double monto;
+
+    public Transferencia() {
+    }
+
+    public Transferencia(Long Id, Cuenta CuentaEmisora, Cuenta CuentaReceptora, LocalDate Fecha, Double monto) {
+        this.Id = Id;
+        this.CuentaEmisora = CuentaEmisora;
+        this.CuentaReceptora = CuentaReceptora;
+        this.Fecha = Fecha;
+        this.monto = monto;
+    }
+    
+    
+    
 
 }

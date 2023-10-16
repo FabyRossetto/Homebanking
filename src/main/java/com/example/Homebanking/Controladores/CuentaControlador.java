@@ -49,9 +49,9 @@ public class CuentaControlador {
     }
 
     @PostMapping("/guardarCuenta")
-    public String guardarCuenta(@RequestParam String idUser, @RequestParam Double saldo, ModelMap modelo) throws Exception {
+    public String guardarCuenta(@RequestParam String Id, @RequestParam Double saldo, ModelMap modelo) throws Exception {
         try {
-            cuentaservicio.guardar(idUser, saldo);
+            cuentaservicio.guardar(Id, saldo);
             modelo.put("Gracias por elegirnos", ("Cuenta dada de alta con éxito"));
         } catch (Exception e) {
             e.getMessage();

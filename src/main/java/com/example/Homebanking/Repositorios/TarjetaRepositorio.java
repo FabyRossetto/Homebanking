@@ -26,4 +26,3 @@ public interface TarjetaRepositorio extends JpaRepository<TarjetaSuperClass,Long
      @Query("SELECT t FROM TarjetaSuperClass t WHERE t.fechaVencimiento = :fechaVto ")
     public List <TarjetaSuperClass> buscarPorVto(@Param("fechaVto") LocalDate fechaVto);
 }
-
