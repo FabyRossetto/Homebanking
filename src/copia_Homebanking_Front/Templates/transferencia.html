@@ -69,71 +69,215 @@
         </div>
         <div id="layoutSidenav_content">
             <main>
+
                 <div class="container-fluid px-4" style="margin: 30px;">
-                    <table class="table text-white" style="background-color: darkslateblue;">
+                    <div class="container-fluid px-4">
+                        <button type="button" class="btn" onclick="mostrarModal()" style="background-color: darkslateblue; color: antiquewhite;
+                        margin:0px 10px 10px 0px;" data-bs-toggle="modal" data-bs-target="#miModal">Nueva
+                            Transferencia</button>
+                    </div>
+                    <div id="miModal" class="modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content" style="background-color: darkslateblue; color: aliceblue;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Nueva Transferencia</h5>
+                                    <button onclick="cerrarModal()" type="button" class="btn-close"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form id="formTf">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="DNIReceptor" class="form-label">DNI</label>
+                                            <input type="text" class="form-control" id="DNIReceptor"
+                                                placeholder="12345678" name="DNIReceptor">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="monto" class="form-label">Monto</label>
+                                            <input class="form-control" id="monto" placeholder="150" name="monto">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button onclick="cerrarModal()" type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-light"
+                                            style="color: darkslateblue; font-weight:bold;">Transferir</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                <div class="container-fluid px-4">
+                    <h3 class="mt-4">Transferencias</h3>
+                    <table id="miTabla" class="table text-white" style="background-color: darkslateblue;">
                         <thead>
-                          <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Fecha</th>
-                            <th scope="col">Monto</th>
-                            <th scope="col">Comprobante</th>
-                          </tr>
+                            <tr>
+                                <th scope="col" name="Id">ID</th>
+                                <th scope="col" name="fecha">Fecha</th>
+                                <th scope="col" name="monto">Monto</th>
+                                <th scope="col">Comprobante</th>
+                            </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                          </tr>
+
                         </tbody>
-                      </table>
-                    <div class="container-fluid px-4">
-                        <h3 class="mt-4">Actividad reciente</h3>
-                        <ul id="lista-usuarios"></ul>
-                    </div>
+                    </table>
                 </div>
 
-
-            </main>
-            <footer class="py-4 bg-light mt-auto">
-
-            </footer>
+                <div class="container-fluid px-4">
+                    <h3 class="mt-4">Actividad reciente</h3>
+                    <ul id="lista-usuarios"></ul>
+                </div>
         </div>
-    </div>
-    <script>
-        // Función para alternar la visibilidad del contenido
-        function toggleVisibility() {
-            const contenido = document.getElementById('contenido');
-            const iconoOjo = document.getElementById('icono-ojo');
+        </main>
+        <footer class="py-4 bg-light mt-auto">
 
-            if (contenido.style.display === 'none') {
-                // Si está oculto, mostrarlo y cambiar el ícono a "ojo abierto"
-                contenido.style.display = 'block';
-                iconoOjo.className = 'fas fa-eye-slash';
-            } else {
-                // Si está visible, ocultarlo y cambiar el ícono a "ojo cerrado"
-                contenido.style.display = 'none';
-                iconoOjo.className = 'fas fa-eye';
-            }
+        </footer>
+    </div>
+    </div>
+
+    <script>
+        const formulario = document.getElementById('formulario-transferencia');
+
+        formulario.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Obtener los valores del formulario
+            const monto = document.getElementById('monto').value;
+            const DNIReceptor = document.getElementById('DNIReceptor').value;
+            url.searchParams.append('monto', monto);
+            url.searchParams.append('DNIReceptor', DNIReceptor);
+
+
+            // Realizar la solicitud de transferencia
+            fetch('http://localhost:8080/transferencia', {
+                method: 'POST',
+                body: JSON.stringify({ monto, DNIReceptor }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la transferencia');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    alert('Transferencia exitosa');
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+
+    <script>
+        // Función para mostrar el modal
+        function mostrarModal() {
+            const modal = document.getElementById('miModal');
+            modal.style.display = 'block';
         }
+
+        // Función para cerrar el modal
+        function cerrarModal() {
+            const modal = document.getElementById('miModal');
+            modal.style.display = 'none';
+        }
+
     </script>
     <script>
-        fetch(`http://localhost:8080/usuarios`, { // Cambia la URL según tu endpoint real
+        document.getElementById('formTf').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            url.searchParams.append('monto', document.getElementById('DNIReceptor').value);
+            url.searchParams.append('DNIReceptor', document.getElementById('monto').value);
+            fetch('http://localhost:8080/transferencia', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la transferencia');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    alert('Transferencia exitosa');
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        })
+    </script>
+    <script>
+        fetch(`http://localhost:8080/transferencia`, { // Cambia la URL según tu endpoint real
             method: 'GET', // Método de la solicitud (GET en este caso)
 
         })
             .then(response => response.json())
-            .then(data => {
-                const listaUsuarios = document.getElementById('lista-usuarios');
-                data.forEach(data => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = data.nombre;
-                    listaUsuarios.appendChild(listItem);
-                });
-            })
-            .catch(error => console.error('Error:', error));
+            .then((data) => mostrarDatos(data))
+            // Capturar el posible error y mostrarlo por la consola o hacer algo con él
+            .catch((error) => console.error(error));
     </script>
+    <script>
+        function mostrarDatos(data) {
+            // Obtener la referencia a la tabla por su id
+            const tabla = document.getElementById("miTabla");
+
+            // Crear una variable para almacenar el contenido HTML de las filas
+            let filas = "";
+
+            // Recorrer el arreglo de datos con un bucle for o forEach
+            data.forEach((dato) => {
+
+                // Añadir cada dato a una celda de la fila
+                filas += `
+      <tr>
+        <td>${dato.Id}</td>
+        <td>${dato.fecha}</td>
+        <td>${dato.monto}</td>
+      </tr>
+    `;
+                //para que la fecha salga con "/" y no con "," debería agregar la siguiente línea .replace(/,/g, "/")
+            });
+
+            // Asignar el contenido HTML al cuerpo de la tabla
+            tabla.tBodies[0].innerHTML = filas;
+        }
+
+        //.then(data => {
+        //  const listaTf = document.getElementById('lista-tf');
+        //data.forEach(data => {
+        //  const listItem = document.createElement('li');
+        //listItem.textContent = data.monto;
+        //listaTf.appendChild(listItem);
+        //});
+        //})
+        //.catch(error => console.error('Error:', error));
+    </script>
+
+    <!-- <script>
+            fetch(`http://localhost:8080/usuarios`, { // Cambia la URL según tu endpoint real
+                method: 'GET', // Método de la solicitud (GET en este caso)
+
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const listaUsuarios = document.getElementById('lista-usuarios');
+                    data.forEach(data => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = data.nombre;
+                        listaUsuarios.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+    </script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
