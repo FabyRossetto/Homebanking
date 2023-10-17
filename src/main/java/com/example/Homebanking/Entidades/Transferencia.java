@@ -1,5 +1,6 @@
 package com.example.Homebanking.Entidades;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -20,18 +19,18 @@ import org.springframework.stereotype.Component;
 @Data
 @Entity
 @Component
-public class Transferencia{
+public class Transferencia implements Serializable{
 
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
 
    
-    @OneToOne
-    Cuenta CuentaEmisora;
+   @OneToOne
+   Cuenta CuentaEmisora;
 
    @OneToOne
-    Cuenta CuentaReceptora;
+   Cuenta CuentaReceptora;
     
     LocalDate Fecha;
 
@@ -51,23 +50,6 @@ public class Transferencia{
         this.CuentaReceptora = CuentaReceptora;
         this.Fecha = Fecha;
         this.monto = monto;
-    }
-
-    public Transferencia(Long Id, Cuenta CuentaReceptora, LocalDate Fecha, Double monto) {
-        this.Id = Id;
-        this.CuentaReceptora = CuentaReceptora;
-        this.Fecha = Fecha;
-        this.monto = monto;
-    }
-    
-     public Transferencia(LocalDate Fecha, Double monto) {
-        this.Fecha = Fecha;
-        this.monto = monto;
-    }
-    
-    
-    
-    
-    
+    }  
 
 }

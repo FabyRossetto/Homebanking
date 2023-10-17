@@ -5,7 +5,6 @@
 package com.example.Homebanking.controladores;
 
 import com.example.Homebanking.Entidades.Transferencia;
-import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.TransferenciaRepositorio;
 import com.example.Homebanking.Servicios.TransferenciaServicio;
 import java.util.List;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,16 +36,9 @@ public class TransferenciaControlador {
         return tfRepositorio.findAll();
     }
 
-    /*@PostMapping()
-    public ResponseEntity<Transferencia> nuevaTf(@RequestBody Transferencia transferencia) throws Exception {
-
-        return ResponseEntity.status(200).body(tfServicio.tf2(transferencia));
-    }*/
-    
     @PostMapping()
-    public ResponseEntity<Transferencia> nuevaTf(@RequestParam Double monto, @RequestParam String DNIReceptor) throws Exception {
+    public ResponseEntity<Transferencia> nuevaTf(@RequestParam String DNIEmisor, @RequestParam String DNIReceptor, Double monto) throws Exception {
         
-    return ResponseEntity.status(200).body(tfServicio.nvatf(monto, DNIReceptor));
+    return ResponseEntity.status(200).body(tfServicio.nvatf(DNIEmisor, DNIReceptor, monto));
     }
-
 }

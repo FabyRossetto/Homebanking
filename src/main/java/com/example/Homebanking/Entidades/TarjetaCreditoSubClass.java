@@ -20,4 +20,6 @@ public class TarjetaCreditoSubClass extends TarjetaSuperClass{
     public TarjetaCreditoSubClass() {
     }
     
+    
+    
 }

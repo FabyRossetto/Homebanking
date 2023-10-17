@@ -48,6 +48,16 @@ public class Cuenta {
 //    @OneToOne
 //    Usuario usuario;
 //  
+
+    public Cuenta() {
+    }
+
+    public Cuenta(Long Id, Double Saldo, Double saldoActual, Date fecha) {
+        this.Id = Id;
+        this.Saldo = Saldo;
+        this.saldoActual = saldoActual;
+        this.fecha = fecha;
+    }
     
     
 }
