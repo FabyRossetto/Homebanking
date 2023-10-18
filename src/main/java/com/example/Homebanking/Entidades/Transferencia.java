@@ -7,10 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import lombok.Data;
 import org.springframework.stereotype.Component;
-
 
 /**
  *
@@ -19,37 +17,38 @@ import org.springframework.stereotype.Component;
 @Data
 @Entity
 @Component
-public class Transferencia implements Serializable{
+public class Transferencia implements Serializable {
 
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
 
-   
-   @OneToOne
-   Cuenta CuentaEmisora;
+    @Column(nullable = false)
+    String DNIEmisor;
 
-   @OneToOne
-   Cuenta CuentaReceptora;
-    
+    @Column(nullable = false)
+    String DNIReceptor;
+
     LocalDate Fecha;
 
     @Column(nullable = false)
     Double monto;
 
-    public Transferencia() {
-    }
-    
     public Transferencia(Double monto) {
-    this.monto = monto;
+        this.monto = monto;
     }
 
-    public Transferencia(Long Id, Cuenta CuentaEmisora, Cuenta CuentaReceptora, LocalDate Fecha, Double monto) {
+    public Transferencia() {
+    }
+
+    public Transferencia(Long Id, String DNIEmisor, String DNIReceptor, LocalDate Fecha, Double monto) {
         this.Id = Id;
-        this.CuentaEmisora = CuentaEmisora;
-        this.CuentaReceptora = CuentaReceptora;
+        this.DNIEmisor = DNIEmisor;
+        this.DNIReceptor = DNIReceptor;
         this.Fecha = Fecha;
         this.monto = monto;
-    }  
+    }
+    
+    
 
 }

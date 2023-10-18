@@ -26,22 +26,25 @@ public class TransferenciaServicio {
 
     @Autowired
     private TransferenciaRepositorio transferenciaRepositorio;
+    
+    @Autowired
+    private CuentaServicio cuentaServicio;
 
     @Transactional
-    public Transferencia nvatf(String DNIEmisor,
-            String DNIReceptor,
-            Double monto) throws Exception {
+    public Transferencia nvatf(String DNIEmisor, String DNIReceptor, Double monto) throws Exception {
+        //String DNIEmisor,String DNIReceptor,
         try {
             validar(DNIEmisor, DNIReceptor, monto);
 
             Transferencia nuevatf = new Transferencia();
-            //asignar cuenta emisora y receptora a la transferencia
-            nuevatf.setCuentaEmisora(cuentaSesion(DNIEmisor));
-            nuevatf.setCuentaReceptora(usuarioRepositorio.findByDNI(DNIReceptor).getCuenta());
-
+            //buscar DNI emisor y receptor a la transferencia
+           nuevatf.setDNIEmisor(usuarioRepositorio.findByDNI(DNIEmisor).getDNI());
+           nuevatf.setDNIReceptor(usuarioRepositorio.findByDNI(DNIReceptor).getDNI());
+            
             //asignar cambios a las cuentas
-            nuevatf.getCuentaEmisora().setSaldo(nuevatf.getCuentaEmisora().getSaldoActual() - monto);
-            nuevatf.getCuentaReceptora().setSaldo(nuevatf.getCuentaReceptora().getSaldoActual() + monto);
+           cuentaServicio.tfEx(usuarioRepositorio.findByDNI(DNIEmisor).getCuenta(), monto);
+           cuentaServicio.tfDp(usuarioRepositorio.findByDNI(DNIReceptor).getCuenta(), monto);
+            
             //asignar atributos a la transferencia
             nuevatf.setMonto(monto);
             nuevatf.setFecha(LocalDate.now());
@@ -53,6 +56,11 @@ public class TransferenciaServicio {
         } catch (Exception ex) {
             throw new Exception("Error al transferir");
         }
+    }
+    
+    @Transactional
+    public Transferencia nuevatf(Transferencia transferencia){
+        return transferenciaRepositorio.save(transferencia);
     }
 
     private Cuenta cuentaSesion(String DNIEmisor) {

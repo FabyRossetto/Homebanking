@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,8 +38,9 @@ public class TransferenciaControlador {
     }
 
     @PostMapping()
-    public ResponseEntity<Transferencia> nuevaTf(@RequestParam String DNIEmisor, @RequestParam String DNIReceptor, Double monto) throws Exception {
+    public ResponseEntity<Transferencia> nuevaTf(@RequestBody Transferencia tran) throws Exception {
         
-    return ResponseEntity.status(200).body(tfServicio.nvatf(DNIEmisor, DNIReceptor, monto));
+    return ResponseEntity.status(200).body(tfServicio.nuevatf(tran));
     }
+    
 }
