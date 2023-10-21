@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Ingreso</title>
+    
+</head>
+<body >
+    <div class="l-form">
+        <form id="send-form"  class="form" action="http://localhost:8080/usuario/logincheck" method="POST">
+            <h1 class="form_tittle">Ingresa</h1>
+
+            <div class="form_div">
+                <input id="email-input" type="email" class="form_input" placeholder="" name="email">
+                <label class="form_label">Email</label>
+            </div>
+
+            <div class="form_div">
+                <input id="password-input" type="password" class="form_input" placeholder="" name="clave">
+                <label class="form_label">Contraseña</label>
+            </div>
+
+            <button class="button accept-button" id="ok-button">ingresar</button>
+            
+        </form>
+    </div>
+     <!-- Alerta de éxito -->
+     <div class="alertS" id="success-alert">
+        <p>Datos modificados con éxito.</p>
+    </div>
+    <!-- Alerta de error -->
+    <div class="alertE" id="error-alert">
+        <p>Hubo un error al intentar modificar sus datos</p>
+    </div>
+  
+    <script>
+        const okButton = document.getElementById("ok-button");
+        const emailInput = document.getElementById("email-input");
+        const passwordInput = document.getElementById("password-input");
+        const errorAlert = document.getElementById("error-alert");
+        const successAlert = document.getElementById("success-alert");
+        const login = document.getElementById("send-form");
+
+    okButton.addEventListener("click", function (event) {
+    event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
+
+    const email = emailInput.value;
+    const password = passwordInput.value;
+    
+    // Verifica si ambos campos no están vacíos antes de realizar la solicitud
+    if (email && password) {
+        const data = {
+            email: email,
+            clave: password
+        };
+        console.log(data),
+
+        fetch("http://localhost:8080/usuario/logincheck", {
+    method: 'POST',
+    body: JSON.stringify(data),//esto convierte el data,que primero fue un javascript,como una cadena en json.
+    headers: {
+        'Content-Type': 'application/json',
+        
+    }
+   
+})
+.then(response => {
+    if (response.status === 200) {
+        // Credenciales válidas, almacenamos la información del usuario en la sesión
+        fetch("http://localhost:8080/usuario/perfil", {
+            method: 'GET',
+            credentials: 'include', // Esto incluye las cookies de sesión en la solicitud
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            const userId = data.idUsuario; 
+            window.location.href = `perfil/${userId}`; // Redirige a la página de perfil del usuario
+        })
+    } else {
+        // Credenciales inválidas, muestra un mensaje de error
+        const errorAlert = document.getElementById("error-alert");
+        errorAlert.style.display = "block";
+        login.reset();
+    }
+})
+.catch(error => {
+    console.error(error);
+    const errorAlert = document.getElementById("error-alert");
+    errorAlert.style.display = "block";
+    login.reset();
+})
+    }});
+</script>
+  
+    </body>
+    </html>

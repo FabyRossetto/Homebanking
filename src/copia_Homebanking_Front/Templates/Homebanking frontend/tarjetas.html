@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Tarjetas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #272727, #000000);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            /* Establece la altura mínima al 100% del viewport para que el degradado cubra toda la página */
+        }
+
+
+
+
+
+        .navbar {
+            background-color: black;
+            color: #FF7D00;
+        }
+
+        .navbar-brand {
+            margin-left: auto;
+        }
+
+
+
+        .navbar-toggler-icon-bar+.navbar-toggler-icon-bar {
+            margin-top: 3px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #FF7D00;
+        }
+
+
+        .offcanvas-body {
+            background-color: black;
+            color: #FF7D00;
+        }
+
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            /* Centra horizontalmente */
+            padding: 40px;
+            background-color: #FFFFFF;
+            color: #FF7D00;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            /* Utiliza flexbox para centrar verticalmente */
+            flex-direction: column;
+            /* Alinea el contenido verticalmente */
+            justify-content: center;
+            /* Centra verticalmente */
+            align-items: center;
+            /* Centra horizontalmente */
+            border-radius: 5%;
+            position: absolute;
+            /* Coloca la tarjeta en posición absoluta */
+            top: 50%;
+            /* Centra verticalmente en relación al viewport */
+            left: 50%;
+            /* Centra horizontalmente en relación al viewport */
+            transform: translate(-50%, -50%);
+            /* Centra en el centro del viewport */
+            width: fit-content;
+            margin-top: 2%;
+            height: 80vh;
+        }
+
+
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5%;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: grid;
+            /* Utilizamos un grid layout */
+            grid-template-columns: 1fr;
+            /* Una columna */
+            align-items: start;
+            /* Alinea los elementos en la parte superior del contenedor */
+            text-align: center;
+            position: relative;
+            width: fit-content;
+            /* Ancho del elemento principal */
+            height: 200px;
+            /* Alto del elemento principal */
+        }
+
+        /* Estilos específicos para las tarjetas de débito
+
+
+
+        /* Estilos específicos para las tarjetas de débito y crédito */
+        .debit-card {
+            background-image: url(tarjetaDebito.png);
+            color: white;
+            width: 250px;
+        }
+
+        .debit-card:hover {
+            -webkit-transform:scale(1.3);transform:scale(1.3);
+        }
+
+
+        .credit-card {
+
+            background-image: url(tarjetaCredito.png);
+            color: white;
+            width: 250px;
+        }
+
+        .credit-card:hover {
+           -webkit-transform:scale(1.3);transform:scale(1.3);
+        }
+
+
+
+        .orden {
+            margin-top: 10%;
+            display: flex;
+            justify-content: space-between;
+            
+        }
+
+
+        .vto {
+
+            font-size: smaller;
+        }
+
+
+        .tipo {
+            position: absolute;
+            top: 0;
+            /* Distancia desde la parte superior del elemento principal */
+            right: 0;
+            /* Distancia desde la derecha del elemento principal */
+
+
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: small;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark fixed-top">
+        <div class="container-fluid">
+            <button id="expansor" class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon">
+                    <span class="navbar-toggler-icon-bar"></span>
+                    <span class="navbar-toggler-icon-bar"></span>
+                    <span class="navbar-toggler-icon-bar"></span>
+                </span>
+            </button>
+            <a class="navbar-brand"><img src="logoBanco.jpg" width="45" height="45" alt="logo" class="logo-brand"></a>
+           
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-body" id="navbarNav">
+                    <ul class="navbar-nav justify-content-start flex-grow-1 pe-2">
+                        <li style="display: flex" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+                              </svg>
+                            <a style="margin-left: 10px"class="nav-link" href="#">Inicio</a>
+                        </li>
+                        <li style="display: flex" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
+                                <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
+                              </svg>
+                            <a style="margin-left: 10px"class="nav-link" href="#">Mi Cuenta</a>
+                        </li>
+                        <li style="display: flex" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
+                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+                                <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+                              </svg>
+                            <a style="margin-left: 10px"style="margin-left: 10px" class="nav-link" href="http://127.0.0.1:5500/tarjetas.html">Mis Tarjetas</a>
+                        </li>
+                        <li style="display: flex" class="nav-item">
+                            
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
+                                <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                                <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
+                              </svg>
+                              <a style="margin-left: 10px"class="nav-link" href="#">Transferencias</a>
+                        </li>
+                        <li style="display: flex" class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 30 30">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                              </svg>
+                            <a style="margin-left: 10px" class="nav-link" href="http://127.0.0.1:5500/usuario.html">Perfil</a>
+                        </li>
+                        <li style="display: flex"class="nav-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                              </svg>
+                            <a style="margin-left: 10px"class="nav-link" href="#">Salir</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    </nav>
+
+    <div class="container">
+        <h2><strong>Mis Tarjetas</strong></h2>
+
+        <!-- Tarjeta de Débito -->
+        <div class="card debit-card">
+            <div class="orden">
+                <strong>
+                    <p class="a" id="apellido"></p>
+                </strong>
+                <p class="n" id="nombre"></p>
+            </div>
+            <p id="idDeb"></p>
+
+            <p id="fechaDeb" class="vto"></p>
+            <p id="tipoDeb" class="tipo"></p>
+        </div>
+
+
+
+        <!-- Tarjeta de Crédito -->
+        <div class="card credit-card">
+            <div class="orden">
+                <strong>
+                    <p class="a" id="apellidoCred"></p>
+                </strong>
+                <p class="n" id="nombreCred"></p>
+            </div>
+            <p id="idCred"> </p>
+            <p id="fechaCred" class="vto"></p>
+            <p id="tipoCred" class="tipo"></p>
+
+        </div>
+    </div>
+    <script>
+        const backendUrl = 'http://localhost:8080'; // URL del backend
+        const userId = 'fea1a925-bea8-47c6-afcf-25061412f6a7'; 
+
+        fetch(`http://localhost:8080/usuario/${userId}`, { 
+            method: 'GET', // Método de la solicitud (GET en este caso)
+
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('La solicitud no se completó correctamente.');
+                }
+                return response.json(); // Parsea la respuesta JSON si es aplicable
+            })
+            .then(data => {
+                
+                console.log(data);
+
+                document.getElementById('nombre').textContent = data.nombre;
+                document.getElementById('apellido').textContent = data.apellido;
+                document.getElementById('idDeb').textContent = data.tarjetaDebito.id;
+                document.getElementById('fechaDeb').textContent = "Vto:" + data.tarjetaDebito.fechaVencimiento;
+                document.getElementById('tipoDeb').textContent = data.tarjetaDebito.tipo;
+                document.getElementById('nombreCred').textContent = data.nombre;
+                document.getElementById('apellidoCred').textContent = data.apellido;
+                document.getElementById('idCred').textContent = data.tarjetaCredito.id;
+                document.getElementById('fechaCred').textContent = "Vto:" + data.tarjetaCredito.fechaVencimiento;
+                document.getElementById('tipoCred').textContent = data.tarjetaCredito.tipo;
+
+
+
+            })
+            .catch(error => {
+               
+                console.error(error);
+            });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
