@@ -6,6 +6,8 @@
 package com.example.Homebanking.Entidades;
 
 import com.example.Homebanking.Enumeraciones.Rol;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -30,6 +32,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Data
 @Getter @Setter
+@JsonAutoDetect
+
 public class Usuario {
 
     @Id

@@ -7,27 +7,20 @@ package com.example.Homebanking.controladores;
 
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Errores.ErrorServicio;
-import java.util.Map;
-
+import java.io.IOException;
 
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -41,35 +34,34 @@ public class UsuarioControlador {
     @Autowired
     com.example.Homebanking.Servicios.UsuarioServicio uSer;
 
-    
-   @PostMapping("/logincheck")
-public ResponseEntity<String> loginCheck(@RequestBody Map<String, String> loginData, HttpSession session) {
-    String email = loginData.get("email");
-    String clave = loginData.get("clave");
-    
-    Usuario usuario = uSer.BucarUsuarioPorEmail(email);
-    
-    if (usuario != null && usuario.getClave().equals(clave)) {
-         session.setAttribute("usuariosession", usuario);
-        // Las credenciales son válidas
-        return ResponseEntity.status(HttpStatus.OK).build();
-    } else {
-        // Las credenciales son inválidas
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-}
+//    @PostMapping("/logincheck")//retorna un 200
+//    public ResponseEntity<String> loginCheck(@RequestBody Map<String, String> loginData, HttpSession session) {
+//        String email = loginData.get("email");
+//        String clave = loginData.get("clave");
+//
+//        Usuario usuario = uSer.BucarUsuarioPorEmail(email);
+//
+//        if (usuario != null && usuario.getClave().equals(clave)) {
+//            session.setAttribute("usuariosession", usuario);
+//            // Las credenciales son válidas
+//            return ResponseEntity.status(HttpStatus.OK).build();
+//        } else {
+//            // Las credenciales son inválidas
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//    }
 
- 
-    @GetMapping("/perfil")// creo que no esta entrando en este controlador.
-    @ResponseBody
-public ResponseEntity<Usuario> perfilUsuario(HttpSession session) {
-    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
-    if (usuarioLogueado != null) {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioLogueado);
-    } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    @GetMapping("/perfil")// me devuelve el string
+    public String perfilUsuario(ModelMap model, HttpSession session) {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
+        if (usuarioLogueado == null) {
+            return "redirect:/login";
+        } else {
+            model.addAttribute("usuario", usuarioLogueado);
+            return "perfil";
+        }
+
     }
-}
 
     //Este metodo registra un usuario con sus datos basicos.
     @PostMapping("/crearUsuario")
@@ -95,28 +87,31 @@ public ResponseEntity<Usuario> perfilUsuario(HttpSession session) {
 
     //@PathVariable= configurar variables dentro de los propios segmentos de la URL
     //HttpSession= puede almacenar los datos de la sesión en el servidor y acceder a los mismos
-    @GetMapping("/modificarUsuario/{id}")
-    public ResponseEntity<Usuario> modificarUsuario(@PathVariable String id, ModelMap modelo, HttpSession session) throws ErrorServicio {
-        Usuario usuario = uSer.BuscarPorId(id);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
+    @GetMapping("/modificar-usuario/{id}")
+    public String modificarUsuario(@PathVariable String id, ModelMap modelo, HttpSession session) throws ErrorServicio {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
+        if (uSer.BuscarPorId(id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())) {
+            modelo.addAttribute("usuario", uSer.BuscarPorId(id));
+           
+           
+            return "modificarDatos";
         } else {
-            return ResponseEntity.notFound().build();
+            return "redirect:/login";
         }
     }
 
-
     //Modifica todos los datos del usuario
     @PutMapping("/modificarUsuario/{Id}")
-    public void ModificarUsuario(ModelMap modelo, @PathVariable String Id, @ModelAttribute Usuario usuarioForm) throws Exception {
-
-        if (usuarioForm != null) {
-            uSer.modificarDatosPersonales(Id, usuarioForm.getNombre(), usuarioForm.getApellido(), usuarioForm.getEmail(), usuarioForm.getClave(), usuarioForm.getDNI());
+    public String modificarUsuario(@PathVariable String idUsuario, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String Email, @RequestParam String clave, @RequestParam String DNI, HttpSession session) throws ErrorServicio, IOException, Exception {
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
+        if (uSer.BuscarPorId(idUsuario).getIdUsuario().equals(usuarioLogueado.getIdUsuario())) {
+            uSer.modificarDatosPersonales(idUsuario, nombre, apellido, Email, clave, DNI);
+            session.setAttribute("usuariosession", uSer.BuscarPorId(idUsuario));
         } else {
-            System.out.println("El controlador esta recibiendo un objeto nulo desde el Formulario");
+            throw new ErrorServicio("No puedes modificar este perfil");
         }
-       
 
+        return "redirect:/usuario/perfil";
     }
 
     //En este metodo se cambia la contraseña,requiere un codigo que es enviado al email.
@@ -135,13 +130,14 @@ public ResponseEntity<Usuario> perfilUsuario(HttpSession session) {
     }
 
     //Da de baja el usuario
-    @PatchMapping("/darDeBajaUsuario")
-    public String DarDeBajaUsuario(ModelMap modelo, @RequestParam String Id) throws Exception {
+    @PatchMapping("/dar-de-baja/{id}")
+    public String DarDeBajaUsuario(@PathVariable String id, HttpSession session) throws Exception {
         try {
-            uSer.darBaja(Id);
+            uSer.darBaja(id);
 
-            modelo.put("exito", "usted fue dado de baja");
-            return "el usuario ha sido dado de baja";
+           session.setAttribute("usuariosession", uSer.BuscarPorId(id));
+
+        return "redirect:/login";
         } catch (Exception e) {
 
             return e.getMessage();
