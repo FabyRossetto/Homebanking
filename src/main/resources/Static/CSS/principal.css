@@ -1,0 +1,250 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+body {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  color: #272727;
+}
+
+/* Estilos para el modal */
+.modal-content {
+  background-color: #ffffff; /* Fondo */
+ /* border-radius: 20px; /* Bordes redondeados */
+  padding: 10px; /* Espacio de relleno interior */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra */
+  width: 500px; /* Ancho fijo */
+  height: 300px; /* Alto fijo */
+  margin: auto; /* Centrar el modal horizontalmente */
+  text-align: center; /* Centrar el contenido del modal */
+}
+
+/* Estilos para los campos de entrada del formulario */
+.modal-content input[type="text"],
+.modal-content input[type="password"] {
+  width: 80%;
+  padding: 5px;
+  margin: 10px 0;
+  border: 1px solid #ffbe0b; /* Borde Amarillo */
+  border-radius: 5px;
+  background-color: transparent; /* Fondo transparente */
+  color: #8c8c8c; /* Texto en color blanco */
+}
+/* Estilo para el botón personalizado */
+.custom-button {
+  background-color: #ffb703; /* Amarillo vibrante */
+  color: #ffffff; /* Texto en blanco */
+  border: 0;
+  outline: none; /* Elimina el borde y el resaltado de enfoque */
+  border-radius: 3px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s; /* Transición de color al pasar el cursor */
+}
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+  margin-bottom: 4rem;
+}
+
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+  bottom: 3rem;
+  z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel-item {
+  height: 32rem;
+}
+
+/* MARKETING CONTENT
+-------------------------------------------------- */
+
+/* Center align the text within the three columns below the carousel */
+.marketing .col-lg-4 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* rtl:begin:ignore */
+.marketing .col-lg-4 p {
+  margin-right: .75rem;
+  margin-left: .75rem;
+}
+
+/* rtl:end:ignore */
+
+
+/* Featurettes
+------------------------- */
+
+.featurette-divider {
+  margin: 5rem 0;
+  /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+/* rtl:begin:remove */
+.featurette-heading {
+  letter-spacing: -.05rem;
+
+}
+
+.featurette h2 {
+  color: #8338ec;
+
+}
+
+
+ /* Cambiar el color del texto secundario de los featurettes */
+ .h2 text-muted {
+  color: #ffbe0b;
+  /* Cambia #00FF00 al color que desees para el texto secundario */
+}
+
+
+/* rtl:end:remove */
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (min-width: 40em) {
+
+  /* Bump up size of carousel content */
+  .carousel-caption p {
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  .featurette-heading {
+    font-size: 50px;
+  }
+}
+
+/*Formulario*/
+.main-container {
+  max-width: max-content;
+  display: flex;
+  justify-content:center;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f1faee;
+  border-radius: 20px;
+  box-shadow: 0 0 10px #8c8c8c;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  color: #8c8c8c;
+}
+  
+
+.main-form {
+  background: #bbd0ff;
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width:600px;
+  margin: 0 auto;
+}
+/*.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}*/
+
+/*Botón Registro Formulario*/
+/* Estilo para el botón "Registrarse" */
+button {
+  background-color: #ffb703;
+  /* Cambia el color de fondo al código deseado */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 3px;
+  font-size: 16px;
+  cursor: pointer;
+  /* Alineación horizontal y vertical */
+  margin: 0 auto;
+  /* Alinea horizontalmente en el centro */
+  display: block;
+  /* Convierte el botón en un bloque para que la alineación vertical funcione */
+}
+
+/* Cambia el color del botón al pasar el mouse sobre él */
+button:hover {
+  background-color: #ffbe0b;
+  /* Cambia el color de fondo cuando se pasa el mouse sobre el botón */
+}
+
+.form-title {
+  color: #ffffff;
+  /* Color del título del formulario (Blanco) */
+  margin-bottom: 20px;
+  /* Espacio inferior del título */
+}
+
+@media (min-width: 62em) {
+  .featurette-heading {
+    margin-top: 7rem;
+  }
+}
+
+/* Estilo para el banner/footer */
+.banner {
+  background-image: url('/imagenes/men.jpg');
+  /* Ruta de tu imagen de fondo */
+
+  background-size: contain;
+  background-repeat: repeat;
+  background-position: center;
+  color: #ff00ff;
+  /* Color de texto en el banner/footer */
+  text-align: center;
+
+  font-weight: bolder;
+  padding: 50px 0;
+  /* Añade espacio interno superior e inferior al banner/footer */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Alinea el contenido en la parte superior e inferior */
+  height: 20vh;
+  /* Ajusta la altura del banner/footer al 100% de la ventana */
+}
+
+/* Estilo para el contenido del footer */
+.footer-content {
+  padding: 10px;
+  /* Añade espacio interno al contenido del footer */
+}
+
+/* Estilo para el enlace "Volver al Inicio" */
+.banner a {
+  color: #272727;
+  /* Color del enlace en el banner/footer */
+  text-decoration: none;
+  /* Quita el subrayado del enlace */
+  text-align: center;
+  font-weight: bold;
+  /* Texto en negrita */
+}
+
+.banner a:hover {
+  text-decoration: underline;
+  /* Subrayado al pasar el mouse sobre el enlace */
+}

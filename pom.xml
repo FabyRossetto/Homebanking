@@ -132,9 +132,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-
-            <version>5.3.19</version>
-
+            <version>5.3.9</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -144,20 +142,13 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
-            <version>5.6.2</version>
+            <version>5.5.2</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>5.6.2</version>
-
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>5.3.18</version>
+            <version>5.5.2</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -181,7 +172,12 @@
     <dependency>
         <groupId>javax.persistence</groupId>
         <artifactId>javax.persistence-api</artifactId>
-    </dependency>
+    </dependency> 
+    <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+
     </dependencies>
    
 

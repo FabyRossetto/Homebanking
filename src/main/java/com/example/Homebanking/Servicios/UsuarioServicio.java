@@ -65,12 +65,12 @@ public class UsuarioServicio implements UserDetailsService{
 
     //se registra el usuario con sus datos personales en este metodo 
     @Transactional
-    public Usuario crear(String nombre, String apellido, String Email, String clave,String DNI) throws ErrorServicio, Exception {
+    public Usuario crear(String nombre, String apellido, String DNI, String email,String clave) throws ErrorServicio, Exception {
        
-            Usuario encontrar = usuarioRepositorio.findByEmail(Email);
+            Usuario encontrar = usuarioRepositorio.findByEmail(email);
             if (encontrar != null) {
 
-                if (encontrar.getEmail().equals(Email)) {
+                if (encontrar.getEmail().equals(email)) {
                     if (encontrar.getAlta() == false) {
                         encontrar.setAlta(true);
                         throw new ErrorServicio("Este e-mail ya se encuentra registrado y el usuario se ha dado de alta nuevamente");
@@ -78,18 +78,18 @@ public class UsuarioServicio implements UserDetailsService{
                 }
             } else {
         
-        validar(nombre, apellido, Email, clave,DNI);
+        validar(nombre, apellido, DNI, email,clave);
 
         Usuario usuario = new Usuario();
         usuario.getIdUsuario();
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
-        usuario.setEmail(Email);
+        usuario.setEmail(email);
         String claveEnc = new BCryptPasswordEncoder().encode(clave);
         usuario.setClave(claveEnc);//se guarda la clave encriptada en la base de datos
         usuario.setAlta(Boolean.TRUE);
         usuario.setFechaAlta(new Date());
-        usuario.setDNI(DNI);
+        usuario.setEmail(email);
 
         if (usuario.getClave()=="ADMIN1234") {
             usuario.setRol(Rol.ADMINISTRADOR);

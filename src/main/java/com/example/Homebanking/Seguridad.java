@@ -13,29 +13,37 @@ public class Seguridad extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
 
         http
                 .authorizeRequests()
                 .antMatchers("/administrador/*").hasRole("ADMINISTRADOR")
                 .antMatchers("/css/*", "/js/*", "/img/*", "/**")
                 .permitAll()
-            .and().formLogin()
+                .and().formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/logincheck")
                 .usernameParameter("DNI")
                 .passwordParameter("clave")
                 .defaultSuccessUrl("/index")
                 .permitAll()
-            .and().logout()
+                .and()
+                .formLogin()
+                .loginPage("/principal.html") // Página de registro
+                .loginProcessingUrl("/registro") // Ruta de procesamiento de registro
+                .usernameParameter("dni")
+                .passwordParameter("clave")
+                .defaultSuccessUrl("/principal.hmtl#formulario")
+                .permitAll()
+                .and().logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
-            .and().csrf().disable()
+                .and().csrf().disable()
                 .sessionManagement()
-                .maximumSessions(1) 
+                .maximumSessions(1)
                 .maxSessionsPreventsLogin(true);
-                
 
     }
 }
