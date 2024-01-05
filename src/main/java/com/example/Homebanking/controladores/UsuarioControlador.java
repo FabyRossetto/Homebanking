@@ -1,5 +1,5 @@
-
 package com.example.Homebanking.controladores;
+
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import com.example.Homebanking.Servicios.UsuarioServicio;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,9 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Fabi
  */
-@RestController
+@Controller
 @CrossOrigin(origins = "null")
-@RequestMapping(value = "/administracionUsuario")
+@RequestMapping("/usuario")//localhost:8080/usuario
 public class UsuarioControlador {
 
     @Autowired
@@ -34,7 +35,19 @@ public class UsuarioControlador {
     @Autowired
     private UsuarioRepositorio usuarioRepo;
 
+    @GetMapping("/mostrar")
+    public String mostrarPagina(Model model) {
+        model.addAttribute("usuarioRegistro", new Usuario());
+        model.addAttribute("usuarioLogin", new Usuario());
+        return "principal";
+    }
 
+//    @GetMapping("/registrar") // localhost:8080/registrar
+//    public String mostrarPaginaPrincipal(Model model) {
+//        // Aquí puedes agregar lógica para preparar datos que quieras mostrar en la página principal
+//        model.addAttribute("usuario", new Usuario()); // Agrega el objeto Usuario al modelo
+//        return "principal.html"; // Retorna la vista de la página principal que incluye el formulario
+//    }
 
     @PostMapping("/registro")
     public ResponseEntity<String> registrarUsuario(@ModelAttribute Usuario usuario) {
@@ -59,39 +72,20 @@ public class UsuarioControlador {
             return false;
         }
     }
+
+    @GetMapping("/login")
+    public String mostrarPaginaLogin(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        return "principal";
+    }
+
+    @PostMapping("/login")
+    public String procesarLogin(@ModelAttribute Usuario usuario) {
+        // Lógica de inicio de sesión aquí
+        return "redirect:/paginaDespuesDeLogin";
+    }
 }
 
-//public class LoginControlador {
-//    @Autowired
-//    private UsuarioServicio usuarioServicio; // Debes inyectar el servicio adecuado
-//
-//    @PostMapping("/login")
-//    public ResponseEntity<String> iniciarSesion(@RequestParam String nombreDeUsuario, @RequestParam String contrasena) {
-//        System.out.println("Recibida solicitud de inicio de sesión.");
-//
-//        boolean inicioSesionExitoso = intentarInicioSesion(nombreDeUsuario, contrasena);
-//
-//        if (inicioSesionExitoso) {
-//            // Inicio de sesión exitoso, devolver un ResponseEntity con estado HTTP 200 (OK)
-//            return new ResponseEntity<>("Inicio de sesión exitoso", HttpStatus.OK);
-//        } else {
-//            // Si el inicio de sesión falla, puedes devolver un ResponseEntity con un estado HTTP 401 (Unauthorized) u otro adecuado
-//            return new ResponseEntity<>("Inicio de sesión fallido", HttpStatus.UNAUTHORIZED);
-//        }
-//    }
-//
-//    private boolean intentarInicioSesion(String nombreDeUsuario, String contrasena) {
-//        try {
-//            // Aquí debes implementar la lógica para verificar las credenciales del usuario
-//            // Puedes utilizar el servicio de usuario para verificar el inicio de sesión
-//            // Si el inicio de sesión es exitoso, devuelve true, de lo contrario, devuelve false.
-//            return usuarioServicio.verificarCredenciales(nombreDeUsuario, contrasena);
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
-//}
-//
 //mensaje / status/ no string/response entity
 //cambie el form a usuario en el script/
 //Este metodo le agrega a el usuario que le pasemos por parametro, una cuenta y tarjetas de debito y credito.
