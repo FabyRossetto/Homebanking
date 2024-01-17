@@ -1,16 +1,9 @@
-package com.example.Homebanking.Controladores;
+package com.example.Homebanking.controladores;
 
 import com.example.Homebanking.Entidades.Cuenta;
-import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Repositorios.CuentaRepositorio;
-import com.example.Homebanking.Repositorios.TarjetaRepositorio;
-import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import com.example.Homebanking.Servicios.CuentaServicio;
-import com.example.Homebanking.Servicios.TarjetaServicio;
-import com.example.Homebanking.Servicios.UsuarioServicio;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,22 +19,11 @@ public class CuentaControlador {
     @Autowired
     private CuentaRepositorio cuentaRepositorio;
 
-    @Autowired
-    private UsuarioRepositorio usuarioRepo;
-
-    @Autowired
-    private TarjetaRepositorio tarjetaRepositorio;
-
-//    @Autowired
-//    private TransferenciaRepositorio transferenciaRepositorio;
-//    
+   
     @Autowired
     private CuentaServicio cuentaservicio;
 
-//    @Autowired
-//    private UsuarioServicio usuarioservicio;
-//    @Autowired
-//    TarjetaServicio tarjetaservicio;
+
     @GetMapping("/guardarCuenta")
     public String guardarCuenta(ModelMap vista) {
 
@@ -109,8 +91,3 @@ public class CuentaControlador {
      }
 
 
-//}
-//
-//
-//
-////alta?
