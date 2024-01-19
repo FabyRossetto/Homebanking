@@ -29,50 +29,52 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Data
-@Getter @Setter
+@Getter
+@Setter
 public class Usuario {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     protected String IdUsuario;
-    
-    @Column(nullable= false)
+
+    @Column(nullable = false)
     String nombre;
-    
-    @Column(nullable= false)
+
+    @Column(nullable = false)
     String apellido;
-    
+
     @OneToOne
     protected Cuenta Cuenta;
-    
-    @Column(nullable= false)
-    String clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
-    
+
+//    @Column(nullable= false )
+//    String clave;//TIENE UNA CLAVE ESPECIFICA PARA ENTRAR COMO ADMINISTRADOR
+    @Column(name = "clave")
+    private String clave;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tarjeta_debito_id")
     TarjetaSuperClass tarjetaDebito;
-    
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tarjeta_credito_id")
     TarjetaSuperClass tarjetaCredito;
-    
-    
+
     Boolean Alta;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     Date fechaAlta;
-    
+
     @Column(unique = true)
     String email;
-    
+
     @Enumerated(EnumType.STRING)
     private Rol rol;
-    
-     @Column(unique = true)
+
+    @Column(unique = true)
     String DNI;
-     
-       private boolean quieroNotificaciones;
+
+    private boolean quieroNotificaciones;
 
     public Usuario get() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

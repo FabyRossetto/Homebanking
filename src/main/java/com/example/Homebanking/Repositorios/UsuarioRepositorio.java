@@ -3,6 +3,7 @@ package com.example.Homebanking.Repositorios;
 
 import com.example.Homebanking.Entidades.Cuenta;
 import com.example.Homebanking.Entidades.Usuario;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,10 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, String> {
      @Query ("SELECT u from Usuario u WHERE u.email= :email")
     public Usuario findByEmail (@Param ("email") String email);
     
+ 
+   // Optional<Usuario> findByEmail(String email);
+
+
    
      @Query ("SELECT u from Usuario u WHERE cuenta_id = cuenta_id")
     public Usuario findByCuenta (@Param ("cuenta_id") Long IdCuenta);

@@ -36,17 +36,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-
-
 @Service
-public class UsuarioServicio implements UserDetailsService{
+public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
     CuentaServicio cuentaSer;
-    
+
     @Autowired
     NotificacionServicio notificacionServicio;
 
@@ -56,53 +54,52 @@ public class UsuarioServicio implements UserDetailsService{
     @Autowired
     com.example.Homebanking.Servicios.TarjetaDebitoServicio tarjetaDebito;
 
-//    @Autowired
-//    com.example.Homebanking.Entidades.Cuenta cuenta;
-    
-//    @Autowired
-//    @Qualifier("tarjetaServicio")
-//    TarjetaServicio tarjeta;
-
     //se registra el usuario con sus datos personales en este metodo 
     @Transactional
-    public Usuario crear(String nombre, String apellido, String DNI, String email,String clave) throws ErrorServicio, Exception {
-       
-            Usuario encontrar = usuarioRepositorio.findByEmail(email);
-            if (encontrar != null) {
+    public Usuario crear(String nombre, String apellido, String DNI, String email, String clave) throws ErrorServicio, Exception {
 
-                if (encontrar.getEmail().equals(email)) {
-                    if (encontrar.getAlta() == false) {
-                        encontrar.setAlta(true);
-                        throw new ErrorServicio("Este e-mail ya se encuentra registrado y el usuario se ha dado de alta nuevamente");
-                    }
+        Usuario encontrar = usuarioRepositorio.findByEmail(email);
+        if (encontrar != null) {
+
+            if (encontrar.getEmail().equals(email)) {
+                if (encontrar.getAlta() == false) {
+                    encontrar.setAlta(true);
+                    throw new ErrorServicio("Este e-mail ya se encuentra registrado y el usuario se ha dado de alta nuevamente");
                 }
-            } else {
-        
-        validar(nombre, apellido, DNI, email,clave);
-
-        Usuario usuario = new Usuario();
-        usuario.getIdUsuario();
-        usuario.setNombre(nombre);
-        usuario.setApellido(apellido);
-        usuario.setEmail(email);
-        String claveEnc = new BCryptPasswordEncoder().encode(clave);
-        usuario.setClave(claveEnc);//se guarda la clave encriptada en la base de datos
-        usuario.setAlta(Boolean.TRUE);
-        usuario.setFechaAlta(new Date());
-        usuario.setEmail(email);
-
-        if (usuario.getClave()=="ADMIN1234") {
-            usuario.setRol(Rol.ADMINISTRADOR);
+            }
         } else {
-            usuario.setRol(Rol.USUARIO);
-        }
-         return usuarioRepositorio.save(usuario);
 
-    }
+            validar(nombre, apellido, DNI, email, clave);
+
+            Usuario usuario = new Usuario();
+            usuario.getIdUsuario();
+            usuario.setNombre(nombre);
+            usuario.setApellido(apellido);
+            usuario.setDNI(DNI);
+            usuario.setEmail(email);
+            String claveEnc = new BCryptPasswordEncoder().encode(clave);
+            usuario.setClave(claveEnc);//se guarda la clave encriptada en la base de datos
+            usuario.setAlta(Boolean.TRUE);
+            usuario.setFechaAlta(new Date());
             
-       return encontrar;
+
+            if (usuario.getClave() == "ADMIN1234") {
+                usuario.setRol(Rol.ADMINISTRADOR);
+            } else {
+                usuario.setRol(Rol.USUARIO);
+            }
+             Usuario usuarioGuardado = usuarioRepositorio.save(usuario);
+
+            // Delegar el envío de notificación a la clase NotificacionServicio
+            notificacionServicio.enviar("¡Hola!Bienvenid@ a HomebankingApp. ¡Prepárate para una experiencia bancaria única y emocionante!", "Registro Exitoso", usuario.getEmail());
+
+            return usuarioGuardado;
+           
+        }
+
+        return encontrar;
     }
-    
+
     //se le agregan al usuario la cuenta y las tarjetas de debito y credito
     @Transactional
     public void cargarTarjetasyCuenta(String IdUsuario, Double saldoCuenta, Integer clave) throws Excepcion, Exception {
@@ -114,31 +111,26 @@ public class UsuarioServicio implements UserDetailsService{
 
             if (usu.getRol() == USUARIO) {
 
-                    Cuenta cuen = cuentaSer.guardar(IdUsuario, saldoCuenta);
-                   usu.setCuenta(cuen);
+                Cuenta cuen = cuentaSer.guardar(IdUsuario, saldoCuenta);
+                usu.setCuenta(cuen);
 
-               
-                    TarjetaSuperClass debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave); 
-                    
-                    usu.setTarjetaDebito(debito);
-                
+                TarjetaSuperClass debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave);
 
-                
-                    TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(IdUsuario, clave);
-                    
-                    usu.setTarjetaCredito(credito);
-                }
-                
-                usuarioRepositorio.save(usu);
+                usu.setTarjetaDebito(debito);
+
+                TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(IdUsuario, clave);
+
+                usu.setTarjetaCredito(credito);
             }
 
+            usuarioRepositorio.save(usu);
         }
 
-    
+    }
 
     //se modifican los datos personales del usuario. Para modificar tarjetas y cuenta tienen sus propios metodos
-    public void modificarDatosPersonales(String IdUsuario, String nombre, String apellido, String Email, String clave,String DNI) throws ErrorServicio, Exception {
-        validar(nombre,apellido,Email,clave,DNI);
+    public void modificarDatosPersonales(String IdUsuario, String nombre, String apellido, String Email, String clave, String DNI) throws ErrorServicio, Exception {
+        validar(nombre, apellido, Email, clave, DNI);
 
         Optional<Usuario> usuario = usuarioRepositorio.findById(IdUsuario);
 
@@ -163,7 +155,7 @@ public class UsuarioServicio implements UserDetailsService{
 //        ns.enviar("Usted esta queriendo cambiar su contraseña de Homebanking", "Su código de recuperacion es " + codigoDeRecuperacion, mail);
 //        return codigoDeRecuperacion;
 //    }
-    
+
     //   Este código genera una nueva contraseña aleatoria, la encripta utilizando el algoritmo BCrypt, 
     //actualiza la propiedad clave del objeto usuario con la contraseña encriptada, guarda el objeto 
     //usuario en la base de datos y envía un correo electrónico al usuario con la nueva contraseña generada.
@@ -211,15 +203,15 @@ public class UsuarioServicio implements UserDetailsService{
 
     @Transactional
     public void cambiarContraseña(Integer codigoIngresado, String claveNueva, String email) throws ErrorServicio {
-        try{
-        Usuario usuario = usuarioRepositorio.findByEmail(email);
+        try {
+            Usuario usuario = usuarioRepositorio.findByEmail(email);
 
-        if (usuario!=null) {
+            if (usuario != null) {
 
-            String claveEnc = new BCryptPasswordEncoder().encode(claveNueva);
-            usuario.setClave(claveEnc);
-            usuarioRepositorio.save(usuario);
-        }
+                String claveEnc = new BCryptPasswordEncoder().encode(claveNueva);
+                usuario.setClave(claveEnc);
+                usuarioRepositorio.save(usuario);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -227,7 +219,6 @@ public class UsuarioServicio implements UserDetailsService{
         }
 
     }
-   
 
     //se da de baja al usuario,por lo que tambien se da de baja su cuenta y las tarjetas de credito y debito,y me retorna la fecha de la baja 
     public Date darBaja(String Id) throws ErrorServicio {//funciona bien
@@ -242,38 +233,37 @@ public class UsuarioServicio implements UserDetailsService{
     }
 
     //se elimina al usuario, asi como la cuenta y sus tarjetas de debito y credito
-    
     public void EliminarUsuario(String IdUsuario) throws Exception {
-        
+
         Usuario usuario = usuarioRepositorio.getById(IdUsuario);
 
         usuarioRepositorio.delete(usuario);
     }
-     
-     public Usuario BuscarUsuarioPorDNI(String DNI){
-         Usuario usuario=usuarioRepositorio.findByDNI(DNI);
-         return usuario;
-     }
-     
-     public Usuario BuscarUsuarioPorApellido(String apellido){
-         Usuario usuario=usuarioRepositorio.findByApellido(apellido);
-         return usuario;
-         
-     }
-     
-     public Usuario BucarUsuarioPorEmail(String email){
-         Usuario usuario=usuarioRepositorio.findByEmail(email);
-         return usuario;
-     }
-     
-     public Usuario BuscarPorCuenta(Long IdCuenta){
-         
-         Usuario usuario= usuarioRepositorio.findByCuenta(IdCuenta);
-         return usuario;
-     }
-     
+
+    public Usuario BuscarUsuarioPorDNI(String DNI) {
+        Usuario usuario = usuarioRepositorio.findByDNI(DNI);
+        return usuario;
+    }
+
+    public Usuario BuscarUsuarioPorApellido(String apellido) {
+        Usuario usuario = usuarioRepositorio.findByApellido(apellido);
+        return usuario;
+
+    }
+
+    public Usuario BucarUsuarioPorEmail(String email) {
+        Usuario usuario = usuarioRepositorio.findByEmail(email);
+        return usuario;
+    }
+
+    public Usuario BuscarPorCuenta(Long IdCuenta) {
+
+        Usuario usuario = usuarioRepositorio.findByCuenta(IdCuenta);
+        return usuario;
+    }
+
 //validaciones
-    public void validar(String nombre, String apellido, String Email, String clave,String DNI) throws ErrorServicio {
+    public void validar(String nombre, String apellido, String Email, String clave, String DNI) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {
             throw new ErrorServicio("El nombre del usuario no puede ser nulo");
         }
@@ -291,7 +281,7 @@ public class UsuarioServicio implements UserDetailsService{
         }
 
     }
-    
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {//este metodo recibe el nombre de usuario lo busca en el repositorio y lo transforma en un usuario de spring security
         Usuario usuario = usuarioRepositorio.findByEmail(email);
@@ -313,5 +303,19 @@ public class UsuarioServicio implements UserDetailsService{
         } else {
             return null;
         }
-}
+
+    }
+
+    public Usuario autenticarUsuario(String email, String clave) throws Exception {
+        // Buscar el usuario por email en la base de datos
+        Usuario usuario = usuarioRepositorio.findByEmail(email);
+
+        // Verificar si el usuario existe y si la clave coincide
+        if (usuario != null && usuario.getClave().equals(clave)) {
+            return usuario; // Usuario autenticado
+        } else {
+            throw new Exception("Error en el inicio de sesión. Por favor, verifica tus credenciales.");
+        }
+    }
+
 }

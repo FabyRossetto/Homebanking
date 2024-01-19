@@ -17,7 +17,7 @@ public class NotificacionServicio {
     public void enviar(String cuerpo,String titulo,String mail){
         SimpleMailMessage message= new SimpleMailMessage();
         message.setTo(mail);
-        message.setFrom("noreply@homebankingapp.com");//cambiar
+        message.setFrom("englishgate.ga@gmail.com");//cambiar
         message.setSubject(titulo);
         message.setText(cuerpo);
         

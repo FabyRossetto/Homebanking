@@ -1,8 +1,11 @@
 package com.example.Homebanking.controladores;
 
 import com.example.Homebanking.Entidades.Usuario;
+import com.example.Homebanking.Entidades.UsuarioLogin;
+import com.example.Homebanking.Errores.ErrorServicio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import com.example.Homebanking.Servicios.UsuarioServicio;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
 
-/**
- *
- * @author Fabi
- */
 @Controller
 @CrossOrigin(origins = "null")
 @RequestMapping("/usuario")//localhost:8080/usuario
@@ -42,13 +42,6 @@ public class UsuarioControlador {
         return "principal";
     }
 
-//    @GetMapping("/registrar") // localhost:8080/registrar
-//    public String mostrarPaginaPrincipal(Model model) {
-//        // Aquí puedes agregar lógica para preparar datos que quieras mostrar en la página principal
-//        model.addAttribute("usuario", new Usuario()); // Agrega el objeto Usuario al modelo
-//        return "principal.html"; // Retorna la vista de la página principal que incluye el formulario
-//    }
-
     @PostMapping("/registro")
     public ResponseEntity<String> registrarUsuario(@ModelAttribute Usuario usuario) {
         System.out.println("Recibida solicitud de registro.");
@@ -60,8 +53,10 @@ public class UsuarioControlador {
             return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
         } else {
             // Si el registro falla, puedes devolver un ResponseEntity con un estado HTTP 400 (Bad Request) u otro adecuado
-            return new ResponseEntity<>("Error en el registro", HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>("Error en el registro :C", HttpStatus.BAD_REQUEST);
         }
+
     }
 
     private boolean intentarRegistro(Usuario usuario) {
@@ -69,23 +64,49 @@ public class UsuarioControlador {
             uSer.crear(usuario.getNombre(), usuario.getApellido(), usuario.getDNI(), usuario.getEmail(), usuario.getClave());
             return true;
         } catch (Exception e) {
-            return false;
+            // Imprimir la traza de la pila en la consola
+            e.printStackTrace();
         }
+        return false;
+
     }
 
     @GetMapping("/login")
     public String mostrarPaginaLogin(Model model) {
-        model.addAttribute("usuario", new Usuario());
+        model.addAttribute("usuarioLogin", new Usuario());
+                    model.addAttribute("usuarioRegistro", new Usuario());
+
+
         return "principal";
     }
 
-    @PostMapping("/login")
-    public String procesarLogin(@ModelAttribute Usuario usuario) {
-        // Lógica de inicio de sesión aquí
-        return "redirect:/paginaDespuesDeLogin";
+    @PostMapping("/procesar-login")
+    public String procesarLogin(@ModelAttribute("usuarioLogin") UsuarioLogin usuarioLogin, BindingResult result, Model model) {
+        try {
+            // Intentar autenticar al usuario
+            Usuario usuarioAutenticado = uSer.autenticarUsuario(usuarioLogin.getEmail(), usuarioLogin.getClave());
+            
+
+            // Si no se lanzó una excepción, el usuario se autenticó con éxito
+            model.addAttribute("mensajeExito", "¡Inicio de sesión exitoso!");
+
+        } catch (Exception e) {
+            // Manejar la excepción de autenticación
+            model.addAttribute("errorAutenticacion", e.getMessage());
+
+        }
+        // Aquí puedes redirigir a una página específica o simplemente mostrar un mensaje en la misma página
+        model.addAttribute("usuarioRegistro", new Usuario());
+        return "principal";
     }
 }
 
+//    @PostMapping("/login")
+//    public String procesarLogin(@ModelAttribute Usuario usuario) {
+//        // Lógica de inicio de sesión aquí
+//        return "principal.html";
+//                //"redirect:/paginaDespuesDeLogin";
+//    }
 //mensaje / status/ no string/response entity
 //cambie el form a usuario en el script/
 //Este metodo le agrega a el usuario que le pasemos por parametro, una cuenta y tarjetas de debito y credito.

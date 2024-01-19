@@ -1,489 +1,500 @@
 <!DOCTYPE html>
-<<html lang="en" xmlns:th="http://www.thymeleaf.org">
->
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-  <meta name="generator" content="Hugo 0.104.2">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+<html lang="en" >
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  <title>HomebankingApp</title>
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/carousel/">
-  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/CSS/principal.css">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+        <meta name="generator" content="Hugo 0.104.2">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+              integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
-  
-  <style>
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <title>HomebankingApp</title>
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/carousel/">
+        <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/Static/principal.css">
 
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-    }
+        <style>
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
 
-    .b-example-divider {
-      height: 3rem;
-      background-color: rgba(0, 0, 0, .1);
-      border: solid rgba(0, 0, 0, .15);
-      border-width: 1px 0;
-      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-    }
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                    font-size: 3.5rem;
+                }
+            }
 
-    .b-example-vr {
-      flex-shrink: 0;
-      width: 1.5rem;
-      height: 100vh;
-    }
+            .b-example-divider {
+                height: 3rem;
+                background-color: rgba(0, 0, 0, .1);
+                border: solid rgba(0, 0, 0, .15);
+                border-width: 1px 0;
+                box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+            }
 
-    .bi {
-      vertical-align: -.125em;
-      fill: currentColor;
-    }
+            .b-example-vr {
+                flex-shrink: 0;
+                width: 1.5rem;
+                height: 100vh;
+            }
 
-    .navbar .navbar-brand {
-      font-weight: bold;
-      font-family: BlinkMacSystemFont;
-    }
+            .bi {
+                vertical-align: -.125em;
+                fill: currentColor;
+            }
 
-    .navbar {
-      background: linear-gradient(90deg, #FF00FF, #8A2BE2);
-      padding: 10px 0;
-    }
+            .navbar .navbar-brand {
+                font-weight: bold;
+                font-family: BlinkMacSystemFont;
+            }
 
-    .navbar a {
-      float: left;
-      display: block;
-      color: white;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-      vertical-align: text-bottom;
-    }
+            .navbar {
+                background: linear-gradient(90deg, #FF00FF, #8A2BE2);
+                padding: 10px 0;
+            }
 
-    .navbar a:hover {
-      background-color: #ffbe0b;
-      color: rgb(252, 248, 248);
-      border-radius: 10px;
-    }
+            .navbar a {
+                float: left;
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                vertical-align: text-bottom;
+            }
 
+            .navbar a:hover {
+                background-color: #ffbe0b;
+                color: rgb(252, 248, 248);
+                border-radius: 10px;
+            }
 
 
-    .nav-scroller {
-      position: relative;
-      z-index: 2;
-      height: 2.75rem;
-      overflow-y: hidden;
-    }
 
-    .nav-scroller .nav {
-      display: flex;
-      flex-wrap: nowrap;
-      padding-bottom: 1rem;
-      margin-top: -1px;
-      overflow-x: auto;
-      text-align: center;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-    }
-    /* Estilos para el botón "Iniciar Sesión" en el modal */
-    .close{
-      margin-left: auto;
-    }
-    .modal h5{
-      font-family: Arial, Helvetica, sans-serif, Courier, monospace;
-      color:#8c8c8c;
-    }
-    .modal h6{
-        font-family: Arial, Helvetica, sans-serif, Courier, monospace;
-      color:#8c8c8c
-      }
-    .nav-link.btn.btn-link:hover {
-      background:#ffbe0b;
-      color: #ffffff;
-      text-align: right;
-      padding: 14px 16px;
-      text-decoration: none;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      vertical-align: middle;
-      /* Alineación vertical al centro */
-      /* Efecto de transición al pasar el mouse */
-    }
+            .nav-scroller {
+                position: relative;
+                z-index: 2;
+                height: 2.75rem;
+                overflow-y: hidden;
+            }
 
-  /* Cambia el color de fondo al pasar el cursor sobre el botón */
-  .custom-button:hover {
-    background-color: #ffbe0b; /* Amarillo vibrante más claro */
-  }
+            .nav-scroller .nav {
+                display: flex;
+                flex-wrap: nowrap;
+                padding-bottom: 1rem;
+                margin-top: -1px;
+                overflow-x: auto;
+                text-align: center;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            /* Estilos para el botón "Iniciar Sesión" en el modal */
+            .close{
+                margin-left: auto;
+            }
+            .modal h5{
+                font-family: Arial, Helvetica, sans-serif, Courier, monospace;
+                color:#8c8c8c;
+            }
+            .modal h6{
+                font-family: Arial, Helvetica, sans-serif, Courier, monospace;
+                color:#8c8c8c
+            }
+            .nav-link.btn.btn-link:hover {
+                background:#ffbe0b;
+                color: #ffffff;
+                text-align: right;
+                padding: 14px 16px;
+                text-decoration: none;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                vertical-align: middle;
+                /* Alineación vertical al centro */
+                /* Efecto de transición al pasar el mouse */
+            }
 
-    .imagen-circular {
-      width: 140px;
-      /* Establece el ancho deseado para la imagen */
-      height: 140px;
-      /* Establece la altura deseada para la imagen */
-      border-radius: 50%;
-      /* Redondea las esquinas al 50% para hacer un círculo */
-      object-fit: cover;
-      /* Ajusta la imagen para que cubra el círculo */
-    }
+            /* Cambia el color de fondo al pasar el cursor sobre el botón */
+            .custom-button:hover {
+                background-color: #ffbe0b; /* Amarillo vibrante más claro */
+            }
 
-    /* Cambiar el color del título de las cards */
-    h2.fw-normal {
-      color: #8338ec;
-      /* Cambia #FF0000 al color que desees */
-    }
+            .imagen-circular {
+                width: 140px;
+                /* Establece el ancho deseado para la imagen */
+                height: 140px;
+                /* Establece la altura deseada para la imagen */
+                border-radius: 50%;
+                /* Redondea las esquinas al 50% para hacer un círculo */
+                object-fit: cover;
+                /* Ajusta la imagen para que cubra el círculo */
+            }
 
-    /* Cambiar el color de los párrafos */
-    p.cards {
-      color: #8c8c8c;
-      /* Cambia #00FF00 al color que desees */
-    }
+            /* Cambiar el color del título de las cards */
+            h2.fw-normal {
+                color: #8338ec;
+                /* Cambia #FF0000 al color que desees */
+            }
 
+            /* Cambiar el color de los párrafos */
+            p.cards {
+                color: #8c8c8c;
+                /* Cambia #00FF00 al color que desees */
+            }
+
+
+
+        </style>
+
+
+
+    </head>
+
+    <body>
+
+        <header>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">HomebankingApp</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="#formulario">Registrarme</a>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar
+                                    Sesión</button>
+                            </li>
+                        </ul>
+                        <form class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+                            <button class="btn btn-outline-info" type="submit">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <!-- Botón para abrir el modal -->
+
+
+        <!-- Modal -->
+        <!-- Modal -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeLoginModal"></span>
+                <h5>Inicia sesión en tu cuenta</h5>
+                <form class="login" th:action="@{/usuario/procesar-login}" th:object="${usuarioLogin}" method="post">
+                    <!-- Nombre de usuario -->
+                    <input type="email" placeholder="Nombre de Usuario" th:field="*{email}" required>
+
+                    <!-- Contraseña -->
+                    <input type="password" placeholder="Contraseña" th:field="*{clave}" required>
+
+                    <input type="submit" value="Ingresar" class="custom-button">
+                </form>
+                <h6>Todavía no tienes una cuenta? <a href="#main-form">Click aquí</a></h6>
+            </div>
+        </div>
+
+
+
+        <main>
+
+            <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+                            aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item carousel-image active bg-img-1">
+                        <img src="" alt="freepik" class=img-fluid>
+                        Image by <a href="https://www.freepik.com/free-photo/side-view-adult-paying-with-card_41253176.htm#page=3&query=digital%20wallet&position=4&from_view=keyword&track=ais&uuid=e8f33bd3-a1bb-4f8d-80dd-b44be05514af">Freepik</a>
+                        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#777" />
+                        </svg>
+
+                        <div class="container">
+                            <div class="carousel-caption text-start">
+                                <h1>¡Bienvenido a la revolución financiera!</h1>
+                                <p>Con Homebanking App, el control de tu dinero está en tus manos. Gestiona tus finanzas de forma segura y
+                                    sencilla.</p>
+                                <p><a class="btn btn-lg btn-warning" href="#formulario">Registrarme ahora</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item carousel-image active bg-img-2">
+                        <img src="/Static.imagenes/persona-pagando-tecnologia-nfc-restaurante.jpg" alt="freepik" class=img-fluid>
+                        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#777" />
+                        </svg>
+
+                        <div class="container">
+                            <div class="carousel-caption">
+                                <h1>Haz que tu dinero trabaje para ti.</h1>
+                                <p>Con Homebanking App, puedes invertir, ahorrar y pagar de manera inteligente. Descubre todas las
+                                    posibilidades que te ofrecemos.</p>
+                                <p><a class="btn btn-lg btn-warning" href="#">Quiero recibir información.</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item carousel-image active bg-img-3">
+                        <img src="/Static.imagenes/pagar-facturas-escaneando-codigo-qr-es-mas-rapido-facil.jpg" alt="freepik"
+                             class=img-fluid>
+                        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#777" />
+                        </svg>
+
+                        <div class="container">
+                            <div class="carousel-caption text-end">
+                                <h1>La comodidad de llevar tu banco en tu bolsillo.</h1>
+                                <p>Homebanking App te permite realizar transferencias, pagar facturas y mucho más, en cualquier momento y
+                                    lugar.</p>
+                                <p><a class="btn btn-lg btn-warning" href="#">Explorá nuestros beneficios.</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+
+
+            <!-- Marketing messaging and featurettes
+          ================================================== -->
+            <!-- Wrap the rest of the page in another container to center all the content. -->
+
+            <div class="container marketing">
+
+                <!-- Three columns of text below the carousel -->
+                <div class="row">
+                    <div class="col-lg-4">
+
+
+                        <img src="/Static.imagenes/verduras.jpg" alt="Descripción de la imagen" class="imagen-circular">
+
+                        <h2 class="fw-normal">Todo en un solo lugar</h2>
+                        <p class="cards">Gestiona tu dinero en un solo lugar. Descubre la comodidad de nuestra billetera virtual.</p>
+                        <p><a class="btn btn-warning" href="#">Quiero saber más </a></p>
+                    </div><!-- /.col-lg-4 -->
+                    <div class="col-lg-4">
+
+                        <img src="/Static.imagenes/trending.jpg" alt="Descripción de la imagen" class="imagen-circular">
+                        <h2 class="fw-normal">Gestioná tus finanzas</h2>
+                        <p class="cards">Paga, ahorra e invierte de manera inteligente con nuestra aplicación de billetera.</p>
+                        <p><a class="btn btn-warning" href="#">Quiero saber más </a></p>
+                    </div><!-- /.col-lg-4 -->
+                    <div class="col-lg-4">
+                        <img src="/Static.imagenes/celubilletera.jpg" alt="Descripción de la imagen" class="imagen-circular">
+
+                        <h2 class="fw-normal">Seguro y Sencillo</h2>
+                        <p class="cards">Seguridad y simplicidad. Controla tus finanzas desde tu dispositivo móvil con facilidad.</p>
+                        <p><a class="btn btn-warning" href="#">Quiero saber más </a></p>
+                    </div><!-- /.col-lg-4 -->
+                </div><!-- /.row -->
+
+
+                <!-- START THE FEATURETTES -->
+
+                <hr class="featurette-divider">
+                <div class="row featurette">
+                    <div class="col-md-7">
+                        <h2 class="featurette-heading fw-normal lh-1">Potencia tus finanzas <span class="text-muted">Control
+                                absoluto</span></h2>
+                        <p class="lead">Nuestra plataforma te brinda el control absoluto sobre tus finanzas. Aumenta tu poder
+                            adquisitivo, ahorra inteligentemente y toma el camino hacia la independencia financiera. ¡Tu éxito está a
+                            solo un clic de distancia!</p>
+                    </div>
+                    <div class="col-md-5">
+                        <img src="/Static.imagenes/monedas.jpg" alt="Imagen de ejemplo" class="img-fluid">
+                    </div>
+                </div>
+
+            </div>
+
+
+            <hr class="featurette-divider">
+
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="featurette-heading fw-normal lh-1">Transacciones Seguras <span class="text-muted">Tu seguridad,
+                            nuestra prioridad</span></h2>
+                    <p class="lead">La seguridad es nuestra prioridad. Con tecnología de vanguardia y medidas de protección
+                        avanzadas, tus transacciones están resguardadas las 24/7. Opera con tranquilidad y confianza en cada
+                        movimiento financiero..</p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src="/Static.imagenes/personas.jpg" alt="Imagen de ejemplo" class="img-fluid">
+                </div>
+            </div>
+
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="featurette-heading fw-normal lh-1">Experiencia Intuitiva <span class="text-muted">Sencillez en cada
+                            acción</span></h2>
+                    <p class="lead">Simplificamos tus tareas financieras. Nuestra interfaz intuitiva y fácil de usar te permite
+                        realizar pagos, transferencias y más, sin complicaciones. Descubre la libertad de administrar tus finanzas
+                        de forma eficiente.</p>
+                </div>
+                <div class="col-md-5">
+                    <img src="/Static.imagenes/mujer.jpg" alt="Imagen de ejemplo" class="img-fluid">
+                </div>
+            </div>
+
+            <hr class="featurette-divider">
+
+            <!-- /END THE FEATURETTES -->
+
+            <!-- /FORMULARIO DE REGISTRO -->
+
+            <div class="main-container">
+                <div id="formulario" class="right">
+                    <form class="main-form" th:action="@{/usuario/registro}" th:object="${usuarioRegistro}" method="post">
+                        <h1 class="form-title">Registro</h1>
+                        <div class="mb-3">
+                            <label for="nombreRegistro" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombreRegistro" th:field="*{nombre}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="apellido" th:field="*{apellido}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dni" class="form-label">DNI</label>
+                            <input type="number" class="form-control" id="dni" th:field="*{DNI}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="emailregistro" th:field="*{email}" aria-describedby="emailHelp">
+                            <div id="emailHelp" class="form-text">Tus datos están protegidos</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="clave" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="claveunica" th:field="*{clave}">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1" th:field="*{quieroNotificaciones}">
+                            <label class="form-check-label" for="exampleCheck1">Quiero recibir notificaciones</label>
+                        </div>
+                        <button class="button-reg" id="btnRegistrar" type="submit">Registrarse</button>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- FOOTER -->
+            <footer class="banner">
+                <p class="float-end"><a href="#">Volver al Inicio</a></p>
+                <p> 2023 HomebankingApp, Inc. <a href="#">Privacidad</a> <a href="#">Terminos y
+                        Condiciones</a></p>
+
+                <p>Algunas imágenes utilizadas en esta aplicación son proporcionadas por Freepik.</p>
+                <p>Diseño por [Nombre del Autor] en Freepik.</p>
+                <p>Consulte la <a href="https://www.freepik.com/free-vector/online-bill-payment-via-mobile-phone-concept_35393113.htm#page=2&query=digital%20wallet&position=48&from_view=keyword&track=ais&uuid=e8f33bd3-a1bb-4f8d-80dd-b44be05514af">Image by upklyak</a> on Freepik" target="_blank">licencia de Freepik para más detalles.</p>
+            </footer>
+
+
+        </main>
+
+
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+               integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+       crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+        <!-- MODAL -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+            // Abrir el modal al hacer clic en el botón con el id "openLoginModal"
+            document.getElementById("openLoginModal").addEventListener("click", function () {
+            document.getElementById("loginModal").style.display = "block";
+            });
+
+            // Cerrar el modal al hacer clic en el botón con el id "closeLoginModal"
+            document.getElementById("closeLoginModal").addEventListener("click", function () {
+            document.getElementById("loginModal").style.display = "none";
+            });
+            });
+        </script>
+
+
+        <!-- CONEXIÓN con el BACK 
+        
+        <script>
+          document.querySelector('.main-form').addEventListener('submit', function(event) {
+             event.preventDefault(); // Evitar que el formulario se envíe por defecto
+             console.log('El formulario se ha enviado'); 
+   
+             const formData = new FormData(this); // Obtener los datos del formulario
+   
+             const backendUrl = 'http://localhost:8080'; // URL del backend
+             const headers = new Headers();
+             headers.append('Content-Type', 'application/json');
    
    
-  </style>
+             fetch(`${backendUrl}/administracionUsuario/registro`, {
+                 method: 'POST', // Método de la solicitud (POST en este caso)
+                 body: formData, // Enviar los datos del formulario en el cuerpo de la solicitud
+                 headers: headers,
+                 accept: 'application/json'
+               })
+             .then(response => {
+                 if (!response.ok) {
+                     throw new Error('La solicitud no se completó correctamente.');
+                 }
+                 return response.json(); // Parsear la respuesta JSON si es aplicable
+             })
+             .then(data => {
+                 // Manejar los datos de la respuesta del servidor aquí
+                 console.log(data);
+                 
+       if (data === "Registro exitoso") {
+           // Redirigir al usuario a principal.html después del registro exitoso
+           window.location.href = "/principal.html";
+       }
+             })
+             .catch(error => {
+                 // Manejar errores aquí
+                 console.error(error);
+             });
+         });
+         </script>
+        -->
 
-
-  <!-- Custom styles for this template -->
-  <link href="principal.css" rel="stylesheet">
-</head>
-
-<body>
-
-  <header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">HomebankingApp</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav me-auto mb-2 mb-md-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="#formulario">Registrarme</a>
-            </li>
-            <li class="nav-item">
-              <button class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar
-                Sesión</button>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-            <button class="btn btn-outline-info" type="submit">Buscar</button>
-          </form>
-        </div>
-      </div>
-    </nav>
-  </header>
-  <!-- Botón para abrir el modal -->
-
-
- <!-- Modal -->
-<!-- Modal -->
-<div id="loginModal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="closeLoginModal"></span>
-    <h5>Inicia sesión en tu cuenta</h5>
-    <form class="login" th:action="@{/usuario/login}" th:object="${usuarioLogin}" method="post">
-      <!-- Nombre de usuario -->
-      <input type="text" placeholder="Nombre de Usuario" th:field="*{nombre}" required>
-      <!-- Contraseña -->
-      <input type="password" placeholder="Contraseña" th:field="*{clave}" required>
-      
-      <input type="submit" value="Ingresar" class="custom-button">
-    </form>
-    <h6>Todavía no tienes una cuenta? <a href="#main-form">Click aquí</a></h6>
-  </div>
-</div>
-
-
-
-  <main>
-
-    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-          aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      </div>
-      <div class="carousel-inner">
-        <div class="carousel-item carousel-image active bg-img-1">
-            <img src="src/main/resources/imagenes/vista-lateral-adulto-pagando-tarjeta.jpg" alt="freepik" class=img-fluid>
-          <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <rect width="100%" height="100%" fill="#777" />
-          </svg>
-
-          <div class="container">
-            <div class="carousel-caption text-start">
-              <h1>¡Bienvenido a la revolución financiera!</h1>
-              <p>Con Homebanking App, el control de tu dinero está en tus manos. Gestiona tus finanzas de forma segura y
-                sencilla.</p>
-              <p><a class="btn btn-lg btn-warning" href="#formulario">Registrarme ahora</a></p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item carousel-image active bg-img-2">
-          <img src="/imagenes/persona-pagando-tecnologia-nfc-restaurante.jpg" alt="freepik" class=img-fluid>
-          <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <rect width="100%" height="100%" fill="#777" />
-          </svg>
-
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>Haz que tu dinero trabaje para ti.</h1>
-              <p>Con Homebanking App, puedes invertir, ahorrar y pagar de manera inteligente. Descubre todas las
-                posibilidades que te ofrecemos.</p>
-              <p><a class="btn btn-lg btn-warning" href="#">Quiero recibir información.</a></p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item carousel-image active bg-img-3">
-          <img src="/imagenes/pagar-facturas-escaneando-codigo-qr-es-mas-rapido-facil.jpg" alt="freepik"
-            class=img-fluid>
-          <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <rect width="100%" height="100%" fill="#777" />
-          </svg>
-
-          <div class="container">
-
-            <div class="carousel-caption text-end">
-              <h1>La comodidad de llevar tu banco en tu bolsillo.</h1>
-              <p>Homebanking App te permite realizar transferencias, pagar facturas y mucho más, en cualquier momento y
-                lugar.</p>
-              <p><a class="btn btn-lg btn-warning" href="#">Explorá nuestros beneficios.</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Siguiente</span>
-      </button>
-    </div>
-
-
-    <!-- Marketing messaging and featurettes
-  ================================================== -->
-    <!-- Wrap the rest of the page in another container to center all the content. -->
-
-    <div class="container marketing">
-
-      <!-- Three columns of text below the carousel -->
-      <div class="row">
-        <div class="col-lg-4">
-
-
-          <img src="/imagenes/verduras.jpg" alt="Descripción de la imagen" class="imagen-circular">
-
-          <h2 class="fw-normal">Todo en un solo lugar</h2>
-          <p class="cards">Gestiona tu dinero en un solo lugar. Descubre la comodidad de nuestra billetera virtual.</p>
-          <p><a class="btn btn-warning" href="#">Quiero saber más </a></p>
-        </div><!-- /.col-lg-4 -->
-        <div class="col-lg-4">
-
-          <img src="/imagenes/trending.jpg" alt="Descripción de la imagen" class="imagen-circular">
-          <h2 class="fw-normal">Gestioná tus finanzas</h2>
-          <p class="cards">Paga, ahorra e invierte de manera inteligente con nuestra aplicación de billetera.</p>
-          <p><a class="btn btn-warning" href="#">Quiero saber más </a></p>
-        </div><!-- /.col-lg-4 -->
-        <div class="col-lg-4">
-          <img src="/imagenes/celubilletera.jpg" alt="Descripción de la imagen" class="imagen-circular">
-
-          <h2 class="fw-normal">Seguro y Sencillo</h2>
-          <p class="cards">Seguridad y simplicidad. Controla tus finanzas desde tu dispositivo móvil con facilidad.</p>
-          <p><a class="btn btn-warning" href="#">Quiero saber más </a></p>
-        </div><!-- /.col-lg-4 -->
-      </div><!-- /.row -->
-
-
-      <!-- START THE FEATURETTES -->
-
-      <hr class="featurette-divider">
-      <div class="row featurette">
-        <div class="col-md-7">
-          <h2 class="featurette-heading fw-normal lh-1">Potencia tus finanzas <span class="text-muted">Control
-              absoluto</span></h2>
-          <p class="lead">Nuestra plataforma te brinda el control absoluto sobre tus finanzas. Aumenta tu poder
-            adquisitivo, ahorra inteligentemente y toma el camino hacia la independencia financiera. ¡Tu éxito está a
-            solo un clic de distancia!</p>
-        </div>
-        <div class="col-md-5">
-          <img src="/imagenes/monedas.jpg" alt="Imagen de ejemplo" class="img-fluid">
-        </div>
-      </div>
-
-    </div>
-   
-
-    <hr class="featurette-divider">
-
-    <div class="row featurette">
-      <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading fw-normal lh-1">Transacciones Seguras <span class="text-muted">Tu seguridad,
-            nuestra prioridad</span></h2>
-        <p class="lead">La seguridad es nuestra prioridad. Con tecnología de vanguardia y medidas de protección
-          avanzadas, tus transacciones están resguardadas las 24/7. Opera con tranquilidad y confianza en cada
-          movimiento financiero..</p>
-      </div>
-      <div class="col-md-5 order-md-1">
-        <img src="/imagenes/personas.jpg" alt="Imagen de ejemplo" class="img-fluid">
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-    <div class="row featurette">
-      <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">Experiencia Intuitiva <span class="text-muted">Sencillez en cada
-            acción</span></h2>
-        <p class="lead">Simplificamos tus tareas financieras. Nuestra interfaz intuitiva y fácil de usar te permite
-          realizar pagos, transferencias y más, sin complicaciones. Descubre la libertad de administrar tus finanzas
-          de forma eficiente.</p>
-      </div>
-      <div class="col-md-5">
-        <img src="/imagenes/mujer.jpg" alt="Imagen de ejemplo" class="img-fluid">
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <!-- /END THE FEATURETTES -->
-
-    <!-- /FORMULARIO DE REGISTRO -->
-
-   <div class="main-container">
-    <div id="formulario" class="right">
-        <form class="main-form" th:action="@{/usuario/registro}" th:object="${usuarioRegistro}" method="post">
-            <h1 class="form-title">Registro</h1>
-            <div class="mb-3">
-                <label for="nombreRegistro" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombreRegistro" th:field="*{nombre}" required>
-            </div>
-            <div class="mb-3">
-                <label for="apellido" class="form-label">Apellido</label>
-                <input type="text" class="form-control" id="apellido" th:field="*{apellido}" required>
-            </div>
-            <div class="mb-3">
-                <label for="dni" class="form-label">DNI</label>
-                <input type="number" class="form-control" id="dni" th:field="*{DNI}" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control" id="email" th:field="*{email}" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">Tus datos están protegidos</div>
-            </div>
-            <div class="mb-3">
-                <label for="clave" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="clave" th:field="*{clave}">
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1" th:field="*{quieroNotificaciones}">
-                <label class="form-check-label" for="exampleCheck1">Quiero recibir notificaciones</label>
-            </div>
-            <button class="button-reg" id="btnRegistrar" type="submit">Registrarse</button>
-        </form>
-    </div>
-</div>
-
-    
-    <!-- FOOTER -->
-    <footer class="banner">
-      <p class="float-end"><a href="#">Volver al Inicio</a></p>
-      <p>&copy; 2023 HomebankingApp, Inc. &middot; <a href="#">Privacidad</a> &middot; <a href="#">Terminos y
-          Condiciones</a></p>
-    </footer>
-  </main>
-   
- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
-
-    <!-- MODAL  -->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("openLoginModal").addEventListener("click", function () {
-          document.getElementById("loginModal").style.display = "block";
-      });
-  });
-  </script>
-  <script>document.getElementById("closeLoginModal").addEventListener("click", function () {
-    document.getElementById("loginModal").style.display = "none";
-  });</script>
-  
-     <!-- CONEXIÓN con el BACK 
-     
-     <script>
-       document.querySelector('.main-form').addEventListener('submit', function(event) {
-          event.preventDefault(); // Evitar que el formulario se envíe por defecto
-          console.log('El formulario se ha enviado'); 
-
-          const formData = new FormData(this); // Obtener los datos del formulario
-
-          const backendUrl = 'http://localhost:8080'; // URL del backend
-          const headers = new Headers();
-          headers.append('Content-Type', 'application/json');
-
-
-          fetch(`${backendUrl}/administracionUsuario/registro`, {
-              method: 'POST', // Método de la solicitud (POST en este caso)
-              body: formData, // Enviar los datos del formulario en el cuerpo de la solicitud
-              headers: headers,
-              accept: 'application/json'
-            })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('La solicitud no se completó correctamente.');
-              }
-              return response.json(); // Parsear la respuesta JSON si es aplicable
-          })
-          .then(data => {
-              // Manejar los datos de la respuesta del servidor aquí
-              console.log(data);
-              
-    if (data === "Registro exitoso") {
-        // Redirigir al usuario a principal.html después del registro exitoso
-        window.location.href = "/principal.html";
-    }
-          })
-          .catch(error => {
-              // Manejar errores aquí
-              console.error(error);
-          });
-      });
-      </script>
-     -->
-      
-</body>
+    </body>
 
 </html>
