@@ -1,5 +1,7 @@
 package com.example.Homebanking;
 
+import com.example.Homebanking.Servicios.UsuarioServicio;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,20 +12,24 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Seguridad extends WebSecurityConfigurerAdapter {
+    
+    @Autowired
+    public UsuarioServicio UsuarioServicio;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+       
         http.cors();
 
         http
                 .authorizeRequests()
                 .antMatchers("/administrador/*").hasRole("ADMINISTRADOR")
-                .antMatchers("/css/*", "/js/*", "/img/*", "/**")
+                .antMatchers("/css/*", "/js/*", "/imagenes/*", "/**")
                 .permitAll()
                 .and().formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/logincheck")
-                .usernameParameter("DNI")
+                .loginProcessingUrl("/usuario/logincheck")
+                .usernameParameter("email")
                 .passwordParameter("clave")
                 .defaultSuccessUrl("/index")
                 .permitAll()
@@ -37,7 +43,7 @@ public class Seguridad extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and().logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
+                .logoutSuccessUrl("/principal")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
                 .and().csrf().disable()

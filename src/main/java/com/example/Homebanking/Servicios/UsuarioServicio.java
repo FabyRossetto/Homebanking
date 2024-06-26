@@ -83,7 +83,7 @@ public class UsuarioServicio implements UserDetailsService {
             usuario.setFechaAlta(new Date());
             
 
-            if (usuario.getClave() == "ADMIN1234") {
+            if ("ADMIN1234".equals(clave)) {
                 usuario.setRol(Rol.ADMINISTRADOR);
             } else {
                 usuario.setRol(Rol.USUARIO);
@@ -307,15 +307,27 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     public Usuario autenticarUsuario(String email, String clave) throws Exception {
-        // Buscar el usuario por email en la base de datos
-        Usuario usuario = usuarioRepositorio.findByEmail(email);
+    // Buscar el usuario por email en la base de datos
+    Usuario usuario = usuarioRepositorio.findByEmail(email);
 
-        // Verificar si el usuario existe y si la clave coincide
-        if (usuario != null && usuario.getClave().equals(clave)) {
-            return usuario; // Usuario autenticado
-        } else {
-            throw new Exception("Error en el inicio de sesión. Por favor, verifica tus credenciales.");
-        }
+    // Verificar si el usuario existe
+    if (usuario == null) {
+        throw new Exception("El usuario con el correo electrónico " + email + " no está registrado.");
     }
 
+    // Verificar si la contraseña proporcionada coincide con la contraseña almacenada encriptada
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(clave, usuario.getClave())) {
+            throw new Exception("La contraseña proporcionada no coincide con la contraseña almacenada.");
+        }
+        
+     return usuario;
+    
 }
+}
+
+
+    
+
+
+    

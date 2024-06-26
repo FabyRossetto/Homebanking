@@ -200,8 +200,19 @@
             <div class="modal-content">
                 <span class="close" id="closeLoginModal"></span>
                 <h5>Inicia sesión en tu cuenta</h5>
-                <form class="login" th:action="@{/usuario/procesar-login}" th:object="${usuarioLogin}" method="post">
+
+                <!-- Mensajes de éxito y error -->
+                <div th:if="${mensajeExito}" class="alert alert-success">
+                    <p th:text="${mensajeExito}"></p>
+                </div>
+
+                <div th:if="${errorAutenticacion}" class="alert alert-danger">
+                    <p th:text="${errorAutenticacion}"></p>
+                </div>
+
+                <form class="login" th:action="@{/usuario/logincheck}" th:object="${usuarioLogin}" method="post">
                     <!-- Nombre de usuario -->
+
                     <input type="email" placeholder="Nombre de Usuario" th:field="*{email}" required>
 
                     <!-- Contraseña -->
@@ -209,9 +220,12 @@
 
                     <input type="submit" value="Ingresar" class="custom-button">
                 </form>
-                <h6>Todavía no tienes una cuenta? <a href="#main-form">Click aquí</a></h6>
+                <h6>Todavía no tienes una cuenta? <a href="#main-form">Click aquí</a></h6> 
+                <!-- Botón para abrir el modal -->
+        <button id="openLoginModal" style="display: none;"></button>
             </div>
         </div>
+
 
 
 
@@ -438,61 +452,94 @@
 
         <!-- MODAL -->
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-            // Abrir el modal al hacer clic en el botón con el id "openLoginModal"
-            document.getElementById("openLoginModal").addEventListener("click", function () {
-            document.getElementById("loginModal").style.display = "block";
-            });
+ // Define la función obtenerModelo
+    function obtenerModelo() {
+        // Lógica para obtener el modelo
+    }
+          document.addEventListener("DOMContentLoaded", function () {
+          // Define la función obtenerModelo
+    function obtenerModelo() {
+        // Lógica para obtener el modelo
+    }
+    var model = obtenerModelo(); // Obtener el objeto Model
+    
+    var openButton = document.getElementById("openLoginModal");
+    var closeButton = document.getElementById("closeLoginModal");
+    var loginModal = document.getElementById("loginModal");
 
-            // Cerrar el modal al hacer clic en el botón con el id "closeLoginModal"
-            document.getElementById("closeLoginModal").addEventListener("click", function () {
-            document.getElementById("loginModal").style.display = "none";
-            });
-            });
+    if (openButton && closeButton && loginModal) {
+        openButton.addEventListener("click", function () {
+            // Accede al objeto Model aquí
+            console.log(model);
+            loginModal.style.display = "block";
+        });
+
+        closeButton.addEventListener("click", function () {
+            // Accede al objeto Model aquí
+            console.log(model);
+            loginModal.style.display = "none";
+        });
+    } else {
+        console.error("Alguno de los elementos necesarios no se encontró en el DOM.");
+    }
+});
+
+
+
         </script>
 
 
         <!-- CONEXIÓN con el BACK 
-        
-        <script>
-          document.querySelector('.main-form').addEventListener('submit', function(event) {
-             event.preventDefault(); // Evitar que el formulario se envíe por defecto
-             console.log('El formulario se ha enviado'); 
-   
-             const formData = new FormData(this); // Obtener los datos del formulario
-   
-             const backendUrl = 'http://localhost:8080'; // URL del backend
-             const headers = new Headers();
-             headers.append('Content-Type', 'application/json');
-   
-   
-             fetch(`${backendUrl}/administracionUsuario/registro`, {
-                 method: 'POST', // Método de la solicitud (POST en este caso)
-                 body: formData, // Enviar los datos del formulario en el cuerpo de la solicitud
-                 headers: headers,
-                 accept: 'application/json'
-               })
-             .then(response => {
-                 if (!response.ok) {
-                     throw new Error('La solicitud no se completó correctamente.');
-                 }
-                 return response.json(); // Parsear la respuesta JSON si es aplicable
-             })
-             .then(data => {
-                 // Manejar los datos de la respuesta del servidor aquí
-                 console.log(data);
-                 
-       if (data === "Registro exitoso") {
-           // Redirigir al usuario a principal.html después del registro exitoso
-           window.location.href = "/principal.html";
-       }
-             })
-             .catch(error => {
-                 // Manejar errores aquí
-                 console.error(error);
-             });
-         });
-         </script>
+        <!--document.addEventListener("DOMContentLoaded", function () {
+           // Abrir el modal al hacer clic en el botón con el id "openLoginModal"
+           document.getElementById("openLoginModal").addEventListener("click", function () {
+           document.getElementById("loginModal").style.display = "block";
+           });
+
+           // Cerrar el modal al hacer clic en el botón con el id "closeLoginModal"
+           document.getElementById("closeLoginModal").addEventListener("click", function () {
+           document.getElementById("loginModal").style.display = "none";
+           });
+           }); 
+       <script>
+         document.querySelector('.main-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evitar que el formulario se envíe por defecto
+            console.log('El formulario se ha enviado'); 
+  
+            const formData = new FormData(this); // Obtener los datos del formulario
+  
+            const backendUrl = 'http://localhost:8080'; // URL del backend
+            const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+  
+  
+            fetch(`${backendUrl}/administracionUsuario/registro`, {
+                method: 'POST', // Método de la solicitud (POST en este caso)
+                body: formData, // Enviar los datos del formulario en el cuerpo de la solicitud
+                headers: headers,
+                accept: 'application/json'
+              })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('La solicitud no se completó correctamente.');
+                }
+                return response.json(); // Parsear la respuesta JSON si es aplicable
+            })
+            .then(data => {
+                // Manejar los datos de la respuesta del servidor aquí
+                console.log(data);
+                
+      if (data === "Registro exitoso") {
+          // Redirigir al usuario a principal.html después del registro exitoso
+          window.location.href = "/principal.html";
+      }
+            })
+            .catch(error => {
+                // Manejar errores aquí
+                console.error(error);
+            });
+        });
+        </script>
         -->
 
     </body>

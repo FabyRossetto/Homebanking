@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @CrossOrigin(origins = "null")
@@ -42,21 +45,34 @@ public class UsuarioControlador {
         return "principal";
     }
 
+//    @PostMapping("/registro")
+//    @ResponseBody //Anotamos el método con @ResponseBody para indicar que el valor de retorno del método debe escribirse directamente en la respuesta HTTP.
+//    public Object registrarUsuario(@ModelAttribute Usuario usuario) {
+//        System.out.println("Recibida solicitud de registro.");
+//
+//        boolean registroExitoso = intentarRegistro(usuario);
+//
+//        if (registroExitoso) {
+//            // Registro exitoso, redirigir a la página registro_exitoso.html
+//            return new RedirectView("/registro_exitoso.html");
+//        } else {
+//            // Si el registro falla, devolver un ResponseEntity con un estado HTTP 400 (Bad Request) u otro adecuado
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en el registro :C");
+//        }
+//    }
     @PostMapping("/registro")
-    public ResponseEntity<String> registrarUsuario(@ModelAttribute Usuario usuario) {
+    public Object registrarUsuario(@ModelAttribute Usuario usuario, Model model) {
         System.out.println("Recibida solicitud de registro.");
 
         boolean registroExitoso = intentarRegistro(usuario);
 
         if (registroExitoso) {
-            // Registro exitoso, devolver un ResponseEntity con estado HTTP 200 (OK)
-            return new ResponseEntity<>("Registro exitoso", HttpStatus.OK);
+            // Registro exitoso, redirigir a la página registro_exitoso.html
+            return "registro_exitoso";
         } else {
-            // Si el registro falla, puedes devolver un ResponseEntity con un estado HTTP 400 (Bad Request) u otro adecuado
-
-            return new ResponseEntity<>("Error en el registro :C", HttpStatus.BAD_REQUEST);
+            // Si el registro falla, devolver un ResponseEntity con un estado HTTP 400 (Bad Request) u otro adecuado
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en el registro :C");
         }
-
     }
 
     private boolean intentarRegistro(Usuario usuario) {
@@ -74,152 +90,51 @@ public class UsuarioControlador {
     @GetMapping("/login")
     public String mostrarPaginaLogin(Model model) {
         model.addAttribute("usuarioLogin", new Usuario());
-                    model.addAttribute("usuarioRegistro", new Usuario());
-
-
-        return "principal";
-    }
-
-    @PostMapping("/procesar-login")
-    public String procesarLogin(@ModelAttribute("usuarioLogin") UsuarioLogin usuarioLogin, BindingResult result, Model model) {
-        try {
-            // Intentar autenticar al usuario
-            Usuario usuarioAutenticado = uSer.autenticarUsuario(usuarioLogin.getEmail(), usuarioLogin.getClave());
-            
-
-            // Si no se lanzó una excepción, el usuario se autenticó con éxito
-            model.addAttribute("mensajeExito", "¡Inicio de sesión exitoso!");
-
-        } catch (Exception e) {
-            // Manejar la excepción de autenticación
-            model.addAttribute("errorAutenticacion", e.getMessage());
-
-        }
-        // Aquí puedes redirigir a una página específica o simplemente mostrar un mensaje en la misma página
         model.addAttribute("usuarioRegistro", new Usuario());
         return "principal";
     }
+
+    @PostMapping("/logincheck")
+    public String procesarLogin(@ModelAttribute("usuarioLogin") UsuarioLogin usuarioLogin, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            // Intentar autenticar al usuario
+            Usuario usuarioAutenticado = uSer.autenticarUsuario(usuarioLogin.getEmail(), usuarioLogin.getClave());
+
+            // Si no se lanzó una excepción, el usuario se autenticó con éxito
+            redirectAttributes.addFlashAttribute("mensajeExito", "¡Inicio de sesión exitoso!");
+            return "perfil";
+        } catch (Exception e) {
+            // Manejar la excepción de autenticación
+            model.addAttribute("errorAutenticacion", e.getMessage());
+            model.addAttribute("usuarioRegistro", new Usuario());
+            return "principal"; // Volver a la página de inicio de sesión en caso de error
+        }
+
+    }
+
+    @GetMapping("/perfil")
+    public String mostrarPerfil(Model model) {
+        // Lógica para preparar la vista de perfil
+        return "perfil"; // Asumiendo que tu vista de perfil se llama "perfil.html"
+    }
 }
 
-//    @PostMapping("/login")
-//    public String procesarLogin(@ModelAttribute Usuario usuario) {
-//        // Lógica de inicio de sesión aquí
-//        return "principal.html";
-//                //"redirect:/paginaDespuesDeLogin";
-//    }
-//mensaje / status/ no string/response entity
-//cambie el form a usuario en el script/
-//Este metodo le agrega a el usuario que le pasemos por parametro, una cuenta y tarjetas de debito y credito.
-//    @PostMapping("/cargarCuentayTarjetas")
-//    public String CargarCuentayTarjetas(ModelMap modelo,
-//            @RequestParam String Id,
-//            @RequestParam Double saldo,
-//            @RequestParam Integer clave) throws Exception {
-//        uSer.cargarTarjetasyCuenta(Id, saldo, clave);//es el IdUsuario
-//        return "se creo su cuenta y se cargaron sus tarjetas de debito y credito";
-//    }
-//
-//    //Modifica todos los datos del usuario
-//    @PutMapping("/modificarUsuario")
-//    public String ModificarUsuario(ModelMap modelo,
-//            @RequestParam String Id,
-//            @RequestParam String nombre,
-//            @RequestParam String apellido,
-//            @RequestParam String Email,
-//            @RequestParam String clave,
-//            @RequestParam String DNI) throws Exception {
+//    @PostMapping("/logincheck")
+//    public String procesarLogin(@ModelAttribute("usuarioLogin") UsuarioLogin usuarioLogin, Model model) {
 //        try {
-//            uSer.modificarDatosPersonales(Id, nombre, apellido, Email, clave, DNI);
-//
-//            modelo.put("exito", "usted ha modificado sus datos con exito");
-//            return "usted ha modificado sus datos con exito";
-//        } catch (Exception e) {
-//
-//            return e.getMessage();
-//        }
-//
-//    }
-//
-//    //En este metodo se cambia la contraseña,requiere un codigo que es enviado al email.
-//    @PutMapping("/modificarPass")
-//    public String CambiarContrasena(ModelMap modelo,
-//            @RequestParam Integer codigo,
-//            @RequestParam String claveNueva,
-//            @RequestParam String email) throws Exception {
-//        try {
-//            uSer.cambiarContraseña(codigo, claveNueva, email);
-//
-//            modelo.put("exito", "la contraseña ha sido modificada con exito");
-//            return "usted ha modificado su contraseña con exito";
-//        } catch (Exception e) {
-//
-//            return e.getMessage();
-//        }
-//
-//    }
-//
-//    //Da de baja el usuario
-//    @PatchMapping("/darDeBajaUsuario")
-//    public String DarDeBajaUsuario(ModelMap modelo,
-//            @RequestParam String Id) throws Exception {
-//        try {
-//            uSer.darBaja(Id);
-//
-//            modelo.put("exito", "usted fue dado de baja");
-//            return "el usuario ha sido dado de baja";
-//        } catch (Exception e) {
-//
-//            return e.getMessage();
-//        }
-//
-//    }
-//
-//    //Elimina al usuario con todos sus datos de la BD
-//    @DeleteMapping("/EliminarUsuario")
-//    public String BorrarUsuario(ModelMap modelo,
-//            @RequestParam String Id) throws Exception {
-//        try {
-//            uSer.EliminarUsuario(Id);
-//
-//            modelo.put("exito", "el usuario fue eliminado");
-//
-//            return "usted fue eliminado de la base de datos";
+//            // Intentar autenticar al usuario
+//            Usuario usuarioAutenticado = uSer.autenticarUsuario(usuarioLogin.getEmail(), usuarioLogin.getClave());
+//            
+//            // Si no se lanzó una excepción, el usuario se autenticó con éxito
+//            model.addAttribute("mensajeExito", "¡Inicio de sesión exitoso!");
 //
 //        } catch (Exception e) {
+//            // Manejar la excepción de autenticación
+//            model.addAttribute("errorAutenticacion", e.getMessage());
 //
-//            return e.getMessage();
 //        }
+//        // Acá puedo redirigir a una página específica o mostrar un mensaje en la misma página
+//        model.addAttribute("usuarioRegistro", new Usuario());
+//        return "perfil";
 //    }
-//
-//    //busca al usuario por DNI y lo trae con todos sus datos
-//    @GetMapping("/BuscarUsuarioPorDNI")
-//    public String BuscarUsuarioDNI(ModelMap modelo,
-//            @RequestParam String DNI
-//    ) {
-//        return "El usuario es :  " + uSer.BuscarUsuarioPorDNI(DNI);
-//    }
-//
-//    //Busca al usuario por Apellido y lo trae con todos sus datos
-//    @GetMapping("/BuscarUsuarioPorApellido")
-//    public String BuscarUsuarioPorApellido(ModelMap modelo,
-//            @RequestParam String Apellido
-//    ) {
-//        return "El usuario es :  " + uSer.BuscarUsuarioPorApellido(Apellido);
-//    }
-//
-//    //Busca al usuario por email y lo trae con todos sus datos
-//    @GetMapping("/BuscarUsuarioPorEmail")
-//    public String BuscarUsuarioPorEmail(ModelMap modelo,
-//            @RequestParam String email
-//    ) {
-//        return "El usuario es :  " + uSer.BucarUsuarioPorEmail(email);
-//    }
-//
-//    //Busca al usuario por la cuenta que le sea pasada por parametro
-//    @GetMapping("/BuscarUsuarioPorCuenta")
-//    public String BuscarUsuarioPorCuenta(ModelMap modelo,
-//            @RequestParam Long IdCuenta
-//    ) {
-//        return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
-//    }
-//}
+//} 
