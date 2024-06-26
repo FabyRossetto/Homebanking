@@ -12,40 +12,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
-@RequestMapping("/portal")
+@RequestMapping("")
 public class PortalControlador {
 
-    @GetMapping("/")
-    public String index() {
-        return "index.html";
-    }
 //    @GetMapping("")
-//  public ResponseEntity<Resource> index() throws IOException {
-//    Resource resource = new ClassPathResource("Templates/index.html"); 
-//    return ResponseEntity.ok()
-//            .contentLength(resource.contentLength())
-//            .contentType(MediaType.TEXT_HTML)
-//            .body(resource);
-//}
-//    @GetMapping("/login")
-//    public ResponseEntity<Resource> ingreso() throws IOException {
-//    Resource resource = new ClassPathResource("Templates/ingreso.html"); 
-//    return ResponseEntity.ok()
-//            .contentLength(resource.contentLength())
-//            .contentType(MediaType.TEXT_HTML)
-//            .body(resource);
-//}
-//    
-//    @PostMapping("/login")
-//    public ResponseEntity<String> ingreso(@RequestParam String email,@RequestParam String contrasena) {
-//       
-//        return ResponseEntity.ok("Datos recibidos: " + email + " y " + contrasena);
+//    public String index() {
+//        return "index.html";
 //    }
-//    @PostMapping("/registro")
-//    public ResponseEntity<String> registro(@RequestParam String nombre,@RequestParam String apellido,
-//          @RequestParam String dni,@RequestParam String email,@RequestParam String clave) {
-//       
-//        return ResponseEntity.ok("Datos recibidos: " + nombre + " y " + apellido);
-//    }
+    @GetMapping("")
+  public ResponseEntity<Resource> index() throws IOException {
+    Resource resource = new ClassPathResource("Templates/index.html"); 
+    return ResponseEntity.ok()
+            .contentLength(resource.contentLength())
+            .contentType(MediaType.TEXT_HTML)
+            .body(resource);
+}
+    @GetMapping("/login")
+    public ResponseEntity<Resource> ingreso() throws IOException {
+    Resource resource = new ClassPathResource("Templates/ingreso.html"); 
+    return ResponseEntity.ok()
+            .contentLength(resource.contentLength())
+            .contentType(MediaType.TEXT_HTML)
+            .body(resource);
+}
+    
+    @PostMapping("/login")
+    public ResponseEntity<String> ingreso(@RequestParam String email,@RequestParam String contrasena) {
+       
+        return ResponseEntity.ok("Datos recibidos: " + email + " y " + contrasena);
+    }
     }
      
+    
+    
+
+
