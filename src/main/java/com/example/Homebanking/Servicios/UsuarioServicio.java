@@ -148,12 +148,7 @@ public class UsuarioServicio implements UserDetailsService {
             throw new ErrorServicio("No se encontró o no se pudo modificar el usuario solicitado");
         }
     }
-    //este metodo le toca hacer a Giani
-//     public int enviar(String mail) throws ErrorServicio {
-//        int codigoDeRecuperacion = (int) (Math.random() * 9000 + 1);
-//        ns.enviar("Usted esta queriendo cambiar su contraseña de Homebanking", "Su código de recuperacion es " + codigoDeRecuperacion, mail);
-//        return codigoDeRecuperacion;
-//    }
+    
 
     //   Este código genera una nueva contraseña aleatoria, la encripta utilizando el algoritmo BCrypt, 
     //actualiza la propiedad clave del objeto usuario con la contraseña encriptada, guarda el objeto 
@@ -237,7 +232,15 @@ public class UsuarioServicio implements UserDetailsService {
         Usuario usuario = usuarioRepositorio.getById(IdUsuario);
 
         usuarioRepositorio.delete(usuario);
+       
     }
+    
+     public Usuario BuscarPorId(String Id){
+        Optional<Usuario> usuario=usuarioRepositorio.findById(Id);
+        Usuario user= usuario.get();
+        return user;
+    }
+ 
 
     public Usuario BuscarUsuarioPorDNI(String DNI) {
         Usuario usuario = usuarioRepositorio.findByDNI(DNI);
