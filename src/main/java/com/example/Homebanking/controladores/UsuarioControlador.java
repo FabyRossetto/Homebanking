@@ -45,21 +45,6 @@ public class UsuarioControlador {
         return "principal";
     }
 
-//    @PostMapping("/registro")
-//    @ResponseBody //Anotamos el método con @ResponseBody para indicar que el valor de retorno del método debe escribirse directamente en la respuesta HTTP.
-//    public Object registrarUsuario(@ModelAttribute Usuario usuario) {
-//        System.out.println("Recibida solicitud de registro.");
-//
-//        boolean registroExitoso = intentarRegistro(usuario);
-//
-//        if (registroExitoso) {
-//            // Registro exitoso, redirigir a la página registro_exitoso.html
-//            return new RedirectView("/registro_exitoso.html");
-//        } else {
-//            // Si el registro falla, devolver un ResponseEntity con un estado HTTP 400 (Bad Request) u otro adecuado
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en el registro :C");
-//        }
-//    }
     @PostMapping("/registro")
     public Object registrarUsuario(@ModelAttribute Usuario usuario, Model model) {
         System.out.println("Recibida solicitud de registro.");
@@ -119,22 +104,3 @@ public class UsuarioControlador {
     }
 }
 
-//    @PostMapping("/logincheck")
-//    public String procesarLogin(@ModelAttribute("usuarioLogin") UsuarioLogin usuarioLogin, Model model) {
-//        try {
-//            // Intentar autenticar al usuario
-//            Usuario usuarioAutenticado = uSer.autenticarUsuario(usuarioLogin.getEmail(), usuarioLogin.getClave());
-//            
-//            // Si no se lanzó una excepción, el usuario se autenticó con éxito
-//            model.addAttribute("mensajeExito", "¡Inicio de sesión exitoso!");
-//
-//        } catch (Exception e) {
-//            // Manejar la excepción de autenticación
-//            model.addAttribute("errorAutenticacion", e.getMessage());
-//
-//        }
-//        // Acá puedo redirigir a una página específica o mostrar un mensaje en la misma página
-//        model.addAttribute("usuarioRegistro", new Usuario());
-//        return "perfil";
-//    }
-//} 

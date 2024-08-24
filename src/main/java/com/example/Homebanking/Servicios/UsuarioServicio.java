@@ -81,20 +81,19 @@ public class UsuarioServicio implements UserDetailsService {
             usuario.setClave(claveEnc);//se guarda la clave encriptada en la base de datos
             usuario.setAlta(Boolean.TRUE);
             usuario.setFechaAlta(new Date());
-            
 
             if ("ADMIN1234".equals(clave)) {
                 usuario.setRol(Rol.ADMINISTRADOR);
             } else {
                 usuario.setRol(Rol.USUARIO);
             }
-             Usuario usuarioGuardado = usuarioRepositorio.save(usuario);
+            Usuario usuarioGuardado = usuarioRepositorio.save(usuario);
 
             // Delegar el envío de notificación a la clase NotificacionServicio
             notificacionServicio.enviar("¡Hola!Bienvenid@ a HomebankingApp. ¡Prepárate para una experiencia bancaria única y emocionante!", "Registro Exitoso", usuario.getEmail());
 
             return usuarioGuardado;
-           
+
         }
 
         return encontrar;
@@ -307,27 +306,21 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     public Usuario autenticarUsuario(String email, String clave) throws Exception {
-    // Buscar el usuario por email en la base de datos
-    Usuario usuario = usuarioRepositorio.findByEmail(email);
+        // Buscar el usuario por email en la base de datos
+        Usuario usuario = usuarioRepositorio.findByEmail(email);
 
-    // Verificar si el usuario existe
-    if (usuario == null) {
-        throw new Exception("El usuario con el correo electrónico " + email + " no está registrado.");
-    }
+        // Verificar si el usuario existe
+        if (usuario == null) {
+            throw new Exception("El usuario con el correo electrónico " + email + " no está registrado.");
+        }
 
-    // Verificar si la contraseña proporcionada coincide con la contraseña almacenada encriptada
+        // Verificar si la contraseña proporcionada coincide con la contraseña almacenada encriptada
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (!passwordEncoder.matches(clave, usuario.getClave())) {
             throw new Exception("La contraseña proporcionada no coincide con la contraseña almacenada.");
         }
-        
-     return usuario;
-    
+
+        return usuario;
+
+    }
 }
-}
-
-
-    
-
-
-    
