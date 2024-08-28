@@ -1,62 +1,40 @@
-
 package com.example.Homebanking.controladores;
 
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Errores.ErrorServicio;
 import java.io.IOException;
-
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author Fabi
- */
-@RestController
-@RequestMapping("/usuario")
+@Controller
+@CrossOrigin(origins = "null")
+@RequestMapping("/usu")
 public class UsuarioControlador {
 
     @Autowired
     com.example.Homebanking.Servicios.UsuarioServicio uSer;
 
-//    @PostMapping("/logincheck")//retorna un 200
-//    public ResponseEntity<String> loginCheck(@RequestBody Map<String, String> loginData, HttpSession session) {
-//        String email = loginData.get("email");
-//        String clave = loginData.get("clave");
-//
-//        Usuario usuario = uSer.BucarUsuarioPorEmail(email);
-//
-//        if (usuario != null && usuario.getClave().equals(clave)) {
-//            session.setAttribute("usuariosession", usuario);
-//            // Las credenciales son válidas
-//            return ResponseEntity.status(HttpStatus.OK).build();
-//        } else {
-//            // Las credenciales son inválidas
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//    }
-
-    @GetMapping("/perfil")// me devuelve el string
+    @GetMapping("/perfil")
     public String perfilUsuario(ModelMap model, HttpSession session) {
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
         if (usuarioLogueado == null) {
-            return "redirect:/login";
+            return "redirect:/usu/perfil";
         } else {
             model.addAttribute("usuario", usuarioLogueado);
-            return "perfil";
+            return "principal";
         }
-
     }
 
     //Este metodo registra un usuario con sus datos basicos.
@@ -88,8 +66,7 @@ public class UsuarioControlador {
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
         if (uSer.BuscarPorId(id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())) {
             modelo.addAttribute("usuario", uSer.BuscarPorId(id));
-           
-           
+
             return "modificarDatos";
         } else {
             return "redirect:/login";
@@ -107,7 +84,7 @@ public class UsuarioControlador {
             throw new ErrorServicio("No puedes modificar este perfil");
         }
 
-        return "redirect:/usuario/perfil";
+        return "redirect:/usu/perfilusuario";
     }
 
     //En este metodo se cambia la contraseña,requiere un codigo que es enviado al email.
@@ -131,9 +108,9 @@ public class UsuarioControlador {
         try {
             uSer.darBaja(id);
 
-           session.setAttribute("usuariosession", uSer.BuscarPorId(id));
+            session.setAttribute("usuariosession", uSer.BuscarPorId(id));
 
-        return "redirect:/login";
+            return "redirect:/login";
         } catch (Exception e) {
 
             return e.getMessage();

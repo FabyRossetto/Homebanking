@@ -28,19 +28,19 @@ public class Cuenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long Id;
+    private Long Id;
 
-    Boolean Alta = Boolean.TRUE;
+    private Boolean Alta = Boolean.TRUE;
 
     //saldoActual=saldo+deposito
-    Double Saldo;
-    Double saldoActual;
+    private Double Saldo;
+    private Double saldoActual;
 
-    Double deposito = 0.00;
-    Double extraccion = 0.00;
+    private Double deposito = 0.00;
+    private Double extraccion = 0.00;
     
     @Temporal(TemporalType.TIMESTAMP)   
-    Date fecha;
+    private Date fechaAlta;
 
 //    @OneToMany
 //    Transferencia transferencia;
@@ -48,6 +48,104 @@ public class Cuenta {
 //    @OneToOne
 //    Usuario usuario;
 //  
+
+    /**
+     * @return the Id
+     */
+    public Long getId() {
+        return Id;
+    }
+
+    /**
+     * @param Id the Id to set
+     */
+    public void setId(Long Id) {
+        this.Id = Id;
+    }
+
+    /**
+     * @return the Alta
+     */
+    public Boolean getAlta() {
+        return Alta;
+    }
+
+    /**
+     * @param Alta the Alta to set
+     */
+    public void setAlta(Boolean Alta) {
+        this.Alta = Alta;
+    }
+
+    /**
+     * @return the Saldo
+     */
+    public Double getSaldo() {
+        return Saldo;
+    }
+
+    /**
+     * @param Saldo the Saldo to set
+     */
+    public void setSaldo(Double Saldo) {
+        this.Saldo = Saldo;
+    }
+
+    /**
+     * @return the saldoActual
+     */
+    public Double getSaldoActual() {
+        return saldoActual;
+    }
+
+    /**
+     * @param saldoActual the saldoActual to set
+     */
+    public void setSaldoActual(Double saldoActual) {
+        this.saldoActual = saldoActual;
+    }
+
+    /**
+     * @return the deposito
+     */
+    public Double getDeposito() {
+        return deposito;
+    }
+
+    /**
+     * @param deposito the deposito to set
+     */
+    public void setDeposito(Double deposito) {
+        this.deposito = deposito;
+    }
+
+    /**
+     * @return the extraccion
+     */
+    public Double getExtraccion() {
+        return extraccion;
+    }
+
+    /**
+     * @param extraccion the extraccion to set
+     */
+    public void setExtraccion(Double extraccion) {
+        this.extraccion = extraccion;
+    }
+
+    /**
+     * @return the fechaAlta
+     */
+    public Date getFechaAlta() {
+        return fechaAlta;
+    }
+
+    /**
+     * @param fechaAlta the fechaAlta to set
+     */
+    public void setFechaAlta(Date fechaAlta) {
+        this.fechaAlta = fechaAlta;
+    }
     
     
 }

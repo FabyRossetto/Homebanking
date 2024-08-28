@@ -6,6 +6,7 @@ import com.example.Homebanking.Errores.ErrorServicio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import com.example.Homebanking.Servicios.UsuarioServicio;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class RegistroYLogueoControlador {
     @Autowired
     private UsuarioServicio uSer;
     @Autowired
-    private UsuarioRepositorio usuarioRepo;
+    private UsuarioRepositorio usuarioRepositorio;
 
     @GetMapping("/mostrar")
     public String mostrarPagina(Model model) {
@@ -80,14 +81,17 @@ public class RegistroYLogueoControlador {
     }
 
     @PostMapping("/logincheck")
-    public String procesarLogin(@ModelAttribute("usuarioLogin") UsuarioLogin usuarioLogin, Model model, RedirectAttributes redirectAttributes) {
+    public String procesarLogin(@ModelAttribute("usuarioLogin") UsuarioLogin usuarioLogin, Model model, RedirectAttributes redirectAttributes, HttpSession session) {
         try {
             // Intentar autenticar al usuario
             Usuario usuarioAutenticado = uSer.autenticarUsuario(usuarioLogin.getEmail(), usuarioLogin.getClave());
-
+            // Guardar el usuario en la sesión
+            session.setAttribute("usuariosession", usuarioAutenticado);
             // Si no se lanzó una excepción, el usuario se autenticó con éxito
             redirectAttributes.addFlashAttribute("mensajeExito", "¡Inicio de sesión exitoso!");
-            return "perfil";
+            //  return "perfil";
+            // Redirigir al perfil
+            return "redirect:/usuario/perfil";
         } catch (Exception e) {
             // Manejar la excepción de autenticación
             model.addAttribute("errorAutenticacion", e.getMessage());
@@ -98,9 +102,18 @@ public class RegistroYLogueoControlador {
     }
 
     @GetMapping("/perfil")
-    public String mostrarPerfil(Model model) {
-        // Lógica para preparar la vista de perfil
-        return "perfil"; // Asumiendo que tu vista de perfil se llama "perfil.html"
+    public String mostrarPerfil(Model model,HttpSession session) {
+        Usuario usuarioAutenticado = (Usuario) session.getAttribute("usuariosession");
+       
+         //Chequear si el usuario está autenticado
+    if (usuarioAutenticado != null) {
+        // Pasar el usuario al modelo
+        model.addAttribute("usuario", usuarioAutenticado);
+    } else {
+        // Redirigir a la página de inicio de sesión si no hay un usuario en la sesión
+        return "redirect:/usuario/login";
+    }
+
+    return "perfil"; 
     }
 }
-

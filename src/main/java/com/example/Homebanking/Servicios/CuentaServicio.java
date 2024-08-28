@@ -27,24 +27,7 @@ public class CuentaServicio {
     @Autowired
     private TransferenciaRepositorio transferenciaRepositorio;
 
-    //el error se debe a que no tengo creado los repo de usuario y transfernecia 
-    //GUARDAR UNA CUENTA: CREACIÓN (necesito transferencia para crearlo?)
-//    @Transactional
-//    public Cuenta guardar(Long Id, Usuario usuario, Double saldo, Boolean alta) throws Excepcion {
-//
-//        //SETEO DE ATRIBUTOS
-//        Cuenta cuenta = new Cuenta();
-//        cuenta.setUsuario(usuario);
-//        cuenta.setSaldo(Double.NaN);
-//        cuenta.setAlta(alta);
-//        // cuenta.setFecha(fecha);
-//        cuenta.setId(Id);
-//
-//        //cuenta.setTransferencia(transferencia);
-//        //PERSISTENCIA DEL OBJETO
-//        return cuentaRepositorio.save(cuenta);
-//
-//    }
+    
     @Transactional //saco el IdUsuario
     public Cuenta guardar(Long Id, Double saldo) throws Excepcion {
         //Optional<Usuario> usu=usuarioRepo.findById(Idusuario);
@@ -55,7 +38,7 @@ public class CuentaServicio {
         // cuenta.setUsuario(usuario);
         cuenta.setSaldo(saldo);
         cuenta.setAlta(Boolean.TRUE);
-        cuenta.setFecha(new Date());
+        cuenta.setFechaAlta(new Date());
         cuenta.setId(Id);
 
         return cuentaRepositorio.save(cuenta);
@@ -76,7 +59,7 @@ public class CuentaServicio {
         
         cuenta.setSaldo(saldo);
         cuenta.setAlta(Boolean.TRUE);
-        cuenta.setFecha(new Date());
+        cuenta.setFechaAlta(new Date());
         cuentaRepositorio.save(cuenta);
         usuario.setCuenta(cuenta);
         usuarioRepo.save(usuario);
@@ -125,7 +108,7 @@ public class CuentaServicio {
         if (respuesta.isPresent()) {
             Cuenta cuenta = respuesta.get();
             cuenta.setSaldoActual(cuenta.getSaldo() + deposito);
-            cuenta.setFecha(new Date());
+            cuenta.setFechaAlta(new Date());
             
             cuentaRepositorio.save(cuenta);
 
@@ -141,7 +124,7 @@ public class CuentaServicio {
         if (respuesta.isPresent()) {
             Cuenta cuenta = respuesta.get();
             cuenta.setSaldoActual(cuenta.getSaldo() - extraccion);
-            cuenta.setFecha(new Date());
+            cuenta.setFechaAlta(new Date());
 
             cuentaRepositorio.save(cuenta);
 
