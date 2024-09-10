@@ -84,7 +84,7 @@ public class UsuarioControlador {
             throw new ErrorServicio("No puedes modificar este perfil");
         }
 
-        return "redirect:/usu/perfilusuario";
+        return "redirect:/usu/perfil";
     }
 
     //En este metodo se cambia la contraseña,requiere un codigo que es enviado al email.
@@ -154,4 +154,23 @@ public class UsuarioControlador {
     public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long IdCuenta) {
         return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
     }
+    //mapeo la vista principal 
+     @GetMapping("/principal")
+    public String mostrarPaginaPrincipal() {
+        return "principal";
+    }
+    
+    //mapeo la pàgina modificar datos del usuario
+    @GetMapping("/modificardatos")
+    public String mostrarModificarDatos() {
+        return "modificardatos";
+    }
+    
+    //mapeo la vista tarjetas
+     @GetMapping("/tarjetas")
+    public String mostrarPaginaTarjetas() {
+        return "tarjetas";
+    }
+    
+    
 }

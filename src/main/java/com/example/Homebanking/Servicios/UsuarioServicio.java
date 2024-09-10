@@ -259,8 +259,7 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     public Usuario BuscarPorCuenta(Long IdCuenta) {
-
-        Usuario usuario = usuarioRepositorio.findByCuenta(IdCuenta);
+        Usuario usuario = usuarioRepositorio.findByIdWithCuenta(IdCuenta);
         return usuario;
     }
 
