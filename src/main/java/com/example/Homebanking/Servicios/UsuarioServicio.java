@@ -11,6 +11,7 @@ import com.example.Homebanking.Enumeraciones.Rol;
 import static com.example.Homebanking.Enumeraciones.Rol.USUARIO;
 import com.example.Homebanking.Errores.ErrorServicio;
 import com.example.Homebanking.Errores.Excepcion;
+import com.example.Homebanking.Repositorios.CuentaRepositorio;
 import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -41,6 +42,10 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
+    
+     @Autowired
+    private CuentaRepositorio cuentaRepositorio;
+    
 
     @Autowired
     CuentaServicio cuentaSer;
@@ -101,23 +106,23 @@ public class UsuarioServicio implements UserDetailsService {
 
     //se le agregan al usuario la cuenta y las tarjetas de debito y credito
     @Transactional
-    public void cargarTarjetasyCuenta(String IdUsuario, Double saldoCuenta, Integer clave) throws Excepcion, Exception {
+    public void cargarTarjetasyCuenta(String idUsuario, Double saldo, Integer clave) throws Excepcion, Exception {
 
-        Optional<Usuario> usuario = usuarioRepositorio.findById(IdUsuario);
+        Optional<Usuario> usuario = usuarioRepositorio.findById(idUsuario);
 
         if (usuario.isPresent()) {
             Usuario usu = usuario.get();
 
             if (usu.getRol() == USUARIO) {
 
-                Cuenta cuen = cuentaSer.guardar(IdUsuario, saldoCuenta);
+                Cuenta cuen = cuentaSer.guardar(Long.MIN_VALUE, saldo);
                 usu.setCuenta(cuen);
 
-                TarjetaSuperClass debito = tarjetaDebito.CrearTarjeta(IdUsuario, clave);
+                TarjetaSuperClass debito = tarjetaDebito.CrearTarjeta(idUsuario, clave);
 
                 usu.setTarjetaDebito(debito);
 
-                TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(IdUsuario, clave);
+                TarjetaSuperClass credito = tarjetaCredito.CrearTarjeta(idUsuario, clave);
 
                 usu.setTarjetaCredito(credito);
             }
@@ -126,12 +131,34 @@ public class UsuarioServicio implements UserDetailsService {
         }
 
     }
+@Transactional //Funciona Perfecto
+    public Cuenta guardar(String idUser, Double saldo) throws Excepcion {
+        Optional<Usuario> usu=usuarioRepositorio.findById(idUser);
+         Usuario usuario= usu.get();
+          if(usuario.getCuenta()==null){
+        //SETEO DE ATRIBUTOS
+        Cuenta cuenta = new Cuenta();
+        
+        cuenta.setSaldo(saldo);
+        cuenta.setAlta(Boolean.TRUE);
+        cuenta.setFechaAlta(new Date());
+        cuentaRepositorio.save(cuenta);
+        usuario.setCuenta(cuenta);
+        usuarioRepositorio.save(usuario);
 
+        return cuenta;
+        
+//        notificacionServicio.enviar("Gracias por elegirnos", "HomeBanking", mail); deberia ir en usuario no acá
+
+    }else{
+            return usuario.getCuenta();
+    }
+    }
     //se modifican los datos personales del usuario. Para modificar tarjetas y cuenta tienen sus propios metodos
-    public void modificarDatosPersonales(String IdUsuario, String nombre, String apellido, String Email, String clave, String DNI) throws ErrorServicio, Exception {
+    public void modificarDatosPersonales(String idUsuario, String nombre, String apellido, String Email, String clave, String DNI) throws ErrorServicio, Exception {
         validar(nombre, apellido, Email, clave, DNI);
 
-        Optional<Usuario> usuario = usuarioRepositorio.findById(IdUsuario);
+        Optional<Usuario> usuario = usuarioRepositorio.findById(idUsuario);
 
         if (usuario.isPresent()) {
             Usuario usu = usuario.get();
@@ -215,8 +242,8 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     //se da de baja al usuario,por lo que tambien se da de baja su cuenta y las tarjetas de credito y debito,y me retorna la fecha de la baja 
-    public Date darBaja(String Id) throws ErrorServicio {//funciona bien
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(Id);
+    public Date darBaja(String idUsuario) throws ErrorServicio {//funciona bien
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(idUsuario);
         Date fechaBaja = new Date();
         if (respuesta.isPresent()) {
             Usuario usuario = respuesta.get();
@@ -227,16 +254,16 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     //se elimina al usuario, asi como la cuenta y sus tarjetas de debito y credito
-    public void EliminarUsuario(String IdUsuario) throws Exception {
+    public void EliminarUsuario(String idUsuario) throws Exception {
 
-        Usuario usuario = usuarioRepositorio.getById(IdUsuario);
+        Usuario usuario = usuarioRepositorio.getById(idUsuario);
 
         usuarioRepositorio.delete(usuario);
        
     }
     
-     public Usuario BuscarPorId(String Id){
-        Optional<Usuario> usuario=usuarioRepositorio.findById(Id);
+     public Usuario BuscarPorId(String idUsuario){
+        Optional<Usuario> usuario=usuarioRepositorio.findById(idUsuario);
         Usuario user= usuario.get();
         return user;
     }
@@ -258,8 +285,8 @@ public class UsuarioServicio implements UserDetailsService {
         return usuario;
     }
 
-    public Usuario BuscarPorCuenta(Long IdCuenta) {
-        Usuario usuario = usuarioRepositorio.findByIdWithCuenta(IdCuenta);
+    public Usuario BuscarPorCuenta( Long idCuenta) {
+        Usuario usuario = usuarioRepositorio.findByCuentaId(idCuenta);
         return usuario;
     }
 

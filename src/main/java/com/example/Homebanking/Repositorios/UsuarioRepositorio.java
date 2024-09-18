@@ -18,8 +18,11 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, String> {
     @Query("SELECT u from Usuario u WHERE u.email= :email")
     public Usuario findByEmail(@Param("email") String email);
 
-    @Query("SELECT u FROM Usuario u LEFT JOIN FETCH u.Cuenta WHERE u.IdUsuario = :id")
-    public Usuario findByIdWithCuenta(@Param("id") Long Id);
+    
+@Query("SELECT u FROM Usuario u LEFT JOIN FETCH u.Cuenta c WHERE c.idCuenta = :idCuenta")
+public Usuario findByCuentaId(@Param("idCuenta") Long idCuenta);
+
+
 
 //    @Query("SELECT u from Usuario u WHERE cuenta_id = cuenta_id")
 //    public Usuario findByCuenta(@Param("cuenta_id") Long IdCuenta);

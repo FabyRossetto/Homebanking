@@ -49,9 +49,9 @@ public class CuentaControlador {
     }
 
     @PostMapping("/guardarCuenta")
-    public String guardarCuenta(@RequestParam String Id, @RequestParam Double saldo, ModelMap modelo) throws Exception {
+    public String guardarCuenta(@RequestParam Long idCuenta, @RequestParam Double saldo, ModelMap modelo) throws Exception {
         try {
-            cuentaservicio.guardar(Id, saldo);
+            cuentaservicio.guardar(idCuenta, saldo);
             modelo.put("Gracias por elegirnos", ("Cuenta dada de alta con éxito"));
         } catch (Exception e) {
             e.getMessage();
@@ -64,10 +64,10 @@ public class CuentaControlador {
     
 
     @PostMapping("/ingresarDinero")
-    public String ingresarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Long Id, @RequestParam Double deposito, ModelMap modelo) throws Exception {
-        Cuenta cuenta = cuentaRepositorio.getById(Id);
+    public String ingresarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Long idCuenta, @RequestParam Double deposito, ModelMap modelo) throws Exception {
+        Cuenta cuenta = cuentaRepositorio.getById(idCuenta);
         try {
-            cuentaservicio.ingresarDinero(saldoActual, saldo, deposito, Id);
+            cuentaservicio.ingresarDinero(saldoActual, saldo, deposito, idCuenta);
             modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
         } catch (Exception e) {
             e.getMessage();
@@ -78,11 +78,11 @@ public class CuentaControlador {
 
 
     @PostMapping("/retirarDinero")
-    public String retirarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Double extraccion, @RequestParam Long Id, ModelMap modelo) throws Exception {
-        Cuenta cuenta = cuentaRepositorio.getById(Id);
+    public String retirarDinero(@RequestParam Double saldoActual, @RequestParam Double saldo, @RequestParam Double extraccion, @RequestParam Long idCuenta, ModelMap modelo) throws Exception {
+        Cuenta cuenta = cuentaRepositorio.getById(idCuenta);
 
         try {
-            cuentaservicio.ingresarDinero(saldoActual, saldo, extraccion, Id);
+            cuentaservicio.ingresarDinero(saldoActual, saldo, extraccion, idCuenta);
             modelo.put("Operación realizada con éxito", ("Gracias por utilizar nuestros servicios"));
         } catch (Exception e) {
             e.getMessage();
@@ -94,9 +94,9 @@ public class CuentaControlador {
     }
 
     @DeleteMapping("/eliminarCuenta")
-    public String eliminarCuenta(@RequestParam Long Id, ModelMap modelo) throws Exception {
+    public String eliminarCuenta(@RequestParam Long idCuenta, ModelMap modelo) throws Exception {
         try {
-             cuentaservicio.borrarPorId(Id);
+             cuentaservicio.borrarPorId(idCuenta);
               modelo.put("Gracias por utilizar nuestros servicios", "Cuenta eliminada");
         } catch (Exception e) {
             modelo.put("Error","No se puede eliminar la cuenta");
@@ -109,8 +109,3 @@ public class CuentaControlador {
      }
 
 
-//}
-//
-//
-//
-////alta?

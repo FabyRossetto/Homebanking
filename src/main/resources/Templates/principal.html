@@ -15,140 +15,140 @@
 
 
 
-        <style>
-            .bd-placeholder-img {
-                font-size: 1.125rem;
-                text-anchor: middle;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                user-select: none;
-            }
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
 
-            @media (min-width: 768px) {
-                .bd-placeholder-img-lg {
-                    font-size: 3.5rem;
-                }
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
             }
+        }
 
-            .b-example-divider {
-                height: 3rem;
-                background-color: rgba(0, 0, 0, .1);
-                border: solid rgba(0, 0, 0, .15);
-                border-width: 1px 0;
-                box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-            }
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
 
-            .b-example-vr {
-                flex-shrink: 0;
-                width: 1.5rem;
-                height: 100vh;
-            }
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
 
-            .bi {
-                vertical-align: -.125em;
-                fill: currentColor;
-            }
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
 
-            .navbar .navbar-brand {
-                font-weight: bold;
-                font-family: BlinkMacSystemFont;
-            }
+        .navbar .navbar-brand {
+            font-weight: bold;
+            font-family: BlinkMacSystemFont;
+        }
 
-            .navbar {
-                background: linear-gradient(90deg, #FF00FF, #8A2BE2);
-                padding: 10px 0;
-            }
+        .navbar {
+            background: linear-gradient(90deg, #FF00FF, #8A2BE2);
+            padding: 10px 0;
+        }
 
-            .navbar a {
-                float: left;
-                display: block;
-                color: white;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                vertical-align: text-bottom;
-            }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            vertical-align: text-bottom;
+        }
 
-            .navbar a:hover {
-                background-color: #ffbe0b;
-                color: rgb(252, 248, 248);
-                border-radius: 10px;
-            }
+        .navbar a:hover {
+            background-color: #ffbe0b;
+            color: rgb(252, 248, 248);
+            border-radius: 10px;
+        }
 
 
 
-            .nav-scroller {
-                position: relative;
-                z-index: 2;
-                height: 2.75rem;
-                overflow-y: hidden;
-            }
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
 
-            .nav-scroller .nav {
-                display: flex;
-                flex-wrap: nowrap;
-                padding-bottom: 1rem;
-                margin-top: -1px;
-                overflow-x: auto;
-                text-align: center;
-                white-space: nowrap;
-                -webkit-overflow-scrolling: touch;
-            }
-            /* Estilos para el botón "Iniciar Sesión" en el modal */
-            .close{
-                margin-left: auto;
-            }
-            .modal h5{
-                font-family: Arial, Helvetica, sans-serif, Courier, monospace;
-                color:#8c8c8c;
-            }
-            .modal h6{
-                font-family: Arial, Helvetica, sans-serif, Courier, monospace;
-                color:#8c8c8c
-            }
-            .nav-link.btn.btn-link:hover {
-                background:#ffbe0b;
-                color: #ffffff;
-                text-align: right;
-                padding: 14px 16px;
-                text-decoration: none;
-                border: none;
-                border-radius: 10px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-                vertical-align: middle;
-                /* Alineación vertical al centro */
-                /* Efecto de transición al pasar el mouse */
-            }
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        /* Estilos para el botón "Iniciar Sesión" en el modal */
+        .close{
+            margin-left: auto;
+        }
+        .modal h5{
+            font-family: Arial, Helvetica, sans-serif, Courier, monospace;
+            color:#8c8c8c;
+        }
+        .modal h6{
+            font-family: Arial, Helvetica, sans-serif, Courier, monospace;
+            color:#8c8c8c
+        }
+        .nav-link.btn.btn-link:hover {
+            background:#ffbe0b;
+            color: #ffffff;
+            text-align: right;
+            padding: 14px 16px;
+            text-decoration: none;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            vertical-align: middle;
+            /* Alineación vertical al centro */
+            /* Efecto de transición al pasar el mouse */
+        }
 
-            /* Cambia el color de fondo al pasar el cursor sobre el botón */
-            .custom-button:hover {
-                background-color: #ffbe0b; /* Amarillo vibrante más claro */
-            }
+        /* Cambia el color de fondo al pasar el cursor sobre el botón */
+        .custom-button:hover {
+            background-color: #ffbe0b; /* Amarillo vibrante más claro */
+        }
 
-            .imagen-circular {
-                width: 140px;
-                /* Establece el ancho deseado para la imagen */
-                height: 140px;
-                /* Establece la altura deseada para la imagen */
-                border-radius: 50%;
-                /* Redondea las esquinas al 50% para hacer un círculo */
-                object-fit: cover;
-                /* Ajusta la imagen para que cubra el círculo */
-            }
+        .imagen-circular {
+            width: 140px;
+            /* Establece el ancho deseado para la imagen */
+            height: 140px;
+            /* Establece la altura deseada para la imagen */
+            border-radius: 50%;
+            /* Redondea las esquinas al 50% para hacer un círculo */
+            object-fit: cover;
+            /* Ajusta la imagen para que cubra el círculo */
+        }
 
-            /* Cambiar el color del título de las cards */
-            h2.fw-normal {
-                color: #8338ec;
-                /* Cambia #FF0000 al color que desees */
-            }
+        /* Cambiar el color del título de las cards */
+        h2.fw-normal {
+            color: #8338ec;
+            /* Cambia #FF0000 al color que desees */
+        }
 
-            /* Cambiar el color de los párrafos */
-            p.cards {
-                color: #8c8c8c;
-                /* Cambia #00FF00 al color que desees */
-            }
-        </style>
+        /* Cambiar el color de los párrafos */
+        p.cards {
+            color: #8c8c8c;
+            /* Cambia #00FF00 al color que desees */
+        }
+    </style>
     </head>
 
     <body>
@@ -214,7 +214,7 @@
                 </form>
                 <h6>Todavía no tienes una cuenta? <a href="#main-form">Click aquí</a></h6> 
                 <!-- Botón para abrir el modal -->
-        <button id="openLoginModal" style="display: none;"></button>
+                <button id="openLoginModal" style="display: none;"></button>
             </div>
         </div>
 
@@ -233,7 +233,7 @@
                 <div class="carousel-inner">
                     <div class="carousel-item carousel-image active bg-img-1">
                         <img src="/static/imagenes/vista-lateral-adulto-pagando-tarjeta.jpg" alt="freepik" class=img-fluid>
-                         <a href="https://www.freepik.com/free-photo/side-view-adult-paying-with-card_41253176.htm#page=3&query=digital%20wallet&position=4&from_view=keyword&track=ais&uuid=e8f33bd3-a1bb-4f8d-80dd-b44be05514af">Freepik</a>
+                        <a href="https://www.freepik.com/free-photo/side-view-adult-paying-with-card_41253176.htm#page=3&query=digital%20wallet&position=4&from_view=keyword&track=ais&uuid=e8f33bd3-a1bb-4f8d-80dd-b44be05514af">Freepik</a>
                         <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                              aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
                         <rect width="100%" height="100%" fill="#777" />
@@ -422,7 +422,7 @@
                 <p> 2023 HomebankingApp, Inc. <a href="#">Privacidad</a> <a href="#">Terminos y
                         Condiciones</a></p>
 
-                
+
             </footer>
 
 

@@ -2,6 +2,7 @@ package com.example.Homebanking.controladores;
 
 import com.example.Homebanking.Entidades.Usuario;
 import com.example.Homebanking.Errores.ErrorServicio;
+import com.example.Homebanking.Repositorios.UsuarioRepositorio;
 import java.io.IOException;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,13 @@ public class UsuarioControlador {
             return "principal";
         }
     }
+//    @GetMapping("/perfil/{id}")
+//public String verPerfil(@PathVariable("id") String idUsuario, Model model) {
+//    Usuario usuario = UsuarioRepositorio.findByIdWithCuenta(idUsuario);
+//    model.addAttribute("usuar", usuario);
+//    return "perfil";
+//}
+
 
     //Este metodo registra un usuario con sus datos basicos.
     @PostMapping("/crearUsuario")
@@ -54,18 +62,18 @@ public class UsuarioControlador {
 
     //Este metodo le agrega a el usuario que le pasemos por parametro, una cuenta y tarjetas de debito y credito.
     @PostMapping("/cargarCuentayTarjetas")
-    public String CargarCuentayTarjetas(ModelMap modelo, @RequestParam String Id, @RequestParam Double saldo, @RequestParam Integer clave) throws Exception {
-        uSer.cargarTarjetasyCuenta(Id, saldo, clave);//es el IdUsuario
+    public String CargarCuentayTarjetas(ModelMap modelo, @RequestParam String idUsuario, @RequestParam Double saldo, @RequestParam Integer clave) throws Exception {
+        uSer.cargarTarjetasyCuenta(idUsuario, saldo, clave);//es el IdUsuario
         return "se creo su cuenta y se cargaron sus tarjetas de debito y credito";
     }
 
     //@PathVariable= configurar variables dentro de los propios segmentos de la URL
     //HttpSession= puede almacenar los datos de la sesión en el servidor y acceder a los mismos
     @GetMapping("/modificar-usuario/{id}")
-    public String modificarUsuario(@PathVariable String id, ModelMap modelo, HttpSession session) throws ErrorServicio {
+    public String modificarUsuario(@PathVariable String idUsuario, ModelMap modelo, HttpSession session) throws ErrorServicio {
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuariosession");
-        if (uSer.BuscarPorId(id).getIdUsuario().equals(usuarioLogueado.getIdUsuario())) {
-            modelo.addAttribute("usuario", uSer.BuscarPorId(id));
+        if (uSer.BuscarPorId(idUsuario).getIdUsuario().equals(usuarioLogueado.getIdUsuario())) {
+            modelo.addAttribute("usuario", uSer.BuscarPorId(idUsuario));
 
             return "modificarDatos";
         } else {
@@ -104,11 +112,11 @@ public class UsuarioControlador {
 
     //Da de baja el usuario
     @PatchMapping("/dar-de-baja/{id}")
-    public String DarDeBajaUsuario(@PathVariable String id, HttpSession session) throws Exception {
+    public String DarDeBajaUsuario(@PathVariable String idUsuario, HttpSession session) throws Exception {
         try {
-            uSer.darBaja(id);
+            uSer.darBaja(idUsuario);
 
-            session.setAttribute("usuariosession", uSer.BuscarPorId(id));
+            session.setAttribute("usuariosession", uSer.BuscarPorId(idUsuario));
 
             return "redirect:/login";
         } catch (Exception e) {
@@ -120,10 +128,10 @@ public class UsuarioControlador {
 
     //Elimina al usuario con todos sus datos de la BD
     @DeleteMapping("/EliminarUsuario/{Id}")
-    public void BorrarUsuario(ModelMap modelo, @PathVariable String Id) throws Exception {
+    public void BorrarUsuario(ModelMap modelo, @PathVariable String idUsuario) throws Exception {
 
-        if (Id != null) {
-            uSer.EliminarUsuario(Id);
+        if (idUsuario != null) {
+            uSer.EliminarUsuario(idUsuario);
 
         } else {
             System.out.println("El controlador esta recibiendo un objeto nulo");
@@ -151,8 +159,8 @@ public class UsuarioControlador {
 
     //Busca al usuario por la cuenta que le sea pasada por parametro
     @GetMapping("/BuscarUsuarioPorCuenta")
-    public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long IdCuenta) {
-        return "El usuario es :  " + uSer.BuscarPorCuenta(IdCuenta);
+    public String BuscarUsuarioPorCuenta(ModelMap modelo, @RequestParam Long idCuenta) {
+        return "El usuario es :  " + uSer.BuscarPorCuenta(idCuenta);
     }
     //mapeo la vista principal 
      @GetMapping("/principal")

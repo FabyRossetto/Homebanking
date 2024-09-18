@@ -206,7 +206,7 @@ button:hover {
 
 /* Estilo para el banner/footer */
 .banner {
-  background-image: url('Static.imagenes/men.jpg');
+  background-image: url('/static/imagenes/men.jpg');
   /* Ruta de tu imagen de fondo */
 
   background-size: contain;

@@ -22,14 +22,14 @@ public class CuentaServicio {
     @Autowired
     private CuentaRepositorio cuentaRepositorio;
     @Autowired
-    private UsuarioRepositorio usuarioRepo;
+    private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
     private TransferenciaRepositorio transferenciaRepositorio;
 
     
     @Transactional //saco el IdUsuario
-    public Cuenta guardar(Long Id, Double saldo) throws Excepcion {
+    public Cuenta guardar(Long idCuenta, Double saldo) throws Excepcion {
         //Optional<Usuario> usu=usuarioRepo.findById(Idusuario);
         // Usuario usuario= usu.get();
         //  if(usuario.getCuenta()==null){
@@ -39,7 +39,7 @@ public class CuentaServicio {
         cuenta.setSaldo(saldo);
         cuenta.setAlta(Boolean.TRUE);
         cuenta.setFechaAlta(new Date());
-        cuenta.setId(Id);
+        cuenta.setIdCuenta(idCuenta);
 
         return cuentaRepositorio.save(cuenta);
         
@@ -49,34 +49,34 @@ public class CuentaServicio {
 //            return usuario.getCuenta();
     } 
     
-    @Transactional //Funciona Perfecto
-    public Cuenta guardar(String idUser, Double saldo) throws Excepcion {
-        Optional<Usuario> usu=usuarioRepo.findById(idUser);
-         Usuario usuario= usu.get();
-          if(usuario.getCuenta()==null){
-        //SETEO DE ATRIBUTOS
-        Cuenta cuenta = new Cuenta();
-        
-        cuenta.setSaldo(saldo);
-        cuenta.setAlta(Boolean.TRUE);
-        cuenta.setFechaAlta(new Date());
-        cuentaRepositorio.save(cuenta);
-        usuario.setCuenta(cuenta);
-        usuarioRepo.save(usuario);
-
-        return cuenta;
-        
-//        notificacionServicio.enviar("Gracias por elegirnos", "HomeBanking", mail); deberia ir en usuario no acá
-
-    }else{
-            return usuario.getCuenta();
-    }
-    }
+//    @Transactional //Funciona Perfecto
+//    public Cuenta guardar(String idUser, Double saldo) throws Excepcion {
+//        Optional<Usuario> usu=usuarioRepositorio.findById(idUser);
+//         Usuario usuario= usu.get();
+//          if(usuario.getCuenta()==null){
+//        //SETEO DE ATRIBUTOS
+//        Cuenta cuenta = new Cuenta();
+//        
+//        cuenta.setSaldo(saldo);
+//        cuenta.setAlta(Boolean.TRUE);
+//        cuenta.setFechaAlta(new Date());
+//        cuentaRepositorio.save(cuenta);
+//        usuario.setCuenta(cuenta);
+//        usuarioRepositorio.save(usuario);
+//
+//        return cuenta;
+//        
+////        notificacionServicio.enviar("Gracias por elegirnos", "HomeBanking", mail); deberia ir en usuario no acá
+//
+//    }else{
+//            return usuario.getCuenta();
+//    }
+//    }
  
 //    //ELIMINAR CUENTA
     @Transactional
-    public void borrarPorId(Long Id) throws Excepcion {
-        Optional<Cuenta> optional = cuentaRepositorio.findById(Id);
+    public void borrarPorId(Long idCuenta) throws Excepcion {
+        Optional<Cuenta> optional = cuentaRepositorio.findById(idCuenta);
 
         if (optional.isPresent()) {
             cuentaRepositorio.delete(optional.get());
@@ -86,8 +86,8 @@ public class CuentaServicio {
 
     //DAR DE BAJA: necesito el alta para luego darlo de baja.Agregar esto a la entidad cuenta
     @Transactional
-    public void darDeBaja(Long Id, Boolean Alta) throws Excepcion {
-        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
+    public void darDeBaja(Long idCuenta, Boolean Alta) throws Excepcion {
+        Optional<Cuenta> respuesta = cuentaRepositorio.findById(idCuenta);
         if (respuesta.isPresent()) {
 
             Cuenta cuenta = respuesta.get();
@@ -100,11 +100,11 @@ public class CuentaServicio {
 
     //MODIFICAR SALDO: Método para INGRESAR: sumar saldo + deposito
     @Transactional
-    public void ingresarDinero(Double saldoActual, Double saldo, Double deposito, Long Id) throws Excepcion {
+    public void ingresarDinero(Double saldoActual, Double saldo, Double deposito, Long idCuenta) throws Excepcion {
 //        Deposito deposito = new deposito();
 //        deposito.setFecha(New Date());
 //       
-        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id); //busco la cuenta, y si existe una con ese id la materializamos
+        Optional<Cuenta> respuesta = cuentaRepositorio.findById(idCuenta); //busco la cuenta, y si existe una con ese id la materializamos
         if (respuesta.isPresent()) {
             Cuenta cuenta = respuesta.get();
             cuenta.setSaldoActual(cuenta.getSaldo() + deposito);
@@ -117,10 +117,10 @@ public class CuentaServicio {
 
     //MODIFICAR SALDO: Método para RETIRAR dinero : saldoActual-extraccion (retiro/compra)
     @Transactional
-    public void retirarDinero(Double saldoActual, Double saldo, Double extraccion, Long Id) throws Excepcion {
+    public void retirarDinero(Double saldoActual, Double saldo, Double extraccion, Long idCuenta) throws Excepcion {
         //      Extraccion extraccion=new extraccion();
         //   extraccion.setFecha(New Date());
-        Optional<Cuenta> respuesta = cuentaRepositorio.findById(Id);
+        Optional<Cuenta> respuesta = cuentaRepositorio.findById(idCuenta);
         if (respuesta.isPresent()) {
             Cuenta cuenta = respuesta.get();
             cuenta.setSaldoActual(cuenta.getSaldo() - extraccion);
@@ -164,13 +164,3 @@ public class CuentaServicio {
 //
 //    }
 //
-//    public void retirarDinero(Double saldoActual, Double saldo, Double saldo0, Long Id, Date fecha) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-//
-//    public void ingresarDinero(Double saldoActual, Double saldo, Long Id, Date fecha) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-//}
-//
-////podria buscar la cuenta por su usuario y lueg realizar ciertas validaciones

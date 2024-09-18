@@ -5,6 +5,7 @@
  */
 package com.example.Homebanking.Entidades;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,25 +16,24 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
-/**
- *
- * @author Fabi
- */
+
 @Data
 @Entity
 @Component
-public class Cuenta {
+public class Cuenta implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long idCuenta;
 
     private Boolean Alta = Boolean.TRUE;
 
     //saldoActual=saldo+deposito
-    private Double Saldo;
+    private Double saldo;
     private Double saldoActual;
 
     private Double deposito = 0.00;
@@ -42,30 +42,19 @@ public class Cuenta {
     @Temporal(TemporalType.TIMESTAMP)   
     private Date fechaAlta;
 
-//    @OneToMany
-//    Transferencia transferencia;
 
-//    @OneToOne
-//    Usuario usuario;
-//  
 
-    /**
-     * @return the Id
-     */
-    public Long getId() {
-        return Id;
+   
+    public Long getIdCuenta() {
+        return idCuenta;
     }
 
-    /**
-     * @param Id the Id to set
-     */
-    public void setId(Long Id) {
-        this.Id = Id;
+    
+    public void setIdCuenta(Long idCuenta) {
+        this.idCuenta = idCuenta;
     }
 
-    /**
-     * @return the Alta
-     */
+ 
     public Boolean getAlta() {
         return Alta;
     }
@@ -81,14 +70,14 @@ public class Cuenta {
      * @return the Saldo
      */
     public Double getSaldo() {
-        return Saldo;
+        return saldo;
     }
 
     /**
      * @param Saldo the Saldo to set
      */
     public void setSaldo(Double Saldo) {
-        this.Saldo = Saldo;
+        this.saldo = Saldo;
     }
 
     /**
