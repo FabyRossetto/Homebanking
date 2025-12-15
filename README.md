@@ -1,17 +1,18 @@
-# Homebanking
+# Homebanking RESTful API
 
-Decripcion: Esta es una ApiRestful de un banco,
-que brinda a sus usuarios acceso a sus cuentas bancarias y distintos servicios financieros,como por ejemplo
-realizar y recibir transferencias,usar tarjetas de credito y debito,entre otras.Este es un proyecto en contruccion.
+## Description
+This project consists of a RESTful API designed for a bank. **Note that this repository contains the backend logic.**
 
-Tecnologias ya empleadas: Java 17, MySQL,SpringBoot,Spring Security,ApiRest,HTML,CSS y Bootstrap
+It allows users to manage their bank accounts and access different financial services, such as sending and receiving transfers, and managing credit and debit cards, among other features.
 
-Tecnologias que vamos a agregar: Docker,Microservicios y AWS.
+## Technologies Used
+* **Java 17**
+* **Spring Boot**
+* **Spring Security**
+* **MySQL**
+* **REST API**
 
-Autoras: 
-
-Fabiana Rossetto:  https://www.linkedin.com/in/fabyrossetto/
-
-Sabrina Mallea: https://www.linkedin.com/in/sabri-mallea/
-
-Gianina Azcurra: https://www.linkedin.com/in/gianina-azcurra/
+## Authors
+* **Fabiana Rossetto:** [LinkedIn Profile](https://www.linkedin.com/in/fabyrossetto/)
+* **Sabrina Mallea:** [LinkedIn Profile](https://www.linkedin.com/in/sabri-mallea/)
+* **Gianina Azcurra:** [LinkedIn Profile](https://www.linkedin.com/in/gianina-azcurra/)
