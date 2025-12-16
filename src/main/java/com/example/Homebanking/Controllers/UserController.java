@@ -1,10 +1,10 @@
-package com.example.homebanking.controllers;
+package com.example.Homebanking.controllers;
 
 import com.example.Homebanking.Models.User;
 import com.example.Homebanking.Security.JwtService;
 import com.example.Homebanking.Services.AuthResponse;
 import com.example.Homebanking.Services.LoginRequest;
-import com.example.homebanking.services.UserService;
+import com.example.Homebanking.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

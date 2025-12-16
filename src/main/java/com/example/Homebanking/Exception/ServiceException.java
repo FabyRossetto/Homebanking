@@ -1,5 +1,5 @@
 
-package com.example.homebanking.exception;
+package com.example.Homebanking.exception;
 
 public class ServiceException extends Exception {
 

@@ -1,7 +1,7 @@
 package com.example.Homebanking.Controllers;
 
 import com.example.Homebanking.Models.Account;
-import com.example.homebanking.services.AccountService;
+import com.example.Homebanking.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

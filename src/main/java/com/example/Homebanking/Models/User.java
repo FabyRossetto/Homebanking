@@ -2,7 +2,7 @@
 package com.example.Homebanking.Models;
 
 import com.example.Homebanking.Enums.Role;
-import com.example.homebanking.Models.Card;
+import com.example.Homebanking.Models.Card;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;

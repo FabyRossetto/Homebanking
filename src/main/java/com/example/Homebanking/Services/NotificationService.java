@@ -1,5 +1,5 @@
 
-package com.example.homebanking.services;
+package com.example.Homebanking.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

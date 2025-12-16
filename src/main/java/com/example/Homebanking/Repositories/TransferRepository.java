@@ -1,7 +1,7 @@
-package com.example.homebanking.repositories;
+package com.example.Homebanking.repositories;
 
 import com.example.Homebanking.Models.Account;
-import com.example.homebanking.Models.Transfer;
+import com.example.Homebanking.Models.Transfer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

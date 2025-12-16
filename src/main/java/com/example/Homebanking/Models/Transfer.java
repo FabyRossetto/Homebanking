@@ -1,4 +1,4 @@
-package com.example.homebanking.Models;
+package com.example.Homebanking.Models;
 
 import com.example.Homebanking.Models.Account;
 import lombok.Data;

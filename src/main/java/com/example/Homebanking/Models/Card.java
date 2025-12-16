@@ -1,5 +1,5 @@
 
-package com.example.homebanking.Models;
+package com.example.Homebanking.Models;
 
 import lombok.Data;
 import javax.persistence.*;

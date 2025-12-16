@@ -1,8 +1,8 @@
-package com.example.homebanking.controllers;
+package com.example.Homebanking.controllers;
 
 import com.example.Homebanking.Models.User;
-import com.example.homebanking.Models.Transfer;
-import com.example.homebanking.services.TransferService;
+import com.example.Homebanking.Models.Transfer;
+import com.example.Homebanking.services.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class TransferController {
     @Autowired
     private TransferService transferService;
     @Autowired
-    private com.example.homebanking.services.UserService userService;
+    private com.example.Homebanking.services.UserService userService;
 
     @PostMapping("/execute")
     public ResponseEntity<?> performTransfer(@RequestParam Double amount,

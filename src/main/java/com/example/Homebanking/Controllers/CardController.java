@@ -1,7 +1,7 @@
-package com.example.homebanking.controllers;
+package com.example.Homebanking.controllers;
 
-import com.example.homebanking.Models.Card;
-import com.example.homebanking.services.CardService;
+import com.example.Homebanking.Models.Card;
+import com.example.Homebanking.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

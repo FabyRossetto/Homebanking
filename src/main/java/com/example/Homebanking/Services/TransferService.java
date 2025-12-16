@@ -1,9 +1,9 @@
-package com.example.homebanking.services;
+package com.example.Homebanking.services;
 
 import com.example.Homebanking.Models.Account;
-import com.example.homebanking.Models.Transfer;
+import com.example.Homebanking.Models.Transfer;
 import com.example.Homebanking.Models.User;
-import com.example.homebanking.repositories.TransferRepository;
+import com.example.Homebanking.repositories.TransferRepository;
 import com.example.Homebanking.Repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

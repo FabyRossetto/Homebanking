@@ -5,7 +5,7 @@
  */
 package com.example.Homebanking.Repositories;
 
-import com.example.homebanking.Models.Card;
+import com.example.Homebanking.Models.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
