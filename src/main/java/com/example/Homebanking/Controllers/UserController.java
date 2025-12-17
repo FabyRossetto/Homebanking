@@ -77,7 +77,7 @@ public class UserController {
     public ResponseEntity<?> requestRecoveryCode(@RequestParam String email) {
         try {
             userService.sendRecoveryCode(email);
-            return new ResponseEntity<>("Recovery code sent to your email.", HttpStatus.OK);
+            return new ResponseEntity<>("Recovery code sent to your email (check logs if simulation).", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

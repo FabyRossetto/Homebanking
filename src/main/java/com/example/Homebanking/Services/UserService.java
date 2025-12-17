@@ -55,7 +55,18 @@ public class UserService implements UserDetailsService {
         }
 
         userRepository.save(newUser);
-        notificationService.sendEmail(email, "Welcome!", "Welcome to HomeBanking, " + firstName);
+        try {
+            notificationService.sendEmail(email, "Welcome!", "Welcome to HomeBanking, " + firstName);
+        } catch (Exception e) {
+            // IF IT FAILS (Railway Block), JUST LOG IT AND CONTINUE
+            System.out.println("\n==================================================");
+            System.out.println("⚠️ RAILWAY SMTP BLOCK - EMAIL SIMULATION MODE ⚠️");
+            System.out.println("STATUS: User registered, but email failed to send.");
+            System.out.println("TO: " + newUser.getEmail());
+            System.out.println("ERROR: " + e.getMessage());
+            System.out.println("==================================================\n");
+
+        }
         return newUser;
     }
 
@@ -91,8 +102,16 @@ public class UserService implements UserDetailsService {
         String body = "Hello " + user.getFirstName() + ",\n\n"
                 + "Your verification code is: " + randomCode + "\n"
                 + "Please enter it in the app to change your password.";
-
-        notificationService.sendEmail(user.getEmail(), subject, body);
+        try {
+            notificationService.sendEmail(user.getEmail(), subject, body);
+        } catch (Exception e) {
+            // Fallback: Print the code to the Console Logs
+            System.out.println("\n==================================================");
+            System.out.println("⚠️ PASSWORD RECOVERY SIMULATION ⚠️");
+            System.out.println("TO: " + user.getEmail());
+            System.out.println("RECOVERY CODE/LINK: " + randomCode);
+            System.out.println("==================================================\n");
+        }
     }
 
     @Transactional
