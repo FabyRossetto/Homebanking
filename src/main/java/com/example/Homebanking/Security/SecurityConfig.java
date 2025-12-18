@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/register").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/users/password/recover").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/password/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 // Private path
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
