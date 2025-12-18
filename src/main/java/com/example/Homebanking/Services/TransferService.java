@@ -3,6 +3,7 @@ package com.example.Homebanking.services;
 import com.example.Homebanking.Models.Account;
 import com.example.Homebanking.Models.Transfer;
 import com.example.Homebanking.Models.User;
+import com.example.Homebanking.Repositories.AccountRepository;
 import com.example.Homebanking.repositories.TransferRepository;
 import com.example.Homebanking.Repositories.UserRepository;
 
@@ -22,6 +23,9 @@ public class TransferService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private AccountRepository accountRepository;
 
   
     @Autowired
@@ -31,42 +35,51 @@ public class TransferService {
     private static final Double MAX_AMOUNT = 300000.0;
 
     // --- MAIN TRANSACTIONAL METHOD ---
-    @Transactional
-    public Transfer performTransfer(String senderEmail, String destinationNationalId, Double amount) throws Exception {
-        
-        // 1. Retrieve Sender User and Account 
-        User sender = userRepository.findByEmail(senderEmail)
-                .orElseThrow(() -> new Exception("Sender user not found"));
+   @Transactional
+public Transfer performTransfer(String senderEmail, String destinationNationalId, Double amount) throws Exception {
+    
+    // 1. Retrieve Sender
+    User sender = userRepository.findByEmail(senderEmail)
+            .orElseThrow(() -> new Exception("Sender user not found"));
 
-        
-        User receiver = validateTransferAndRetrieveReceiver(sender, destinationNationalId, amount); 
-        
-        Account sourceAccount = sender.getAccount();
-        Account destinationAccount = receiver.getAccount();
+    // 2. Retrieve Receiver
+    User receiver = validateTransferAndRetrieveReceiver(sender, destinationNationalId, amount); 
+    
+    Account sourceAccount = sender.getAccount();
+    Account destinationAccount = receiver.getAccount();
 
-        // 3. Execute Money Movement
-        sourceAccount.setBalance(sourceAccount.getBalance() - amount);
-        destinationAccount.setBalance(destinationAccount.getBalance() + amount);
-       
+    // 3. Execute Money Movement (In Memory)
+    sourceAccount.setBalance(sourceAccount.getBalance() - amount);
+    destinationAccount.setBalance(destinationAccount.getBalance() + amount);
+    
+    // ---------------------------------------------------------
+    // 4. SAVE THE ACCOUNTS TO DATABASE (CRITICAL STEP)
+    // ---------------------------------------------------------
+    accountRepository.save(sourceAccount);       
+    accountRepository.save(destinationAccount);  
 
-        // 4. Create and Save Transfer Record
-        Transfer transfer = new Transfer();
-        transfer.setAmount(amount);
-        transfer.setSourceAccount(sourceAccount);
-        transfer.setDestinationAccount(destinationAccount);
-        transfer.setDate(LocalDateTime.now());
-        transfer.setDescription("Transfer to " + receiver.getLastName());
+    // 5. Create and Save Transfer Record
+    Transfer transfer = new Transfer();
+    transfer.setAmount(amount);
+    transfer.setSourceAccount(sourceAccount);
+    transfer.setDestinationAccount(destinationAccount);
+    transfer.setDate(LocalDateTime.now());
+    transfer.setDescription("Transfer to " + receiver.getLastName());
 
-        transferRepository.save(transfer);
+    transferRepository.save(transfer);
 
-        // 5. Send Notification
+    // 6. Send Notification
+    try {
         notificationService.sendEmail(sender.getEmail(), 
                 "Transfer Successful", 
                 "You have successfully transferred $" + amount + " to " + receiver.getFirstName() + " " + receiver.getLastName());
-
-        return transfer;
+    } catch (Exception e) {
+        // Log error but don't stop the transfer
+        System.out.println("Email failed: " + e.getMessage());
     }
 
+    return transfer;
+}
     // --- VALIDATION LOGIC  ---
     private User validateTransferAndRetrieveReceiver(User sender, String destinationNationalId, Double amount) throws Exception {
         
