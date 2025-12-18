@@ -28,31 +28,34 @@ public class CardService {
     // --- CREATION ---
     @Transactional
     public Card createCard(String email, String type, Integer pin) throws Exception {
-        
+
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new Exception("Usuario no encontrado"));
-        
+                .orElseThrow(() -> new Exception("Usuario no encontrado"));
+
+        if (user.getAccount() == null) {
+            throw new Exception("You cannot create a card without a bank account.");
+        }
+
         if (pin == null || String.valueOf(pin).length() != 4) {
             throw new Exception("PIN must be 4 digits");
         }
 
-       
         if (type.equalsIgnoreCase("DEBIT") && user.getDebitCard() != null && user.getDebitCard().isActive()) {
-             throw new Exception("User already has an active Debit Card");
+            throw new Exception("User already has an active Debit Card");
         }
         if (type.equalsIgnoreCase("CREDIT") && user.getCreditCard() != null && user.getCreditCard().isActive()) {
-             throw new Exception("User already has an active Credit Card");
+            throw new Exception("User already has an active Credit Card");
         }
 
         Card newCard;
 
         if (type.equalsIgnoreCase("DEBIT")) {
             newCard = new DebitCard();
-            newCard.setBalance(0.0); 
+            newCard.setBalance(0.0);
         } else if (type.equalsIgnoreCase("CREDIT")) {
             CreditCard creditCard = new CreditCard();
-            creditCard.setMaxLimit(500000.00); 
-            creditCard.setBalance(500000.00);  
+            creditCard.setMaxLimit(500000.00);
+            creditCard.setBalance(500000.00);
             newCard = creditCard;
         } else {
             throw new Exception("Invalid card type: Must be DEBIT or CREDIT");
@@ -82,7 +85,7 @@ public class CardService {
     // --- MODIFICATION ---
     @Transactional
     public Card updateCard(Long cardId, String email, Integer oldPin, Integer newPin) throws Exception {
-       
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new Exception("User not found"));
 
@@ -107,21 +110,20 @@ public class CardService {
         } else {
             throw new Exception("New PIN is invalid");
         }
-        
+
         return cardRepository.save(card);
     }
-    
+
     // --- SOFT DELETE ---
     @Transactional
     public void cancelCard(Long cardId, String email) throws Exception {
-      
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new Exception("User not found"));
 
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new Exception("Card not found"));
-        
-        
+
         boolean ownsDebit = user.getDebitCard() != null && user.getDebitCard().getId().equals(cardId);
         boolean ownsCredit = user.getCreditCard() != null && user.getCreditCard().getId().equals(cardId);
 
@@ -136,23 +138,22 @@ public class CardService {
     // --- HARD DELETE ---
     @Transactional
     public void deleteCard(String email, Long cardId) throws Exception {
-       
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new Exception("User not found"));
-        
+
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new Exception("Card not found"));
 
-       
         if (user.getDebitCard() != null && user.getDebitCard().getId().equals(cardId)) {
             user.setDebitCard(null);
         } else if (user.getCreditCard() != null && user.getCreditCard().getId().equals(cardId)) {
             user.setCreditCard(null);
         } else {
-            
+
             throw new Exception("Access Denied: You cannot delete a card that isn't linked to you");
         }
-        
+
         userRepository.save(user); // Save user without the card
         cardRepository.delete(card); // Now delete the card
     }
@@ -163,14 +164,18 @@ public class CardService {
     }
 
     public List<Card> findCardsByUser(String email) throws Exception {
-        
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new Exception("User not found"));
-        
+
         List<Card> cards = new ArrayList<>();
-        if (user.getDebitCard() != null) cards.add(user.getDebitCard());
-        if (user.getCreditCard() != null) cards.add(user.getCreditCard());
-        
+        if (user.getDebitCard() != null) {
+            cards.add(user.getDebitCard());
+        }
+        if (user.getCreditCard() != null) {
+            cards.add(user.getCreditCard());
+        }
+
         return cards;
     }
 
