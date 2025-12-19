@@ -55,18 +55,18 @@ public class UserService implements UserDetailsService {
         }
 
         userRepository.save(newUser);
-        try {
-            notificationService.sendEmail(email, "Welcome!", "Welcome to HomeBanking, " + firstName);
-        } catch (Exception e) {
+//        try {
+//            notificationService.sendEmail(email, "Welcome!", "Welcome to HomeBanking, " + firstName);
+//        } catch (Exception e) {
             // IF IT FAILS (Railway Block), JUST LOG IT AND CONTINUE
-            System.out.println("\n==================================================");
-            System.out.println("⚠️ RAILWAY SMTP BLOCK - EMAIL SIMULATION MODE ⚠️");
-            System.out.println("STATUS: User registered, but email failed to send.");
-            System.out.println("TO: " + newUser.getEmail());
-            System.out.println("ERROR: " + e.getMessage());
-            System.out.println("==================================================\n");
+//            System.out.println("\n==================================================");
+//            System.out.println("⚠️ RAILWAY SMTP BLOCK - EMAIL SIMULATION MODE ⚠️");
+//            System.out.println("STATUS: User registered, but email failed to send.");
+//            System.out.println("TO: " + newUser.getEmail());
+//            System.out.println("ERROR: " + e.getMessage());
+//            System.out.println("==================================================\n");
 
-        }
+        
         return newUser;
     }
 

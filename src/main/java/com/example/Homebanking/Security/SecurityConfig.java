@@ -40,8 +40,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 // Public path
-                .antMatchers(HttpMethod.POST, "/api/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
+                
                 .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/password/**").permitAll()

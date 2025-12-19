@@ -52,12 +52,7 @@ public class CardController {
         }
     }
 
-    // Update Balance 
-    @PutMapping("/update-limit") 
-    public ResponseEntity<?> updateLimit(@RequestParam Long cardId, @RequestParam Double amount) {
-       
-        return new ResponseEntity<>("Limit updated ", HttpStatus.OK);
-    }
+    
 
     // Soft Delete 
     @PatchMapping("/{id}/deactivate")
@@ -98,6 +93,7 @@ public class CardController {
     // Search by Expiration Date 
     @GetMapping("/expiration")
     public ResponseEntity<?> getCardsByExpiration(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        
         return new ResponseEntity<>(cardService.findByExpirationDate(date), HttpStatus.OK);
     }
 }

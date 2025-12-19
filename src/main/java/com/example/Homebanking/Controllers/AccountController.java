@@ -59,14 +59,5 @@ public class AccountController {
         }
     }
 
-    // Hard Delete (Admin only - requires ID)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable Long id) {
-        try {
-            accountService.deleteAccount(id);
-            return new ResponseEntity<>("Account permanently deleted", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    
 }

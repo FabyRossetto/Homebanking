@@ -108,27 +108,5 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id) {
-        try {
-            userService.hardDeleteUser(id);
-            return new ResponseEntity<>("User permanently deleted", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/search/dni")
-    public ResponseEntity<?> findByNationalId(@RequestParam String dni) {
-        User user = userService.findByNationalId(dni);
-        return user != null ? new ResponseEntity<>(user, HttpStatus.OK)
-                : new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/search/email")
-    public ResponseEntity<?> findByEmail(@RequestParam String email) {
-        User user = userService.findByEmail(email);
-        return user != null ? new ResponseEntity<>(user, HttpStatus.OK)
-                : new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-    }
+   
 }
