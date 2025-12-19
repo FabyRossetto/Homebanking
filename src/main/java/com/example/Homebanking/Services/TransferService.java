@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,11 +24,10 @@ public class TransferService {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private AccountRepository accountRepository;
 
-  
     @Autowired
     private NotificationService notificationService;
 
@@ -35,54 +35,55 @@ public class TransferService {
     private static final Double MAX_AMOUNT = 300000.0;
 
     // --- MAIN TRANSACTIONAL METHOD ---
-   @Transactional
-public Transfer performTransfer(String senderEmail, String destinationNationalId, Double amount) throws Exception {
-    
-    // 1. Retrieve Sender
-    User sender = userRepository.findByEmail(senderEmail)
-            .orElseThrow(() -> new Exception("Sender user not found"));
+    @Transactional
+    public Transfer performTransfer(String senderEmail, String destinationNationalId, Double amount) throws Exception {
 
-    // 2. Retrieve Receiver
-    User receiver = validateTransferAndRetrieveReceiver(sender, destinationNationalId, amount); 
-    
-    Account sourceAccount = sender.getAccount();
-    Account destinationAccount = receiver.getAccount();
+        // 1. Retrieve Sender
+        User sender = userRepository.findByEmail(senderEmail)
+                .orElseThrow(() -> new Exception("Sender user not found"));
 
-    // 3. Execute Money Movement (In Memory)
-    sourceAccount.setBalance(sourceAccount.getBalance() - amount);
-    destinationAccount.setBalance(destinationAccount.getBalance() + amount);
-    
-    // ---------------------------------------------------------
-    // 4. SAVE THE ACCOUNTS TO DATABASE (CRITICAL STEP)
-    // ---------------------------------------------------------
-    accountRepository.save(sourceAccount);       
-    accountRepository.save(destinationAccount);  
+        // 2. Retrieve Receiver
+        User receiver = validateTransferAndRetrieveReceiver(sender, destinationNationalId, amount);
 
-    // 5. Create and Save Transfer Record
-    Transfer transfer = new Transfer();
-    transfer.setAmount(amount);
-    transfer.setSourceAccount(sourceAccount);
-    transfer.setDestinationAccount(destinationAccount);
-    transfer.setDate(LocalDateTime.now());
-    transfer.setDescription("Transfer to " + receiver.getLastName());
+        Account sourceAccount = sender.getAccount();
+        Account destinationAccount = receiver.getAccount();
 
-    transferRepository.save(transfer);
+        // 3. Execute Money Movement (In Memory)
+        sourceAccount.setBalance(sourceAccount.getBalance() - amount);
+        destinationAccount.setBalance(destinationAccount.getBalance() + amount);
 
-    // 6. Send Notification
-    try {
-        notificationService.sendEmail(sender.getEmail(), 
-                "Transfer Successful", 
-                "You have successfully transferred $" + amount + " to " + receiver.getFirstName() + " " + receiver.getLastName());
-    } catch (Exception e) {
-        // Log error but don't stop the transfer
-        System.out.println("Email failed: " + e.getMessage());
+        // ---------------------------------------------------------
+        // 4. SAVE THE ACCOUNTS TO DATABASE (CRITICAL STEP)
+        // ---------------------------------------------------------
+        accountRepository.save(sourceAccount);
+        accountRepository.save(destinationAccount);
+
+        // 5. Create and Save Transfer Record
+        Transfer transfer = new Transfer();
+        transfer.setAmount(amount);
+        transfer.setSourceAccount(sourceAccount);
+        transfer.setDestinationAccount(destinationAccount);
+        transfer.setDate(LocalDateTime.now());
+        transfer.setDescription("Transfer to " + receiver.getLastName());
+
+        transferRepository.save(transfer);
+
+        // 6. Send Notification
+        try {
+            notificationService.sendEmail(sender.getEmail(),
+                    "Transfer Successful",
+                    "You have successfully transferred $" + amount + " to " + receiver.getFirstName() + " " + receiver.getLastName());
+        } catch (Exception e) {
+            // Log error but don't stop the transfer
+            System.out.println("Email failed: " + e.getMessage());
+        }
+
+        return transfer;
     }
 
-    return transfer;
-}
     // --- VALIDATION LOGIC  ---
     private User validateTransferAndRetrieveReceiver(User sender, String destinationNationalId, Double amount) throws Exception {
-        
+
         // Check 1: Nulls
         if (destinationNationalId == null || destinationNationalId.isEmpty()) {
             throw new Exception("Destination National ID (DNI) is required");
@@ -97,15 +98,15 @@ public Transfer performTransfer(String senderEmail, String destinationNationalId
         if (sender.getNationalId().equalsIgnoreCase(destinationNationalId)) {
             throw new Exception("You cannot transfer money to yourself using this method");
         }
-        
+
         // Check 4 & 5: Receiver Existence and Account Existence (OPTIMIZED: only one DB call)
         User receiver = userRepository.findByNationalId(destinationNationalId)
-             .orElseThrow(() -> new Exception("User with the provided National ID does not exist"));
+                .orElseThrow(() -> new Exception("User with the provided National ID does not exist"));
 
         if (sender.getAccount() == null) {
             throw new Exception("Sender does not have an active account");
         }
-        
+
         if (receiver.getAccount() == null) {
             throw new Exception("The destination user does not have an active account");
         }
@@ -114,11 +115,11 @@ public Transfer performTransfer(String senderEmail, String destinationNationalId
         if (amount > sender.getAccount().getBalance()) {
             throw new Exception("Insufficient funds");
         }
-        
+
         if (amount < MIN_AMOUNT || amount > MAX_AMOUNT) {
             throw new Exception("Amount must be between $" + MIN_AMOUNT + " and $" + MAX_AMOUNT);
         }
-        
+
         return receiver;
     }
 
@@ -132,10 +133,23 @@ public Transfer performTransfer(String senderEmail, String destinationNationalId
     }
 
     public List<Transfer> getTransfersByDate(int year, int month, int day) {
-        
+
         LocalDateTime startOfDay = LocalDate.of(year, month, day).atStartOfDay();
         LocalDateTime endOfDay = LocalDate.of(year, month, day).atTime(23, 59, 59);
-        
+
         return transferRepository.findByDateBetween(startOfDay, endOfDay);
+    }
+
+    public List<Transfer> getHistory(String email) throws Exception {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new Exception("User not found"));
+
+        if (user.getAccount() == null) {
+            return new ArrayList<>();
+        }
+
+        Account myAccount = user.getAccount();
+
+        return transferRepository.findBySourceAccountOrDestinationAccount(myAccount, myAccount);
     }
 }

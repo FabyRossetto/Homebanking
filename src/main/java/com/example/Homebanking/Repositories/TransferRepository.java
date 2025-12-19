@@ -23,4 +23,7 @@ public interface TransferRepository extends JpaRepository<Transfer, Long> {
     
     List<Transfer> findBySourceAccount(Account account);
     List<Transfer> findByDestinationAccount(Account account);
+    
+   
+    List<Transfer> findBySourceAccountOrDestinationAccount(Account source, Account destination);
 }
