@@ -68,17 +68,24 @@ public class TransferService {
 
         transferRepository.save(transfer);
 
-        // 6. Send Notification
-        try {
-            notificationService.sendEmail(sender.getEmail(),
-                    "Transfer Successful",
-                    "You have successfully transferred $" + amount + " to " + receiver.getFirstName() + " " + receiver.getLastName());
-        } catch (Exception e) {
-            // Log error but don't stop the transfer
-            System.out.println("Email failed: " + e.getMessage());
-        }
+        System.out.println("\n--- [RAILWAY MODE] EMAIL SIMULATION ---");
+        System.out.println("TO: " + sender.getEmail());
+        System.out.println("SUBJECT: Transfer Successful");
+        System.out.println("BODY: You sent $" + amount + " to " + receiver.getLastName());
+        System.out.println("---------------------------------------\n");
 
         return transfer;
+
+        // 6. Send Notification
+//        try {
+//            notificationService.sendEmail(sender.getEmail(),
+//                    "Transfer Successful",
+//                    "You have successfully transferred $" + amount + " to " + receiver.getFirstName() + " " + receiver.getLastName());
+//        } catch (Exception e) {
+//            // Log error but don't stop the transfer
+//            System.out.println("Email failed: " + e.getMessage());
+//        }
+        
     }
 
     // --- VALIDATION LOGIC  ---
