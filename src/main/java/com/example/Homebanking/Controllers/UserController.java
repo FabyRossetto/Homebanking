@@ -61,7 +61,7 @@ public class UserController {
     }
 
     @PatchMapping("/me/update")
-    public ResponseEntity<?> updateUser(Authentication authentication, 
+    public ResponseEntity<?> updateUser(Authentication authentication,
             @RequestParam(required = false) String firstName,
             @RequestParam(required = false) String lastName,
             @RequestParam(required = false) String nationalId) {
@@ -76,8 +76,11 @@ public class UserController {
     @PostMapping("/password/request")
     public ResponseEntity<?> requestRecoveryCode(@RequestParam String email) {
         try {
-            userService.sendRecoveryCode(email);
-            return new ResponseEntity<>("Recovery code sent to your email (check logs if simulation).", HttpStatus.OK);
+
+            String code = userService.sendRecoveryCode(email);
+
+            return new ResponseEntity<>("DEV MODE: Tu código es: " + code, HttpStatus.OK);
+
         } catch (Exception e) {
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

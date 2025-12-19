@@ -89,15 +89,19 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void sendRecoveryCode(String email) throws Exception {
+    
+    public String sendRecoveryCode(String email) throws Exception {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new Exception("User not found"));
 
         int randomCode = (int) (Math.random() * 9000) + 1000;
+        String codeStr = String.valueOf(randomCode);
 
-        user.setRecoveryCode(String.valueOf(randomCode));
+        user.setRecoveryCode(codeStr);
         userRepository.save(user);
 
+        // --- This is commented because Railway blocks mailsender ---
+        /*
         String subject = "Password Recovery Code";
         String body = "Hello " + user.getFirstName() + ",\n\n"
                 + "Your verification code is: " + randomCode + "\n"
@@ -105,13 +109,16 @@ public class UserService implements UserDetailsService {
         try {
             notificationService.sendEmail(user.getEmail(), subject, body);
         } catch (Exception e) {
-            // Fallback: Print the code to the Console Logs
-            System.out.println("\n==================================================");
-            System.out.println("⚠️ PASSWORD RECOVERY SIMULATION ⚠️");
-            System.out.println("TO: " + user.getEmail());
-            System.out.println("RECOVERY CODE/LINK: " + randomCode);
-            System.out.println("==================================================\n");
+            e.printStackTrace();
         }
+        */
+        // ----------------------------------------------------
+
+        
+        System.out.println("⚠️ RECOVERY CODE FOR " + email + ": " + codeStr);
+
+       
+        return codeStr; 
     }
 
     @Transactional
