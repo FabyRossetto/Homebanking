@@ -21,5 +21,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     @Query("SELECT c FROM Card c WHERE c.expirationDate = :date")
     List<Card> findByExpirationDate(@Param("date") LocalDate date);
     
-    List<Card> findByExpirationDateLessThanEqual(LocalDate date);
+   @Query(value = "SELECT * FROM card WHERE CAST(expiration_date AS DATE) <= :date", nativeQuery = true)
+    List<Card> findByExpirationDateLessThanEqual(@Param("date") LocalDate date);
 }
