@@ -41,4 +41,13 @@ public abstract class Card {
         this.pin = pin;
         this.expirationDate = expirationDate;
     }
+    
+    @Transient 
+    public String getType() {
+        if (this instanceof CreditCard) {
+            return "CREDIT";
+        } else {
+            return "DEBIT"; 
+        }
+    }
 }

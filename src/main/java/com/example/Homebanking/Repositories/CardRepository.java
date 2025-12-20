@@ -18,9 +18,6 @@ import org.springframework.data.repository.query.Param;
 public interface CardRepository extends JpaRepository<Card, Long> {
 
     // Finds cards by exact expiration date
-    @Query("SELECT c FROM Card c WHERE c.expirationDate = :date")
-    List<Card> findByExpirationDate(@Param("date") LocalDate date);
-    
-   @Query(value = "SELECT * FROM card WHERE CAST(expiration_date AS DATE) <= :date", nativeQuery = true)
-    List<Card> findByExpirationDateLessThanEqual(@Param("date") LocalDate date);
+   @Query("SELECT c FROM Card c WHERE c.expirationDate >= :start AND c.expirationDate < :end")
+    List<Card> findByExpirationDateBetween(@Param("start") LocalDate start, @Param("end") LocalDate end);
 }

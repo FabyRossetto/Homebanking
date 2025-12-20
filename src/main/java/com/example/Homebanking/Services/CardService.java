@@ -180,7 +180,8 @@ public class CardService {
     }
 
     public List<Card> findByExpirationDate(LocalDate date) {
-        return cardRepository.findByExpirationDateLessThanEqual(date);
+        LocalDate fechaFin = date.plusDays(1);
+        return cardRepository.findByExpirationDateBetween(date, fechaFin);
     }
 
     // --- UTILS ---

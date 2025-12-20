@@ -12,8 +12,10 @@ import com.example.Homebanking.Repositories.CardRepository;
 import com.example.Homebanking.Repositories.UserRepository;
 import com.example.Homebanking.repositories.TransferRepository;
 import com.example.Homebanking.services.AccountService;
+import com.example.Homebanking.services.CardService;
 import com.example.Homebanking.services.UserService;
 import java.time.LocalDate;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -45,6 +47,9 @@ public class AdminController {
 
     @Autowired
     private AccountService accountService;
+    
+    @Autowired
+    private CardService cardService;
 
     @GetMapping("/debug-role")
     public ResponseEntity<?> debugMyRole(Authentication authentication) {
@@ -91,7 +96,9 @@ public class AdminController {
     public ResponseEntity<?> getCardsByExpiration(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-        return new ResponseEntity<>(cardRepository.findByExpirationDateLessThanEqual(date), HttpStatus.OK);
+        List<Card> cards = cardService.findByExpirationDate(date);
+        
+        return new ResponseEntity<>(cards, HttpStatus.OK);
     }
 
     @DeleteMapping("/cards/{id}")
