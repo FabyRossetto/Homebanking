@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -44,6 +45,12 @@ public class AdminController {
 
     @Autowired
     private AccountService accountService;
+
+    @GetMapping("/debug-role")
+    public ResponseEntity<?> debugMyRole(Authentication authentication) {
+        // This will print exactly what Spring Security sees
+        return new ResponseEntity<>("Java sees your authorities as: " + authentication.getAuthorities(), HttpStatus.OK);
+    }
 
     // ----------------------------------------------------------------
     // 1. USERS MANAGMENT

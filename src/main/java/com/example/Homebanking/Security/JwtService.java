@@ -4,7 +4,6 @@
  */
 package com.example.Homebanking.Security;
 
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.util.Date;
@@ -15,6 +14,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -22,15 +23,21 @@ import io.jsonwebtoken.security.Keys;
  */
 @Service
 public class JwtService {
-      
 
-private static final String SECRET_KEY = "VGhpc0lzQVNlY3JldEtleVRoYXRJc0xvbmdFbm91Z2hUb0JlVXNlZEZvckpXVFRva2VuR2VuZXJhdGlvbjEyMw==";
+    private static final String SECRET_KEY = "VGhpc0lzQVNlY3JldEtleVRoYXRJc0xvbmdFbm91Z2hUb0JlVXNlZEZvckpXVFRva2VuR2VuZXJhdGlvbjEyMw==";
 
     public String generateToken(UserDetails userDetails) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", userDetails.getAuthorities().toString());
+        return createToken(extraClaims, userDetails.getUsername());
+    }
+
+    private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setClaims(claims) // <--- AQUÍ SE GUARDAN LOS ROLES
+                .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -49,7 +56,7 @@ private static final String SECRET_KEY = "VGhpc0lzQVNlY3JldEtleVRoYXRJc0xvbmdFbm
         final Claims claims = Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
         return claimsResolver.apply(claims);
     }
-    
+
     private Key getSignInKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
     }
@@ -58,4 +65,3 @@ private static final String SECRET_KEY = "VGhpc0lzQVNlY3JldEtleVRoYXRJc0xvbmdFbm
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 }
-

@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/api/users/password/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 // Private path
-                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/admin/**").hasAnyAuthority("ADMIN","ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
