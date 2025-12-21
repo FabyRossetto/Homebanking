@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import java.util.Random;
 
@@ -136,26 +137,48 @@ public class CardService {
     }
 
     // --- HARD DELETE ---
+//    @Transactional
+//    public void deleteCard(String email, Long cardId) throws Exception {
+//
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new Exception("User not found"));
+//
+//        Card card = cardRepository.findById(cardId)
+//                .orElseThrow(() -> new Exception("Card not found"));
+//
+//        if (user.getDebitCard() != null && user.getDebitCard().getId().equals(cardId)) {
+//            user.setDebitCard(null);
+//        } else if (user.getCreditCard() != null && user.getCreditCard().getId().equals(cardId)) {
+//            user.setCreditCard(null);
+//        } else {
+//
+//            throw new Exception("Access Denied: You cannot delete a card that isn't linked to you");
+//        }
+//
+//        userRepository.save(user); // Save user without the card
+//        cardRepository.delete(card); // Now delete the card
+//    }
     @Transactional
-    public void deleteCard(String email, Long cardId) throws Exception {
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new Exception("User not found"));
+    public void deleteCardAdmin(Long cardId) throws Exception {
 
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new Exception("Card not found"));
 
-        if (user.getDebitCard() != null && user.getDebitCard().getId().equals(cardId)) {
-            user.setDebitCard(null);
-        } else if (user.getCreditCard() != null && user.getCreditCard().getId().equals(cardId)) {
-            user.setCreditCard(null);
-        } else {
+        Optional<User> owner = userRepository.findOwnerByCardId(cardId);
 
-            throw new Exception("Access Denied: You cannot delete a card that isn't linked to you");
+        if (owner.isPresent()) {
+            User user = owner.get();
+
+            if (user.getDebitCard() != null && user.getDebitCard().getId().equals(cardId)) {
+                user.setDebitCard(null);
+            } else if (user.getCreditCard() != null && user.getCreditCard().getId().equals(cardId)) {
+                user.setCreditCard(null);
+            }
+
+            userRepository.save(user);
         }
 
-        userRepository.save(user); // Save user without the card
-        cardRepository.delete(card); // Now delete the card
+        cardRepository.deleteById(cardId);
     }
 
     // --- SEARCH METHODS ---

@@ -21,15 +21,15 @@ public class CardController {
 
     // Create Card (Unified for Debit and Credit)
     @PostMapping("/create")
-    public ResponseEntity<?> createCard(Authentication authentication, 
-                                        @RequestParam String type, 
-                                        @RequestParam Integer pin) {
+    public ResponseEntity<?> createCard(Authentication authentication,
+            @RequestParam String type,
+            @RequestParam Integer pin) {
         try {
             // Get email from Token
             String email = authentication.getName();
-            
+
             Card card = cardService.createCard(email, type, pin);
-            
+
             return new ResponseEntity<>("Card created successfully: " + card.getNumber(), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -38,11 +38,10 @@ public class CardController {
 
     // Update PIN 
     @PutMapping("/update-pin")
-    public ResponseEntity<?> updateCardPin(Authentication authentication, 
-                                           @RequestParam Long cardId, 
-                                          
-                                           @RequestParam Integer oldPin, 
-                                           @RequestParam Integer newPin) {
+    public ResponseEntity<?> updateCardPin(Authentication authentication,
+            @RequestParam Long cardId,
+            @RequestParam Integer oldPin,
+            @RequestParam Integer newPin) {
         try {
             // Pass email from token to service
             cardService.updateCard(cardId, authentication.getName(), oldPin, newPin);
@@ -51,8 +50,6 @@ public class CardController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    
 
     // Soft Delete 
     @PatchMapping("/{id}/deactivate")
@@ -67,19 +64,17 @@ public class CardController {
     }
 
     // Hard Delete
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCard(Authentication authentication, @PathVariable Long id) {
+    @DeleteMapping("/cards/{id}")
+    public ResponseEntity<?> deleteCard(@PathVariable Long id) {
         try {
-             // Pass email from token to service for ownership check
-            cardService.deleteCard(authentication.getName(), id);
+            cardService.deleteCardAdmin(id);
             return new ResponseEntity<>("Card deleted successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    
-    @GetMapping("/current") 
+    @GetMapping("/current")
     public ResponseEntity<?> getMyCards(Authentication authentication) {
         try {
             // Uses email from token
@@ -93,7 +88,7 @@ public class CardController {
     // Search by Expiration Date 
     @GetMapping("/expiration")
     public ResponseEntity<?> getCardsByExpiration(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        
+
         return new ResponseEntity<>(cardService.findByExpirationDate(date), HttpStatus.OK);
     }
 }
