@@ -159,26 +159,25 @@ public class CardService {
 //        cardRepository.delete(card); // Now delete the card
 //    }
     @Transactional
-    public void deleteCardAdmin(Long cardId) throws Exception {
+    public void deleteCardAdmin(Long id) {
 
-        Card card = cardRepository.findById(cardId)
-                .orElseThrow(() -> new Exception("Card not found"));
-
-        Optional<User> owner = userRepository.findOwnerByCardId(cardId);
+        Optional<User> owner = userRepository.findOwnerByCardId(id);
 
         if (owner.isPresent()) {
             User user = owner.get();
 
-            if (user.getDebitCard() != null && user.getDebitCard().getId().equals(cardId)) {
+            if (user.getDebitCard() != null && user.getDebitCard().getId().equals(id)) {
                 user.setDebitCard(null);
-            } else if (user.getCreditCard() != null && user.getCreditCard().getId().equals(cardId)) {
+            }
+
+            if (user.getCreditCard() != null && user.getCreditCard().getId().equals(id)) {
                 user.setCreditCard(null);
             }
 
             userRepository.save(user);
         }
 
-        cardRepository.deleteById(cardId);
+        cardRepository.deleteById(id);
     }
 
     // --- SEARCH METHODS ---

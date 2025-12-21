@@ -101,13 +101,16 @@ public class AdminController {
         return new ResponseEntity<>(cards, HttpStatus.OK);
     }
 
-    @DeleteMapping("/cards/{id}")
+   @DeleteMapping("/cards/{id}")
     public ResponseEntity<?> deleteCard(@PathVariable Long id) {
-        if (!cardRepository.existsById(id)) {
-            return new ResponseEntity<>("Card not found", HttpStatus.NOT_FOUND);
+        try {
+            
+            cardService.deleteCardAdmin(id);
+            return new ResponseEntity<>("Card deleted successfully", HttpStatus.OK);
+            
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        cardRepository.deleteById(id);
-        return new ResponseEntity<>("Card hard-deleted by Admin", HttpStatus.OK);
     }
 
     // Update Balance 

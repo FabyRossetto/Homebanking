@@ -64,15 +64,15 @@ public class CardController {
     }
 
     // Hard Delete
-    @DeleteMapping("/cards/{id}")
-    public ResponseEntity<?> deleteCard(@PathVariable Long id) {
-        try {
-            cardService.deleteCardAdmin(id);
-            return new ResponseEntity<>("Card deleted successfully", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @DeleteMapping("/cards/{id}")
+//    public ResponseEntity<?> deleteCard(@PathVariable Long id) {
+//        try {
+//            cardService.deleteCardAdmin(id);
+//            return new ResponseEntity<>("Card deleted successfully", HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @GetMapping("/current")
     public ResponseEntity<?> getMyCards(Authentication authentication) {
