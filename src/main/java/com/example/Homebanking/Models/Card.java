@@ -1,12 +1,15 @@
 
 package com.example.Homebanking.Models;
 
+
 import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter @Setter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "card_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Card { 
@@ -42,6 +45,12 @@ public abstract class Card {
         this.expirationDate = expirationDate;
     }
     
+    
+    public Long getId() {
+        return id;
+    }
+    
+    
     @Transient 
     public String getType() {
         if (this instanceof CreditCard) {
@@ -49,5 +58,14 @@ public abstract class Card {
         } else {
             return "DEBIT"; 
         }
+    }
+    
+    @Override
+    public String toString() {
+        return "Card{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", cardHolder='" + cardHolder + '\'' +
+                '}';
     }
 }
