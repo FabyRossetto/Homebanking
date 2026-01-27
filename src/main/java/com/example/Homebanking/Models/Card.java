@@ -60,6 +60,10 @@ public abstract class Card {
         }
     }
     
+    public LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+    
     @Override
     public String toString() {
         return "Card{" +

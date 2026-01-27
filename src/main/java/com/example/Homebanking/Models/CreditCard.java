@@ -19,6 +19,9 @@ public class CreditCard extends Card {
     public void setMaxLimit(Double maxLimit) {
         this.maxLimit = maxLimit;
     }
+    public Double getMaxLimit() {
+        return maxLimit;
+    }
     
     
     
