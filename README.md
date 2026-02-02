@@ -1,16 +1,24 @@
-# Homebanking RESTful API
+# Homebanking RESTful API 🏦
 
-## Description
-This project consists of a RESTful API designed for a bank. **Note that this repository contains the backend logic.**
+**Live Demo:** [yourbankonline.netlify.app](https://yourbankonline.netlify.app/)
 
-It allows users to manage their bank accounts and access different financial services, such as sending and receiving transfers, and managing credit and debit cards, among other features.
+### Description
+This project consists of a RESTful API designed for a bank. This repository contains the backend logic for financial operations and user management.
 
-## Technologies Used
-* **Java 17**
-* **Spring Boot**
-* **Spring Security**
-* **MySQL**
-* **REST API**
+### 🚀 Key Features
+* **Admin Dashboard:** Specific view for administrators to manage users, accounts, and system-wide settings.
+* **User Services:** Allows users to manage bank accounts, view balances, and access financial services.
+* **Transactions:** Sending and receiving transfers between accounts.
+* **Card Management:** Full handling of credit and debit cards.
+* **Security:** Authentication and authorization implemented with Spring Security.
+
+### 🛠 Technologies Used
+* Java 17
+* Spring Boot
+* Spring Security
+* MySQL
+* REST API
+
 
 ## Authors
 * **Fabiana Rossetto:** [LinkedIn Profile](https://www.linkedin.com/in/fabyrossetto/)
